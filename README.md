@@ -1,4 +1,4 @@
-#skŸlizer* The Eve-Online scan analyzer
+# skŸlizer* The Eve-Online scan analyzer
 
 skŸlizer is a tool for Eve Online to handle any kind of scans. At the moment only survey scans of moon are supported which has been introduced to the game 25th of October 2017.
 
