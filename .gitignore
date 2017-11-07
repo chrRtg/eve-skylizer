@@ -1,0 +1,12 @@
+nbproject
+._*
+.vagrant
+.~lock.*
+.buildpath
+.DS_Store
+.idea
+.project
+.nbproject
+.settings
+vendor/
+ressource/
