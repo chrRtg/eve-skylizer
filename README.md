@@ -88,7 +88,7 @@ cp config/autoload/local.php.dist config/autoload/local.php
 
 Edit **`config/autoload/local.php`** and set various parameters. Hint: you may look out for '// @' inside the file in order to identify where settings have to made.
 
-> **Please mind:** below you'll find some configuration examples. Text in **arrow brackets** ('<' and '>') has to be replaced by your input. The arrow brackets have to be **removed**.
+> **Please mind:** below you'll find some configuration examples. Text in **arrow brackets** ('<' and '>') has to be replaced by your input. The arrow brackets have to be **removed** too.
 
 #### EVE Online SSO access
 
@@ -151,15 +151,9 @@ Please enter your database connection details and credentials.
 #### Logging
 
 You may change the logging level. By default only errors or critical errors are logged.
-In case you wan to get more or less information the supported logging levels are: 
-* EMERG
-* ALERT
-* CRIT
-* ERR
-* WARN
-* NOTICE
-* INFO
-* DEBUG
+In case you wan to get more or less information the supported logging levels are: EMERG, ALERT, CRIT, ERR, WARN, NOTICE, INFO and DEBUG. 
+To change the log level set ´priority´ from ´Logger::ERR´ e.g. to ´Logger::DEBUG´ to switch to a log level of DEBUG - which is very noisy.
+Logfiles are beeing stored in ´./data/log/´, one file each day. Please log-rotate them to avoid exceeding your hard drive capacity.
 
 ```php
 	'log' => [
@@ -169,7 +163,7 @@ In case you wan to get more or less information the supported logging levels are
                     'name' => 'stream',
 					// @ Change loglevel to your needs, recommended Logger::ERR
 					// supported levels: EMERG, ALERT, CRIT, ERR, WARN, NOTICE, INFO, DEBUG
-                    'priority' => Logger::**ERR**,
+                    'priority' => Logger::ERR,
                     'options' => [
                         'stream' => './data/log/atlog_'.date('ymd').'.log',
                     ],
