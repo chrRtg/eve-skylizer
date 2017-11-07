@@ -1,4 +1,4 @@
-# skŸlizer* The Eve-Online scan analyzer
+# skŸlizer - The Eve-Online scan analyzer
 
 skŸlizer is a tool for Eve Online to handle any kind of scans. At the moment only survey scans of moon are supported which has been introduced to the game 25th of October 2017.
 
@@ -78,7 +78,7 @@ Then create an Apache virtual host. It should look like below:
 </VirtualHost>
 ```
 
-### Configuration
+### Application Configuration
 
 Create `config/autoload/local.php` config file by copying its distrib version:
 
@@ -86,7 +86,9 @@ Create `config/autoload/local.php` config file by copying its distrib version:
 cp config/autoload/local.php.dist config/autoload/local.php
 ```
 
-Edit `config/autoload/local.php` and set various parameters. Hint: you may look out for '// @' inside the file in order to identify where settings have to made.
+Edit **`config/autoload/local.php`** and set various parameters. Hint: you may look out for '// @' inside the file in order to identify where settings have to made.
+
+> **Please mind:** below you'll find some configuration examples. Text in **arrow brackets** ('<' and '>') has to be replaced by your input. The arrow brackets have to be **removed**.
 
 #### EVE Online SSO access
 
@@ -96,16 +98,16 @@ What you need to have available is:
 > as scope please add `publicData` and `esi-location.read_location.v1`
 
 ```php
-	'eve_sso' => array (
-		// @ generate a new EVE application at https://developers.eveonline.com/applications
-		'clientId'          => '**<generate it at https://developers.eveonline.com/applications>**',
-		'clientSecret'      => '**<generate it at https://developers.eveonline.com/applications>**',
-		'redirectUri'       => '**<your application base URL>**/auth/index',
-		'scope' => [
-			// @ while generating your EVE application take care to add these scopes
-			'publicData', 
-			'esi-location.read_location.v1'
-		],
+'eve_sso' => array (
+	// @ generate a new EVE application at https://developers.eveonline.com/applications
+	'clientId'          => '<generate it at https://developers.eveonline.com/applications>',
+	'clientSecret'      => '<generate it at https://developers.eveonline.com/applications>',
+	'redirectUri'       => '<your application base URL>**/auth/index',
+	'scope' => [
+		// @ while generating your EVE application take care to add these scopes
+		'publicData', 
+		'esi-location.read_location.v1'
+	],
 ```
 
 #### User & Corporation access
@@ -115,14 +117,14 @@ Then you may add some friends into ´user_allow´ or add your corporation (full 
 If you would like to allow anybody to access your application and to override any setting made in ´user_allow´ and ´corp_allow´ you may set ´allow_all´ to ´YeS´. Then please mind the upper and lower case!
 
 ```php
-		'auth' => [
-			// @ Change to reflect your needs
-			'allow_all' => 'no', // set to '**YeS**' (mind the upper and lower case!) **to allow to any Eve-User to get access as a regular user**
-			'admin' => ['**your player name**'],
-			'corp_allow' => ["**your corporation**", "**another corporation**"],
-			'user_allow' => ["**some player not in the corportions above**", "**another player name**"],
-			'user_deny' => ["**some spy in your corporation**", "**another spy in your corporation**", "**your CEO's name (joke...)**"],
-		],
+'auth' => [
+	// @ Change to reflect your needs
+	'allow_all' => 'no', // set to 'YeS' (mind the upper and lower case!) **to allow to any Eve-User to get access as a regular user**
+	'admin' => ["<your player name>"],
+	'corp_allow' => ["<your corporation>", "<another corporation>"],
+	'user_allow' => ["<some player not in the corportions above", "<another player name>"],
+	'user_deny' => ["<some spy in your corporation", "<another spy in your corporation>", "<your CEO's name (joke...)>"],
+],
 ```
 
 #### Database 
@@ -130,20 +132,20 @@ If you would like to allow anybody to access your application and to override an
 Please enter your database connection details and credentials.
 
 ```php
-    'doctrine' => [
-        'connection' => [
-            'orm_default' => [
-                'driverClass' => PDOMySqlDriver::class,
-                'params' => [
-				// @ Change database connection to your needs
-                    'host'     => '**127.0.0.1**',
-                    'user'     => '**skylizer**',
-                    'password' => '**<db-password>**',
-                    'dbname'   => '**skylizer**',
-                ]
-            ],
-        ], 
-    ],
+'doctrine' => [
+	'connection' => [
+		'orm_default' => [
+			'driverClass' => PDOMySqlDriver::class,
+			'params' => [
+			// @ Change database connection to your needs
+				'host'     => '<127.0.0.1>',
+				'user'     => '<skylizer>',
+				'password' => '<db-password>',
+				'dbname'   => '<skylizer>',
+			]
+		],
+	], 
+],
 ```
 
 #### Logging
