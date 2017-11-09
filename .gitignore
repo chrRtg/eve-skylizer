@@ -9,6 +9,7 @@ nbproject
 .nbproject
 .settings
 vendor/
+composer.lock
 
 /ressource/db_model.mwb.bak
 /ressource/private/
