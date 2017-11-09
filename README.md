@@ -59,6 +59,7 @@ quit
 Import database from your skylizer respository:
 
 ```
+bunzip *.bz2
 mysql -u root -p skylizer <./ressource/db_import/sl_full_dump_171022.sql
 ```
 
