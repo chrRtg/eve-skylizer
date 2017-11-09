@@ -1,0 +1,63 @@
+<?php
+/**
+ * Local Configuration Override
+ *
+ * This configuration override file is for overriding environment-specific and
+ * security-sensitive configuration information. Copy this file without the
+ * .dist extension at the end and populate values as needed.
+ */
+
+use Doctrine\DBAL\Driver\PDOMySql\Driver as PDOMySqlDriver;
+use Zend\Log\Logger;
+
+return [
+	'eve_sso' => array (
+		// @ generate a new EVE application at https://developers.eveonline.com/applications
+		'clientId'          => '<generate it at https://developers.eveonline.com/applications>',
+		'clientSecret'      => '<generate it at https://developers.eveonline.com/applications>',
+		'redirectUri'       => '<your application base URL>/auth/index',
+		'scope' => [
+			// @ while generating your EVE application take care to add these scopes
+			'publicData', 
+			'characterLocationRead', 
+			'esi-location.read_location.v1'
+		],
+		'auth' => [
+			// @ Change to reflect your needs
+			'allow_all' => 'no', // set to 'YeS' (mind the upper and lower case!) to allow to any Eve-User to get access as a regular user
+			'admin' => ["your player name"],
+			'corp_allow' => ["your corporation", "another corporation"],
+			'user_allow' => ["some player not in the corportions above", "another player name"],
+			'user_deny' => ["some spy in your corporation", "another spy in your corporation", "your CEO's name (joke...)"],
+		],
+	),		
+    'doctrine' => [
+        'connection' => [
+            'orm_default' => [
+                'driverClass' => PDOMySqlDriver::class,
+                'params' => [
+				// @ Change database connection to your needs
+                    'host'     => '127.0.0.1',
+                    'user'     => 'db-username',
+                    'password' => 'db-password',
+                    'dbname'   => 'db-name',
+                ]
+            ],            
+        ], 
+    ],
+	'log' => [
+        'MyLogger' => [
+            'writers' => [
+                [
+                    'name' => 'stream',
+					// @ Change loglevel to your needs, recommended Logger::ERR
+					// supported levels: EMERG, ALERT, CRIT, ERR, WARN, NOTICE, INFO, DEBUG
+                    'priority' => Logger::ERR,
+                    'options' => [
+                        'stream' => './data/log/atlog_'.date('ymd').'.log',
+                    ],
+                ],
+            ],
+        ],
+	],
+];

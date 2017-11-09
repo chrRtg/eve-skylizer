@@ -1,0 +1,29 @@
+<?php
+$this->headTitle('Welcome');
+
+$this->mainMenu()->setActiveItemId('home');
+
+$this->pageBreadcrumbs()->setItems([
+            'Home'=>$this->url('home')
+            ]);
+?>
+
+<div class="jumbotron">
+  <h1>Welcome <?=$this->currentUser()->getEveUsername(); ?></h1>
+<p>
+    You succesfully logged in to skŸlizer.
+</p>
+<p>
+    skŸlizer is a tool for Eve Online to handle any kind of scans. At the moment only the new kind of moon survey scans are supported.
+</p>
+
+<p>
+	As a next step you may choose from the top menu where you want to go to. In each module you may discover a friendly 
+	blue button in the top right labeled "info". This may give you some thoughts on what this tool is meant for.
+</p>
+
+
+</div>
+
+
+

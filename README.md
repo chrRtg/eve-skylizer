@@ -2,9 +2,9 @@
 
 skŸlizer is a tool for Eve Online to handle any kind of scans. At the moment only survey scans of moon are supported which has been introduced to the game 25th of October 2017.
 
-skŸlizer is also a robust foundation to build any kind of EVE related tools on it. 
-
 ## Features (of the framework)
+
+skŸlizer is also a robust foundation to build any kind of EVE related tools on it. 
 
 * EVE ESI (swagger) API interface
 * Login is available only via EVE-SSO as a identity provider. 
@@ -13,8 +13,9 @@ skŸlizer is also a robust foundation to build any kind of EVE related tools on 
 * A granular role-rights-permission system to manage who is allowed to use what.
 * User, Role and Permission administration interface
 * set one player name as application adminstrator, also with the capability to add more administators
-* PHP 7.0 or better* uses [Zend Framework 3](https://github.com/zendframework/zendframework)
-* MySQL 5.6 or better
+* requires PHP 7.0 or better
+* uses [Zend Framework 3](https://github.com/zendframework/zendframework)
+* requires MySQL 5.6 or better
 * based on the fantastic [Role Demo Sample from olegkrivtsov](https://github.com/olegkrivtsov/using-zf3-book-samples/tree/master/roledemo)
 * uses some more libraries, see below in the *thank you* section.
 
@@ -51,13 +52,14 @@ Create database:
 ```
 CREATE DATABASE skylizer;
 GRANT ALL PRIVILEGES ON skylizer.* TO skylizer@localhost identified by '<your_password>';
+FLUSH PRIVILEGES;
 quit
 ```
 
-Run database migrations to intialize database schema:
+Import database from your skylizer respository:
 
 ```
-./vendor/bin/doctrine-module migrations:migrate
+mysql -u root -p skylizer <./ressource/db_import/sl_full_dump_171022.sql
 ```
 
 ### Apache virtual host

@@ -1,0 +1,167 @@
+/*
+* stdbg col: #2b3e50 
+* shades: #4e5d6c #344b61
+* orange: #df691a
+*
+*/
+
+body {
+    margin: 50px 10px 0px 5px;
+}
+
+.nav-avatar {
+	margin-top: 4px;
+}
+
+footer {
+    margin: 1em 0;
+	background-color: #292929;
+	padding: 0.5em;
+	font-size: 10pt;
+}
+
+.modal-backdrop.in {
+    opacity: 0.8;
+}
+
+/* less room for forms */
+.form-control,
+.form-control[disabled], 
+.form-control[readonly] {
+	padding: 2px 4px;
+	font-family: "Lucida Console", Monaco, monospace;
+}
+
+.syklizer {
+	color: #df691a;
+}
+
+button.btn, a.btn {
+	margin:2px;
+}
+
+.btn.btn-system {
+	background-color: #515c6b;
+	color: #fff;
+}
+.btn.btn-constellation {
+	background-color: #304559;
+	color: #fff;
+}
+.btn.btn-system:hover, .btn.btn-constellation:hover {
+	border: 1px solid #df691a; 
+}
+
+.alert.alert-warning {
+	color: #304559;
+}
+
+/* data table styling */
+.dataTables_wrapper {
+	margin-top: 20px;
+}
+.pagination > li > a, .pagination > li > span {
+    padding: 4px 8px;
+}
+
+div.dataTables_wrapper div.dataTables_info {
+	font-size: 13px;
+}
+
+table.dataTable {
+	clear: both;
+    margin-top: 6px !important;
+    margin-bottom: 6px !important;
+    max-width: none !important;
+    border-collapse: collapse !important;
+}
+
+.table > thead > tr > th, 
+.table > tbody > tr > th, 
+.table > tfoot > tr > th, 
+.table > thead > tr > td, 
+.table > tbody > tr > td, 
+.table > tfoot > tr > td {
+    border: none;
+}
+
+.table > thead > tr > th {
+	line-height: 2.15;
+}
+
+.table > thead > tr {
+    background-color: #515c6b; 
+	border-bottom: 1px solid #ebebeb; 
+}
+
+.table-striped > tbody > tr:nth-of-type(odd) {
+    background-color: #304559;
+	border-bottom: 1px solid #2b3e50; 
+}
+.table-striped > tbody > tr:nth-of-type(even) {
+    background-color: #344b61;
+	border-bottom: 1px solid #2b3e50; 
+}
+
+.table > tbody > tr:hover, .table-striped > tbody > tr:hover {
+    background-color: #4e433c;
+	border-bottom: 1px solid #df691a; 
+}
+
+.table-striped > tbody > tr  > td .actions { 
+	visibility: hidden;
+}
+.table-striped > tbody > tr:hover  > td .actions { 
+	visibility: visible;
+}
+
+.gooname {
+	color: #df691a;
+}
+.gooval {
+	font-weight: bold;
+}
+.gooprice {
+	color: #3c9887;
+}
+
+/*
+ * Select 2 Styling
+ */
+.select2-dropdown {
+	background-color: #4e433c;
+	border: 1px solid #5e534c
+}
+
+.form-group-lg .select2 .selection {
+	font-size: 23px;
+}
+
+.select2-search > input {
+	background-color: #3e332c;
+}
+
+.select2-container--default .select2-selection--single {
+    background-color: #3e332c; 
+    border: 1px solid #4e433c;
+    border-radius: 1px;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    color: #fff;
+    line-height: 28px;
+}
+
+.select2-result-repository__title {
+	color: #fff;
+	font-size: 14px;
+	font-weight: bold;
+}
+
+/*
+ *
+ */
+.addpaddingtop20 {
+	padding-top: 20px;
+}
+

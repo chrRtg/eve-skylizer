@@ -1,0 +1,176 @@
+<?php
+$this->headTitle('Moon');
+
+$this->mainMenu()->setActiveItemId('vposmoon');
+
+$form->get('scan')->setAttributes([
+	'class' => 'form-control',
+	'rows' => '20',
+	'id' => 'scanarea',
+	'placeholder' => 'paste your scan from SCAN, DSCAN or survey scan HERE',
+	'required' => true
+]);
+
+//ini_set('xdebug.var_display_max_depth', 3);
+//var_dump($filters);
+
+if(empty($filters['info_system']['constellation'])) {
+	$location_string = $filters['info_system']['itemname'] . ' (Constellation in '.$filters['info_system']['region'].')';
+} else {
+	$location_string = $filters['info_system']['itemname'] . ' ('.$filters['info_system']['region'].')';
+}
+
+?>
+<script>
+	var sl_messages = <?= json_encode($message); ?>;
+	var filters_json = <?= json_encode($filters_json); ?>;
+</script>	
+<?= $this->flashMessenger()->render('error', ['alert', 'alert-warning']); ?>
+<?= $this->flashMessenger()->render('success', ['alert', 'alert-success']); ?>
+<?= $this->flashMessenger()->render('info', ['alert', 'alert-info']); ?>
+
+<div class="row">
+	<div class="col-lg-9 col-sm-8">
+		<div class="row">
+			<div class="col-sm-6">
+				<!-- start system name -->
+				<div class="form-group form-group-lg addpaddingtop20">
+					<select class="form-control select2-typeahead-system" name="selectsystem" id="selectsystem">
+						<option value="<?= $this->escapeHtml($filters['info_system']['itemid']); ?>" selected><?= $this->escapeHtml($location_string); ?></option>
+					</select>
+				</div>
+				<div>
+					<?= $this->vpViewTool()->createNeighboursNavigation($filters['info_system']); ?>
+				</div>
+			</div>
+			<!-- start filter area -->
+			<div class="col-sm-3">
+				<div class="form-group form-group-sm">
+					<label for="selectcomposition">Composition - Filter <?= (!empty($filters['composition']) ? '&nbsp; <a href="/" class="resetswitch" data-id="selectcomposition">reset</a>' : '') ; ?></label>
+					<select class="form-control" name="selectcomposition" id="selectcomposition">
+						<option value="0">please select a value</option>
+						<?= $this->vpViewTool()->getCompositionListAsOptions($filters['info_system']['id'], (!empty($filters['composition']) ? $filters['composition'] : 0)); ?>
+					</select>
+				</div>
+				<div class="form-group form-group-sm">
+					<label for="selectore">Ore - Filter <?= (!empty($filters['ore']) ? '&nbsp; <a href="/" class="resetswitch" data-id="selectore">reset</a>' : '') ; ?></label>
+					<select class="form-control" name="selectore" id="selectore">
+						<option value="0">please select a value</option>
+						<?= $this->vpViewTool()->getOreListAsOptions($filters['info_system']['id'], (!empty($filters['ore']) ? $filters['ore'] : 0)); ?>
+					</select>
+				</div>
+			</div>
+			<div class="col-sm-3">
+				View-Switches (to be done later)
+			</div>
+
+		</div>
+		<div class="row">
+			<div class="col-sm-12">
+				<table id="moontable" class="table table-hover table-striped table-responsive" cellspacing="0" width="100%">
+					<thead>
+						<tr>
+							<th>Planet / Moon</th>
+							<th>Composition</th>
+							<th>Value</th>
+							<th>Ore</th>
+							<th>Ore-Value</th>
+							<th>Structure</th>
+							<th>Owner</th>
+							<th>Scanned</th>
+						</tr>
+					</thead>
+					<tbody>
+						<?php foreach ($moon_list as $key => $moon): ?>
+							<?php
+//echo '<pre>('.$key.')';
+//ini_set('xdebug.var_display_max_depth', 3);
+//var_dump($moon);
+							?>
+						<td><?= $this->escapeHtml($moon[0]->getEveMapdenormalizeItemid()->getItemname()); ?>&nbsp;
+							[<?= $this->vpViewTool()->convertMoonToShortform($moon[0]->getEveMapdenormalizeItemid()->getItemname()); ?>]
+							<span  class="actions">
+								<a class="btn btn-xs btn-danger"  data-toggle="modal" data-target="#nopeModal"
+								   href="<?= $this->url('vposmoon', ['action' => 'delete', 'id' => $moon[0]->getMoonId()]); ?>" 
+								   title="delete Moon"><span class="glyphicon glyphicon-remove"></span></a></span></td>
+						<td><?= $this->vpViewTool()->renderMoonComposition($moon['goo']); ?></td>
+						<td><?= $this->vpViewTool()->calculateMoonComposition($moon['goo']); ?></td>
+						<td><?= $this->vpViewTool()->renderMoonMateriallist($moon['materiallist']); ?></td>
+						<td><?= number_format( round(intval($this->vpViewTool()->renderMoonMaterialValue($moon['materiallist']))/1000), 0) ; ?> k</td>
+						<td>tbd</td>
+						<td>tbd</td>
+						<td><?= date_format($moon[0]->getLastseenDate(), 'Y-m-d H:i:s'); ?><br /> <?= $moon['uchgddat']; ?></td>
+						</tr>
+					<?php endforeach; ?>						
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	<!-- start scan area -->
+	<div class="col-lg-3 col-sm-4">
+		<div class="row">
+			<button type="button" class="btn btn-info btn-sm pull-right" data-toggle="modal" data-target="#helpModal">
+				<span class="glyphicon glyphicons-question-sign"></span> Help
+			</button>
+		<?php if($this->access('moon.manage')): ?>
+			<a href="<?= $this->url('vposmoon', ['action' => 'dlMoonsCsv']); ?>" class="btn btn-success btn-sm pull-right" title="download Moon data as CSV">
+				<span class="glyphicon glyphicons-question-sign"></span> DL-CSV
+			</a>
+		<?php endif; ?>
+		</div>
+		<div class="row">
+			<form class="form-signin" method="post">
+				<?= $this->formLabel($form->get('scan')); ?>
+				<?= $this->formElement($form->get('scan')); ?>
+				<?= $this->formElementErrors($form->get('scan')); ?>
+				<button class="btn btn-sm btn-primary btn-block" type="submit">submit your scan</button>
+			</form>
+		</div>
+	</div>
+</div>
+
+
+
+<!-- Help Modal -->
+<div class="modal fade" id="helpModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="myModalLabel">Scan What?</h4>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+					<div class="col-md-6">
+						<img src="img/eve_moon_probe_window.jpg" alt=""/>
+					</div>
+					<div class="col-md-6">
+						<p>
+						The &laquo;Moon Probe and Analysis&raquo; window offer a button &laquo;in the right bottom&raquo;. After you pressed this
+						button navigate to <span class="syklizer">Syklizer - Moon</span> and paste the result into the big area to the right. 
+						</p>
+						<p>Then press the button &laquo;submit your scan&raquo; below the area and hold a sec. The table to the left will get updated soon and show your
+						scan results.
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Nope Modal -->
+<div class="modal fade" id="nopeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="myModalLabel">Nope?!</h4>
+			</div>
+			<div class="modal-body">
+				Sorry folks, this function is not supported yet.
+			</div>
+		</div>
+	</div>
+</div>

@@ -9,4 +9,5 @@ nbproject
 .nbproject
 .settings
 vendor/
-ressource/
+
+/ressource/db_model.mwb.bak

@@ -1,0 +1,81 @@
+<?= $this->doctype() ?>
+
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<?= $this->headTitle('skŸlizer - The Eve-Online Scan Analyzer')->setSeparator(' - ')->setAutoEscape(false) ?>
+
+		<?=
+			$this->headMeta()
+			->appendName('viewport', 'width=device-width, initial-scale=1.0')
+			->appendHttpEquiv('X-UA-Compatible', 'IE=edge')
+		?>
+
+		<link rel="apple-touch-icon" sizes="144x144" href="<?= $this->basePath() . '/img'; ?>/apple-icon-144x144.png">
+		<link rel="icon" type="image/png" sizes="192x192"  href="<?= $this->basePath() . '/img'; ?>/android-icon-192x192.png">
+		<link rel="icon" type="image/png" sizes="32x32" href="<?= $this->basePath() . '/img'; ?>/favicon-32x32.png">
+		<link rel="icon" type="image/png" sizes="96x96" href="<?= $this->basePath() . '/img'; ?>/favicon-96x96.png">
+		<link rel="icon" type="image/png" sizes="16x16" href="<?= $this->basePath() . '/img'; ?>/favicon-16x16.png">
+		<?=
+			$this->headLink(['rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->basePath() . '/img/favicon.ico'])
+				->prependStylesheet($this->basePath('css/sl.css'))
+				->prependStylesheet($this->basePath('css/jquery.toast.css'))
+				->prependStylesheet('https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.4/css/select2.css')
+				->prependStylesheet($this->basePath('css/responsive.bootstrap.min.css'))
+				->prependStylesheet($this->basePath('css/dataTables.bootstrap.min.css'))
+				->prependStylesheet($this->basePath('css/skylizer.css'))
+				//->prependStylesheet($this->basePath('css/custom.min.css'))
+		?>
+
+		<?=
+			$this->headScript()
+			->prependFile($this->basePath('js/sl.js'))
+			->prependFile($this->basePath('js/jquery.toast.js'))
+			->prependFile('https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.4/js/select2.full.min.js')
+			->prependFile($this->basePath('js/responsive.bootstrap.min.js'))
+			->prependFile($this->basePath('js/dataTables.responsive.min.js'))
+			->prependFile($this->basePath('js/dataTables.bootstrap.min.js'))
+			->prependFile($this->basePath('js/jquery.dataTables.min.js'))
+			->prependFile($this->basePath('js/bootstrap.min.js'))
+			->prependFile($this->basePath('js/jquery-2.2.4.min.js'))
+		?>
+	</head>
+	<body>
+		<div class="navbar navbar-default navbar-fixed-top">
+			<div class="container-fluid">
+			<div class="navbar-header">
+				<a href="../"><img src="<?= $this->basePath('img/'); ?>skylizer_logo.png" height="40" width="120"></a>
+				
+				<!-- Navigation bar -->
+				<?php
+				// Check if the activeMenuItemId passed to layout view model
+				// and if so, use it for setting active navbar item.
+				if (isset($activeMenuItemId)) {
+					$this->mainMenu()->setActiveItemId($activeMenuItemId);
+				}
+
+				// Render the navbar
+				echo $this->mainMenu()->render();
+				?>
+			</div>
+			</div>
+		</div>
+
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-md-12">
+					<!-- Page content placeholder -->
+					<?= $this->content; ?>
+				</div>
+			</div>
+		</div>
+			<footer>
+				<div class="row">
+					<div class="col-lg-12">
+						&copy; 2017 by <a href="https://evewho.com/pilot/Rtg+Quack" target="_blank">Rtg Quack</a> | All Eve Related Materials are Property Of <a href="http://www.ccpgames.com/" target="_blank">CCP Games</a>
+					</div>
+				</div>
+			</footer>
+	</body>
+	<?= $this->inlineScript() ?>
+</html>
