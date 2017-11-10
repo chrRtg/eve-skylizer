@@ -196,7 +196,7 @@ class VposMoonHelper extends AbstractHelper {
 			// mode: constellation
 			foreach ($res as $system) {
 				if ($system['mdc_id'] != $system_data['constellationid'] && $system['mdc_id'] != $system_data['itemid']) {
-					$neighbour_list['constellation'][$system['mdc_id']] = $system['mdc_name'] . ' ('.$system['mds_name'].')';
+					$neighbour_list['constellation'][$system['mdc_id']] = $system['mdc_name'] . ' <span class="system">('.$system['mds_name'].')</span>';
 				} else {
 					$neighbour_list['system'][$system['mds_id']] = $system['mds_name'];
 				}
@@ -208,7 +208,7 @@ class VposMoonHelper extends AbstractHelper {
 				$neighbour_list['system'][$system['mds_id']] = $system['mds_name'];
 
 				if ($system['mdc_id'] != $system_data['constellationid'] && $system['mdc_id'] != $system_data['itemid']) {
-					$neighbour_list['constellation'][$system['mdc_id']] = $system['mdc_name'];
+					$neighbour_list['constellation'][$system['mdc_id']] = $system['mdc_name'] . ' <span class="system">('.$system['mds_name'].')</span>';
 				}
 			}
 		}

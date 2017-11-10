@@ -46,7 +46,10 @@ button.btn, a.btn {
 }
 .btn.btn-constellation {
 	background-color: #304559;
-	color: #fff;
+	color: #5cb85c;
+}
+.btn.btn-constellation span.system{
+	color: #ccc;
 }
 .btn.btn-system:hover, .btn.btn-constellation:hover {
 	border: 1px solid #df691a; 
