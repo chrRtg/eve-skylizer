@@ -93,7 +93,7 @@ class VposMoonHelper extends AbstractHelper {
 		if (!empty($data)) {
 			foreach ($data as $k => $row) {
 				if (!empty($row) && $k != 'val') {
-					$res .= '<span class="gooval">' . round(((float) $row['qty'] * 100), 0) . '</span>&nbsp;';
+					$res .= '<span class="gooval">' . number_format(round(((float) $row['qty'] * 100), 0)) . '</span>&nbsp;';
 					$res .= '<span class="gooname">' . $row['name'] . '</span>&nbsp;';
 					$res .= '<span class="gooprice">' . number_format(floatval($row['worth']), 0) . '</span><br />';
 				}
@@ -196,7 +196,7 @@ class VposMoonHelper extends AbstractHelper {
 			// mode: constellation
 			foreach ($res as $system) {
 				if ($system['mdc_id'] != $system_data['constellationid'] && $system['mdc_id'] != $system_data['itemid']) {
-					$neighbour_list['constellation'][$system['mdc_id']] = $system['mdc_name'];
+					$neighbour_list['constellation'][$system['mdc_id']] = $system['mdc_name'] . ' ('.$system['mds_name'].')';
 				} else {
 					$neighbour_list['system'][$system['mds_id']] = $system['mds_name'];
 				}

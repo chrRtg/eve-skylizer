@@ -86,7 +86,12 @@ table.dataTable {
 }
 
 .table > thead > tr > th {
-	line-height: 2.15;
+	line-height: 1.75;
+}
+
+thead div.sub {
+	font-weight: normal;
+	font-size: 12px;
 }
 
 .table > thead > tr {
@@ -119,7 +124,7 @@ table.dataTable {
 	color: #df691a;
 }
 .gooval {
-	font-weight: bold;
+/*	font-weight: bold; */
 }
 .gooprice {
 	color: #3c9887;
