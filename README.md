@@ -4,6 +4,7 @@ skŸlizer is a tool for Eve Online to handle any kind of scans. At the moment on
 
 ## Features
 
+* [for the impatient - a screenshot](https://raw.githubusercontent.com/chrRtg/eve-skylizer/master/public/img/skylizer_screenshot_1.jpg)
 * read Moon scan data from Eve Online. Press below the scan results "copy to clipboard", then navigate to skŸlizer and paste the scan to the area to the right and then the button "submit your scan" below the area.
 * search by Systemname or Constellation with autosuggest, just start typing
 * easily navigate to neighbor systems, constellation or show all scanned moons in the current constellation
