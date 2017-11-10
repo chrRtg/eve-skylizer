@@ -1,8 +1,36 @@
 # skŸlizer - The Eve-Online scan analyzer
 
-skŸlizer is a tool for Eve Online to handle any kind of scans. At the moment only survey scans of moon are supported which has been introduced to the game 25th of October 2017.
+skŸlizer is a tool for Eve Online to handle any kind of scans. At the moment only survey scans of moon are supported which has been introduced with the Liveblood expansion 25'th of October 2017.
 
-## Features (of the framework)
+## Features
+
+* read Moon scan data from Eve Online. Press below the scan results "copy to clipboard", then navigate to skŸlizer and paste the scan to the area to the right and then the button "submit your scan" below the area.
+* search by Systemname or Constellation with autosuggest, just start typing
+* easily navigate to neighbor systems, constellation or show all scanned moons in the current constellation
+* show the composition, amount and value of the goo for each moon
+* show the composition, amount and value of the refined minerals ("Ore") for each moon
+* filter by goo or refined minerals
+* order by value (which moon is the R64 equivalent)
+* polls current prices from Eve via ESI call
+* Help Function
+* for Moon-Managers (specific right in the tool) create CSV exports
+* and much more to be come...
+
+In the future skŸlizer will become a tool to share moon, scan and dscan results and to combine the scan results. It will e.g. show after a scan which kind of structure has been anchored on a moon or somewhere else.
+
+## [PUBLIC Demo of skŸlizer](https://skylizer.eve-tools.info)
+
+Data available in the public demo for: 3QE-9Q, Alparena, Daras, F-TE1T, Hakonen, HM-UVD, L-C3O7, Reschard, Taisy and ZOYW-O
+
+Feel free to add your scans (or some from pastebin) to the tool. 
+
+## Requirement
+
+* Webserver, e.g. Apache
+* PHP v.7 or later with `gd` and `intl` extensions
+* MySQL 5.6 or later.
+
+## Features of the framework (for developers)
 
 skŸlizer is also a robust foundation to build any kind of EVE related tools on it. 
 
@@ -12,18 +40,17 @@ skŸlizer is also a robust foundation to build any kind of EVE related tools on 
 * Deny access by EVE-Online player names 
 * A granular role-rights-permission system to manage who is allowed to use what.
 * User, Role and Permission administration interface
-* set one player name as application adminstrator, also with the capability to add more administators
-* requires PHP 7.0 or better
+* set one player name as application administrator, also with the capability to add more administrators
 * uses [Zend Framework 3](https://github.com/zendframework/zendframework)
-* requires MySQL 5.6 or better
 * based on the fantastic [Role Demo Sample from olegkrivtsov](https://github.com/olegkrivtsov/using-zf3-book-samples/tree/master/roledemo)
 * uses some more libraries, see below in the *thank you* section.
 
 ## Installation
 
-You need to have Apache 2.4 HTTP server, PHP v.7 or later with `gd` and `intl` extensions, and MySQL 5.6 or later.
+To download skŸlizer as a ZIP archive, click the Clone or Download button. When download is complete, unpack the archive to some directory.
+It can be your home dir or `/var/www/html`).
 
-Download skylizer to some directory (it can be your home dir or `/var/www/html`) and run Composer as follows:
+Then run Composer as follows:
 
 ```
 php composer.phar install
@@ -103,7 +130,7 @@ Edit **`config/autoload/local.php`** and set various parameters. Hint: you may l
 
 #### EVE Online SSO access
 
-First go to [EVE Online developers portal](https://developers.eveonline.com/applications) to obtain some crendentials. 
+First go to [EVE Online developers portal](https://developers.eveonline.com/applications) to obtain some credentials. 
 What you need to have available is:
 > your webserver URL. Please add `/auth/index` to your URl in order to generate the *redirect URL*
 > as scope please add `publicData` and `esi-location.read_location.v1`
@@ -186,7 +213,7 @@ Logfiles are beeing stored in ´./data/log/´, one file each day. Please log-rot
 
 ### GO!
 
-Now you should be able to see the skylizer website by visiting the link "http://localhost/". 
+Now you should be able to see the skylizer website by visiting the link "http://skylizer.your.domain/". 
  
 ## Contributing
 
@@ -198,7 +225,7 @@ If you found a mistake or a bug please get in touch via
 ## Development
 
 You're invited to add modules or enhance functionality to skŸlizer or even build your own application on it. 
-I'm happy to support you or to speed up end enhance the developemnt as part of a team.
+I'm happy to support you or to speed up end enhance the development as part of a team.
 We also may discuss via EVE ingame mail, TS or even better discord.
 
 To enable development mode:
@@ -216,4 +243,5 @@ This code is provided under the [Apache License 2.0](https://choosealicense.com/
 * to OG for teaching me doctrine 2 and more
 * [EveLabs](https://github.com/EvELabs/oauth2-eveonline) for the  Oauth Library
 * [SeAT](https://github.com/eveseat/eseye) for the ESI interface
-* to [xell network seven](http://evemaps.dotlan.net/corp/xell_network_seven) and [V.e.G.A.](http://evemaps.dotlan.net/alliance/V.e.G.A.)* flying with them since some years
+* and of course to [xell network seven](http://evemaps.dotlan.net/corp/xell_network_seven) and [V.e.G.A.](http://evemaps.dotlan.net/alliance/V.e.G.A.), flying with them since some years
+
