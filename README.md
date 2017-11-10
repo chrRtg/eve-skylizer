@@ -31,6 +31,14 @@ php composer.phar install
 
 The command above will install the dependencies, in particular Zend Framework 3 and Doctrine 2.
 
+
+Add some directories manually:
+
+```
+mkdir ./data/cache
+mkdir ./data/log
+```
+
 If required adjust permissions for all files and directories:
 
 ```
@@ -59,8 +67,8 @@ quit
 Import database from your skylizer respository:
 
 ```
-bunzip *.bz2
-mysql -u root -p skylizer <./ressource/db_import/sl_full_dump_171022.sql
+bunzip2 *.bz2
+mysql -u root -p skylizer <./ressource/db_import/sl_full_dump_*.sql
 ```
 
 ### Apache virtual host
