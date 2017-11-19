@@ -291,14 +291,27 @@ class MoonManager {
 		// restore filter from user session
 		if (empty($this->sessionContainer->filter)) {
 			$filters = array();
+			$filters['detail_filter_composition'] = "1";
+			$filters['detail_filter_ore'] = "1";
 		} else {
 			$filters = $this->sessionContainer->filter;
 		}
+		
+		// start with the view filters
+		if (!empty($get_parameters['detail_filter_composition'])) {
+			$filters['detail_filter_composition'] = $get_parameters['detail_filter_composition'];
+		}
+		if (!empty($get_parameters['detail_filter_ore'])) {
+			$filters['detail_filter_ore'] = $get_parameters['detail_filter_ore'];
+		}
 
+		
+		// system or constellation
 		if (!empty($get_parameters['system'])) {
 			$filters['system'] = $get_parameters['system'];
 		}
 
+		// composition facette
 		if (isset($get_parameters['composition'])) {
 			if ($get_parameters['composition'] == '0') {
 				$filters['composition'] = 0;
@@ -308,6 +321,7 @@ class MoonManager {
 			}
 		}
 
+		// ore facette
 		if (isset($get_parameters['ore'])) {
 			if ($get_parameters['ore'] == '0') {
 				$filters['ore'] = 0;
@@ -317,7 +331,7 @@ class MoonManager {
 			}
 		}
 
-		// if no system is give fix it to Jita
+		// if no system is given - default to Jita
 		if (empty($filters['system'])) {
 			$my_location = $this->eveSSOManager->getUserLocationAsSystemID();
 			// Current location if given, otherwise we'll take Jita

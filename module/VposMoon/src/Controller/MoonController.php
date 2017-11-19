@@ -117,8 +117,6 @@ class MoonController extends AbstractActionController {
 	 */
 	public function priceUpdateAction()
 	{
-
-		$this->logger->debug('debug msg from test Action');
 		$cnt = $this->eveDataManager->updatePrices();
 
 		return new ViewModel([

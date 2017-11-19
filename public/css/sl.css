@@ -51,6 +51,13 @@ button.btn, a.btn {
 .btn.btn-constellation span.system{
 	color: #ccc;
 }
+
+.btn-skylizer {
+  color: #ebebeb;
+  background-color: #3e332c;	
+  border-color: #4e433c;
+}
+
 .btn.btn-system:hover, .btn.btn-constellation:hover {
 	border: 1px solid #df691a; 
 }

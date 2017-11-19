@@ -1,6 +1,24 @@
 $(document).ready(function ()
 {
 	
+	// auto-submit checkboxes
+	$("#detail_filter_composition").change(function() {
+		if (this.checked) {
+			buildFilterQuery({type:"detail_filter_composition", id:"1"});
+		} else {
+			buildFilterQuery({type:"detail_filter_composition", id:"-1"});
+		}
+	});	
+
+	$("#detail_filter_ore").change(function() {
+		if (this.checked) {
+			buildFilterQuery({type:"detail_filter_ore", id:"1"});
+		} else {
+			buildFilterQuery({type:"detail_filter_ore", id:"-1"});
+		}
+	});	
+
+	// auto-submit links
 	$('a.sytemswitch').click(function() {
 		buildFilterQuery({type:"selectsystem", id:$(this).data("id")});
 		return false;
@@ -11,6 +29,8 @@ $(document).ready(function ()
 		return false;
 	});
 	
+	
+	// activate select2 for some elements
 	$('#selectcomposition').select2();
 	$('#selectore').select2();
 
@@ -107,11 +127,32 @@ $(document).ready(function ()
 		buildFilterQuery({type:"selectsystem", id:loc_id});
 	}
 
+	/**
+	 * Takes the filter params as well a request. 
+	 * 
+	 * Out of all previous filters as well the current request this function builds a 
+	 * filtered query and send him to the server via location.href
+	 * 
+	 * 
+	 * @param {type} filter_param
+	 * @return {Boolean}
+	 */
 	function buildFilterQuery(filter_param) 
 	{
 		var jdata = null;
 		var url_param = {};
 		var url = '';
+		
+		$.blockUI({ message: "<h1>update the page...</h1>",
+			css: { 
+				border: 'none', 
+				padding: '15px', 
+				backgroundColor: '#000', 
+				'-webkit-border-radius': '10px', 
+				'-moz-border-radius': '10px', 
+				opacity: .5, 
+				color: '#fff' 
+			} }); 
 		
 		if (typeof filters_json === 'undefined' || !filters_json) {
 			console.debug('no filter param given');
@@ -133,6 +174,12 @@ $(document).ready(function ()
 			}
 			if(filter_param.type === 'selectore') {
 				url_param['ore'] = filter_param.id;
+			}
+			if(filter_param.type === 'detail_filter_composition') {
+				url_param['detail_filter_composition'] = filter_param.id;
+			}
+			if(filter_param.type === 'detail_filter_ore') {
+				url_param['detail_filter_ore'] = filter_param.id;
 			}
 		}
 		

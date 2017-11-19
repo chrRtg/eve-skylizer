@@ -14,12 +14,11 @@ $form->get('scan')->setAttributes([
 //ini_set('xdebug.var_display_max_depth', 3);
 //var_dump($filters);
 
-if(empty($filters['info_system']['constellation'])) {
-	$location_string = $filters['info_system']['itemname'] . ' (Constellation in '.$filters['info_system']['region'].')';
+if (empty($filters['info_system']['constellation'])) {
+	$location_string = $filters['info_system']['itemname'] . ' (Constellation in ' . $filters['info_system']['region'] . ')';
 } else {
-	$location_string = $filters['info_system']['itemname'] . ' ('.$filters['info_system']['region'].')';
+	$location_string = $filters['info_system']['itemname'] . ' (' . $filters['info_system']['region'] . ')';
 }
-
 ?>
 <script>
 	var sl_messages = <?= json_encode($message); ?>;
@@ -45,25 +44,37 @@ if(empty($filters['info_system']['constellation'])) {
 			</div>
 			<!-- start filter area -->
 			<div class="col-sm-3">
+				<!-- facette filter Composition -->
 				<div class="form-group form-group-sm">
-					<label for="selectcomposition">Composition - Filter <?= (!empty($filters['composition']) ? '&nbsp; <a href="/" class="resetswitch" data-id="selectcomposition">reset</a>' : '') ; ?></label>
+					<label for="selectcomposition">Composition - Filter <?= (!empty($filters['composition']) ? '&nbsp; <a href="/" class="resetswitch" data-id="selectcomposition">reset</a>' : ''); ?></label>
 					<select class="form-control" name="selectcomposition" id="selectcomposition">
 						<option value="0">please select a value</option>
 						<?= $this->vpViewTool()->getCompositionListAsOptions($filters['info_system']['id'], (!empty($filters['composition']) ? $filters['composition'] : 0)); ?>
 					</select>
 				</div>
+				<div class="checkbox">
+					<label>
+						<input type="checkbox"" id="detail_filter_composition" <?= (!empty($filters['detail_filter_composition'] && $filters['detail_filter_composition'] == "1") ? 'checked' : '' ) ?>>
+						show Composition details in table
+					</label>
+				</div>				
+			</div>
+			<div class="col-sm-3">
+				<!-- facette filter Ore -->
 				<div class="form-group form-group-sm">
-					<label for="selectore">Ore - Filter <?= (!empty($filters['ore']) ? '&nbsp; <a href="/" class="resetswitch" data-id="selectore">reset</a>' : '') ; ?></label>
+					<label for="selectore">Ore - Filter <?= (!empty($filters['ore']) ? '&nbsp; <a href="/" class="resetswitch" data-id="selectore">reset</a>' : ''); ?></label>
 					<select class="form-control" name="selectore" id="selectore">
 						<option value="0">please select a value</option>
 						<?= $this->vpViewTool()->getOreListAsOptions($filters['info_system']['id'], (!empty($filters['ore']) ? $filters['ore'] : 0)); ?>
 					</select>
 				</div>
+				<div class="checkbox">
+					<label>
+						<input type="checkbox" id="detail_filter_ore" <?= (!empty($filters['detail_filter_ore'] && $filters['detail_filter_ore'] == "1") ? 'checked' : '' ) ?>>
+						show Ore details in table
+					</label>
+				</div>
 			</div>
-			<div class="col-sm-3">
-				View-Switches (to be done later)
-			</div>
-
 		</div>
 		<div class="row">
 			<div class="col-sm-12">
@@ -71,9 +82,13 @@ if(empty($filters['info_system']['constellation'])) {
 					<thead>
 						<tr>
 							<th>Planet / Moon</th>
+						<?php if (!empty($filters['detail_filter_composition'] && $filters['detail_filter_composition'] == "1")): ?>
 							<th>Composition<div class="sub">(<span class="gooval">amount</span> / <span class="gooname">name</span> / <span class="gooprice">ISK</span>)</div></th>
+						<?php endif; ?>
 							<th>Value</th>
+						<?php if (!empty($filters['detail_filter_ore'] && $filters['detail_filter_ore'] == "1")): ?>
 							<th>Ore<div class="sub">(<span class="gooval">amount</span> / <span class="gooname">name</span> / <span class="gooprice">ISK</span>)</div></th>
+						<?php endif; ?>
 							<th>Ore-Value</th>
 							<th>Structure</th>
 							<th>Owner</th>
@@ -81,22 +96,21 @@ if(empty($filters['info_system']['constellation'])) {
 						</tr>
 					</thead>
 					<tbody>
-						<?php foreach ($moon_list as $key => $moon): ?>
-							<?php
-//echo '<pre>('.$key.')';
-//ini_set('xdebug.var_display_max_depth', 3);
-//var_dump($moon);
-							?>
+					<?php foreach ($moon_list as $key => $moon): ?>
 						<td><?= $this->escapeHtml($moon[0]->getEveMapdenormalizeItemid()->getItemname()); ?>&nbsp;
 							[<?= $this->vpViewTool()->convertMoonToShortform($moon[0]->getEveMapdenormalizeItemid()->getItemname()); ?>]
 							<span  class="actions">
 								<a class="btn btn-xs btn-danger"  data-toggle="modal" data-target="#nopeModal"
 								   href="<?= $this->url('vposmoon', ['action' => 'delete', 'id' => $moon[0]->getMoonId()]); ?>" 
 								   title="delete Moon"><span class="glyphicon glyphicon-remove"></span></a></span></td>
+					<?php if (!empty($filters['detail_filter_composition'] && $filters['detail_filter_composition'] == "1")): ?>
 						<td><?= $this->vpViewTool()->renderMoonComposition($moon['goo']); ?></td>
+					<?php endif; ?>
 						<td><?= $this->vpViewTool()->calculateMoonComposition($moon['goo']); ?></td>
+					<?php if (!empty($filters['detail_filter_ore'] && $filters['detail_filter_ore'] == "1")): ?>
 						<td><?= $this->vpViewTool()->renderMoonMateriallist($moon['materiallist']); ?></td>
-						<td><?= number_format( round(intval($this->vpViewTool()->renderMoonMaterialValue($moon['materiallist']))/1000), 0) ; ?> k</td>
+					<?php endif; ?>
+						<td><?= number_format(round(intval($this->vpViewTool()->renderMoonMaterialValue($moon['materiallist'])) / 1000), 0); ?> k</td>
 						<td>tbd</td>
 						<td>tbd</td>
 						<td><?= date_format($moon[0]->getLastseenDate(), 'Y-m-d H:i:s'); ?><br /> <?= $moon['uchgddat']; ?></td>
@@ -113,11 +127,11 @@ if(empty($filters['info_system']['constellation'])) {
 			<button type="button" class="btn btn-info btn-sm pull-right" data-toggle="modal" data-target="#helpModal">
 				<span class="glyphicon glyphicons-question-sign"></span> Help
 			</button>
-		<?php if($this->access('moon.manage')): ?>
-			<a href="<?= $this->url('vposmoon', ['action' => 'dlMoonsCsv']); ?>" class="btn btn-success btn-sm pull-right" title="download Moon data as CSV">
-				<span class="glyphicon glyphicons-question-sign"></span> DL-CSV
-			</a>
-		<?php endif; ?>
+			<?php if ($this->access('moon.manage')): ?>
+				<a href="<?= $this->url('vposmoon', ['action' => 'dlMoonsCsv']); ?>" class="btn btn-success btn-sm pull-right" title="download Moon data as CSV">
+					<span class="glyphicon glyphicons-question-sign"></span> DL-CSV
+				</a>
+			<?php endif; ?>
 		</div>
 		<div class="row">
 			<form class="form-signin" method="post">
@@ -147,11 +161,11 @@ if(empty($filters['info_system']['constellation'])) {
 					</div>
 					<div class="col-md-6">
 						<p>
-						The &laquo;Moon Probe and Analysis&raquo; window offer a button &laquo;in the right bottom&raquo;. After you pressed this
-						button navigate to <span class="syklizer">Syklizer - Moon</span> and paste the result into the big area to the right. 
+							The &laquo;Moon Probe and Analysis&raquo; window offer a button &laquo;in the right bottom&raquo;. After you pressed this
+							button navigate to <span class="syklizer">Syklizer - Moon</span> and paste the result into the big area to the right. 
 						</p>
 						<p>Then press the button &laquo;submit your scan&raquo; below the area and hold a sec. The table to the left will get updated soon and show your
-						scan results.
+							scan results.
 						</p>
 					</div>
 				</div>

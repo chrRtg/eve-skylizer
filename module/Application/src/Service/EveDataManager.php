@@ -151,7 +151,7 @@ class EveDataManager {
 			$types = $row[0];
 			$tid = $types->getTypeid();
 			if (!empty($price_arr[$tid])) {
-				// var_dump($tid . '  has price: ' . $price_arr[$tid] . '  baseprice: '. $types->getBaseprice());
+				//var_dump($tid . '  has price: ' . $price_arr[$tid] . '  baseprice: '. $types->getBaseprice());
 				$types->setBaseprice($price_arr[$tid]);
 				$j++;
 			}
@@ -163,7 +163,9 @@ class EveDataManager {
 			++$i;
 		}
 		$this->entityManager->flush();
-
+		
+		$this->logger->info($j . ' Prices were updated via ESI');
+		
 		return($j);
 	}
 
