@@ -153,6 +153,7 @@ class EveDataManager {
 			if (!empty($price_arr[$tid])) {
 				//var_dump($tid . '  has price: ' . $price_arr[$tid] . '  baseprice: '. $types->getBaseprice());
 				$types->setBaseprice($price_arr[$tid]);
+				$this->entityManager->persist($types);
 				$j++;
 			}
 

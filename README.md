@@ -75,6 +75,16 @@ sudo find ./ -type f -exec chmod 664 {} \;
 sudo find ./ -type d -exec chmod 775 {} \;
 ```
 
+## Update
+
+After any update please mind to clear the caches with ```rm ./data/cache/*.php```.
+
+## Update Prices
+
+Updating the prices, fetching them from Eve Database (ESI) is only available to the skŸlizer admin. To update just call 
+in your browser http://your-domain/vposmoon/priceUpdate
+
+
 ### Database
 
 Login to MySQL client:
@@ -92,7 +102,7 @@ FLUSH PRIVILEGES;
 quit
 ```
 
-Import database from your skylizer respository:
+Import database from your skŸlizer respository:
 
 ```
 bunzip2 *.bz2
