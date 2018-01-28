@@ -52,7 +52,7 @@ return [
              * Expects: string
              * Default: 'data/cache'
              */
-            'cache_dir' => 'data/cache',
+            'cache_dir' => realpath(__DIR__)  . '../../data/cache',
 
             /**
              * If a matches is defined, the profiler will be disabled if the request does not match the pattern.

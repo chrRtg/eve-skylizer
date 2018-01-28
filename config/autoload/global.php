@@ -41,7 +41,7 @@ return [
                 'name'    => Filesystem::class,
                 'options' => [
                     // Store cached data in this directory.
-                    'cache_dir' => './data/cache',
+                    'cache_dir' => realpath(__DIR__) . '/../../data/cache',
                     // Store cached data for 1 hour.
                     'ttl' => 60*60*1 
                 ],
@@ -59,7 +59,7 @@ return [
         // migrations configuration
         'migrations_configuration' => [
             'orm_default' => [
-                'directory' => 'data/Migrations',
+                'directory' => realpath(__DIR__) . '../../data/Migrations',
                 'name'      => 'Doctrine Database Migrations',
                 'namespace' => 'Migrations',
                 'table'     => 'migrations',
