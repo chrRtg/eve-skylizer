@@ -123,6 +123,13 @@ class MoonController extends AbstractActionController {
 			'cnt' => $cnt,
 		]);
 	}
+	
+	public function priceUpdateConsole()
+	{
+		$request = $this->getRequest();
+		
+		return $this->eveDataManager->updatePrices();
+	}
 
 	/**
 	 * Export Moons and Moongoo as a CSV and offer a download link.

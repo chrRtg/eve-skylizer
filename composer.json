@@ -33,7 +33,8 @@
         "zendframework/zend-log": "^2.9",
         "beberlei/DoctrineExtensions": "^1.0",
         "evelabs/oauth2-eveonline": "^1.1",
-        "eveseat/eseye": "^0.0.10"
+        "eveseat/eseye": "^0.0.10",
+        "illchuk/zf3-symfony-console": "^0.1.1"
     },
     "autoload": {
         "psr-4": {

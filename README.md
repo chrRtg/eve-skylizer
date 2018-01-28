@@ -75,17 +75,22 @@ sudo find ./ -type f -exec chmod 664 {} \;
 sudo find ./ -type d -exec chmod 775 {} \;
 ```
 
-## Update
+## Update the application
 
-After any update please mind to clear the caches with ```rm ./data/cache/*.php```.
+You may update using git or by updating the files manually e.g. by unzipping the distribution. 
+
+But anyhow, after any update please mind to clear the caches with ```rm ./data/cache/*.php```.
 
 ## Update Prices
 
-Updating the prices, fetching them from Eve Database (ESI) is only available to the skŸlizer admin. To update just call 
-in your browser http://your-domain/vposmoon/priceUpdate
+Updating the prices, fetching them from Eve Database (ESI) is only possible by using your browser or from the shell.
+
+In order to update prices online login to skŸlizer as an admin. Then point your browser to http://your-domain/vposmoon/priceUpdate
+
+To update prices from the shell or using a cron-tab use the command ``` /usr/bin/php -f ./bin/skylizer_cli.php price```.
 
 
-### Database
+## Database
 
 Login to MySQL client:
 
@@ -109,7 +114,7 @@ bunzip2 *.bz2
 mysql -u root -p skylizer <./ressource/db_import/sl_full_dump_*.sql
 ```
 
-### Apache virtual host
+## Apache virtual host
 
 Then create an Apache virtual host. It should look like below:
 
@@ -127,7 +132,7 @@ Then create an Apache virtual host. It should look like below:
 </VirtualHost>
 ```
 
-### Application Configuration
+## Application Configuration
 
 Create `config/autoload/local.php` config file by copying its distrib version:
 
