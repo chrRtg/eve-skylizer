@@ -36,7 +36,7 @@ class EveDataManager {
 	 * @var \Application\Controller\Plugin\LoggerPlugin
 	 */
 	private $logger;
-	
+
 	/**
 	 * Constructor.
 	 */
@@ -134,11 +134,20 @@ class EveDataManager {
 		// get his corporation details from ESI
 		$prices = $this->eveESIManager->publicRequest('get', '/markets/prices/', []);
 
-		$prices_data = get_object_vars($prices);
+		$this->logger->debug('updatePrices :: prices cnt: ' . count($prices));
+		// better than get_object_vars() cause working in all cases;
+		$prices_data = (array) $prices;
+ 		// $this->logger->debug('prices_data cnt: ' . count($prices_data));
 
 		// transform prices into a associative array with the typeID as key
 		foreach ($prices_data as $price) {
 			$price_arr[$price->type_id] = (!empty($price->average_price) ? $price->average_price : (!empty($price->adjusted_price) ? $price->adjusted_price : 0.0));
+		}
+		// $this->logger->debug('price_arr cnt: ' . count($price_arr));
+
+		// no prices, no need to persist
+		if (!count($price_arr)) {
+			return 0;
 		}
 
 		// update field "Baseprice" in table "Invtypes"
@@ -150,24 +159,25 @@ class EveDataManager {
 		foreach ($iterableResult as $row) {
 			$types = $row[0];
 			$tid = $types->getTypeid();
+			//$this->logger->debug('check tid:' . $tid);
 			if (!empty($price_arr[$tid])) {
-				//var_dump($tid . '  has price: ' . $price_arr[$tid] . '  baseprice: '. $types->getBaseprice());
+				//$this->logger->debug('write ' . $tid . '  with price: ' . $price_arr[$tid] . '  DB baseprice: ' . $types->getBaseprice());
 				$types->setBaseprice($price_arr[$tid]);
 				$this->entityManager->persist($types);
 				$j++;
 			}
 
 			if (($i % $batchSize) === 0) {
+				//$this->logger->debug('persist at: ' . $i);
 				$this->entityManager->flush(); // Executes all updates.
 				$this->entityManager->clear(); // Detaches all objects from Doctrine!
 			}
 			++$i;
 		}
 		$this->entityManager->flush();
-		
+
 		$this->logger->info($j . ' Prices were updated via ESI');
-		
+
 		return($j);
 	}
-
 }
