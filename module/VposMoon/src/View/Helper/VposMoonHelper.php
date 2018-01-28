@@ -88,6 +88,8 @@ class VposMoonHelper extends AbstractHelper {
 
 		$data = $this->calculateMoonMateriallist($input);
 
+		// sort ore by baseprice
+		uasort($data,array($this, 'sortWorthForRenderMoonMateriallist'));
 
 		// second step, create view
 		if (!empty($data)) {
@@ -102,7 +104,22 @@ class VposMoonHelper extends AbstractHelper {
 
 		return ($res);
 	}
-
+	
+	
+	/**
+	 * Utility function for @see renderMoonMateriallist()
+	 * Sort array by worth, used by uasort()
+	 *  
+	 * @param type $a
+	 * @param type $b
+	 * @return type 
+	 */	
+	private function sortWorthForRenderMoonMateriallist($a,$b)
+	{
+	  return $a["worth"] <= $b["worth"];
+	}
+	
+	
 	public function renderMoonMaterialValue($input)
 	{
 		$res = '';
@@ -116,6 +133,13 @@ class VposMoonHelper extends AbstractHelper {
 		return($res);
 	}
 
+	/**
+	 * Utility function for @see renderMoonMateriallist() and calculateMoonMateriallist()
+	 * Parse input string with material list for a single moon into a array.
+	 * 
+	 * @param string $input
+	 * @return array
+	 */
 	private function calculateMoonMateriallist($input)
 	{
 		$data = [];
