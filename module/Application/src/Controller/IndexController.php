@@ -91,5 +91,9 @@ class IndexController extends AbstractActionController
             'user' => $user
         ]);
     }
+	
+	public function testAction($param) {
+		echo ("nice! (--$param--) \n");
+	}
 }
 
