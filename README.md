@@ -21,7 +21,7 @@ In the future skŸlizer will become a tool to share moon, scan and dscan results
 
 ## [PUBLIC Demo of skŸlizer](https://skylizer.eve-tools.info)
 
-Data available in the public demo for: 3QE-9Q, Alparena, Daras, F-TE1T, Hakonen, HM-UVD, L-C3O7, Reschard, Taisy and ZOYW-O
+Data available in the public demo for: 3QE-9Q, Alparena, Daras, F-TE1T, Hakonen, HM-UVD, L-C3O7, Reschard, Taisy and ZOYW-O, see [PUBLIC Demo of skŸlizer](https://skylizer.eve-tools.info)
 
 Feel free to add your scans (or some from pastebin) to the tool. 
 
