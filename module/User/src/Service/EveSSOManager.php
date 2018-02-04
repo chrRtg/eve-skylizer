@@ -221,7 +221,7 @@ class EveSSOManager {
 		]);
 
 
-		$this->logger->debug('EveSSO, checkCredentials for user: __' . $sso_user->getCharacterName() . '__  belongs to: __' . $corporation->corporation_name . '__');
+		$this->logger->debug('EveSSO, checkCredentials for user: __' . $sso_user->getCharacterName() . '__  belongs to: __' . ($corporation->corporation_name ? $corporation->corporation_name : 'ERR:not-resolved') . '__');
 
 		// check if user is allowed to log in (by player name or because of his corporation
 		if (isset($corporation->corporation_name) && !$this->checkEveCredentials($sso_user->getCharacterName(), $corporation->corporation_name)) {
