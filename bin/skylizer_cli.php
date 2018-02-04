@@ -1,4 +1,12 @@
-cd <?php
+<?php
+
+/**
+ * This makes our life easier when dealing with paths. Everything is relative
+ * to the application root now.
+ */
+chdir(dirname(__DIR__));
+
+//echo('CLI chdir to: __'.dirname(__DIR__).'__');
 
 require __DIR__ . '/../vendor/autoload.php';
 

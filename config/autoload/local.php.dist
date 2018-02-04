@@ -54,7 +54,7 @@ return [
 					// supported levels: EMERG, ALERT, CRIT, ERR, WARN, NOTICE, INFO, DEBUG
                     'priority' => Logger::ERR,
                     'options' => [
-                        'stream' => realpath(__DIR__)  '/../../data/log/atlog_'.date('ymd').'.log',
+                        'stream' => 'data/log/atlog_'.date('ymd').'.log',
                     ],
                 ],
             ],
