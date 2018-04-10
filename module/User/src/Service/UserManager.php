@@ -58,7 +58,7 @@ class UserManager {
 		if (!$user) {
 			// Create new User entity.
 			$user = new User();
-			$user->setEveCorpid($this->getOrAddCorporation($eve_char->corporation_id, $eve_corporation->corporation_name, $eve_corporation->ticker));
+			$user->setEveCorpid($this->getOrAddCorporation($eve_char->corporation_id, $eve_corporation->name, $eve_corporation->ticker));
 			$user->setEveUserid($eve_char_id);
 			$user->setEveUsername($eve_char['name']);
 

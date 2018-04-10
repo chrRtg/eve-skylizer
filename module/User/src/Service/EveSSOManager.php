@@ -221,11 +221,11 @@ class EveSSOManager {
 		]);
 
 
-		$this->logger->debug('EveSSO, checkCredentials for user: __' . $sso_user->getCharacterName() . '__  belongs to: __' . ($corporation->corporation_name ? $corporation->corporation_name : 'ERR:not-resolved') . '__');
+		$this->logger->debug('EveSSO, checkCredentials for user: __' . $sso_user->getCharacterName() . '__  belongs to: __' . ($corporation->name ? $corporation->name : 'ERR:not-resolved') . '__');
 
 		// check if user is allowed to log in (by player name or because of his corporation
-		if (isset($corporation->corporation_name) && !$this->checkEveCredentials($sso_user->getCharacterName(), $corporation->corporation_name)) {
-			$this->logger->notice("login attempt failed for " . $sso_user->getCharacterName() . " [" . $corporation->corporation_name . "]");
+		if (isset($corporation->name) && !$this->checkEveCredentials($sso_user->getCharacterName(), $corporation->name)) {
+			$this->logger->notice("login attempt failed for " . $sso_user->getCharacterName() . " [" . $corporation->name . "]");
 			$this->responseMessage = 'This user is not allowed to use this tool.';
 			return(false);
 		}
@@ -388,11 +388,11 @@ class EveSSOManager {
 	{
 		$char = $this->getFullIdentity();
 
-		if (!$char || !isset($char['corporation']->corporation_name)) {
+		if (!$char || !isset($char['corporation']->name)) {
 			return false;
 		}
 
-		return($char['corporation']->corporation_name);
+		return($char['corporation']->name);
 	}
 
 	/**
