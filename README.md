@@ -25,6 +25,14 @@ Data available in the public demo for: 3QE-9Q, Alparena, Daras, F-TE1T, Hakonen,
 
 Feel free to add your scans (or some from pastebin) to the tool. 
 
+## Changelog
+
+2018-04-10
+
+* fixed problem with login, thanks to Elexia Beacon for the bug report
+* small changes and updates on the layout
+
+
 ## Requirement
 
 * Webserver, e.g. Apache
