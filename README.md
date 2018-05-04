@@ -73,6 +73,7 @@ Add some directories manually:
 ```
 mkdir ./data/cache
 mkdir ./data/log
+mkdir ./data/storage
 ```
 
 If required adjust permissions for all files and directories:
