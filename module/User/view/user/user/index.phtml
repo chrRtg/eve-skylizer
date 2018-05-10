@@ -26,11 +26,11 @@ $this->mainMenu()->setActiveItemId('admin');
 			<tr>
 				<td><?= $this->escapeHtml($user->getId()); ?></td>
 				<td>
-					<img src="http://imageserver.eveonline.com/Character/<?= $user->getEveUserid(); ?>_32.jpg">&nbsp;
+					<img src="https://imageserver.eveonline.com/Character/<?= $user->getEveUserid(); ?>_32.jpg">&nbsp;
 					<?= $this->escapeHtml($user->getEveUsername()); ?>
 				</td>
 				<td>
-					<img src="http://imageserver.eveonline.com/Corporation/<?= $user->getEveCorpid()->getCorporationId(); ?>_32.png">&nbsp;
+					<img src="https://imageserver.eveonline.com/Corporation/<?= $user->getEveCorpid()->getCorporationId(); ?>_32.png">&nbsp;
 					<?= $this->escapeHtml($user->getEveCorpid()->getCorporationName()); ?>
 				</td>
 				<td>

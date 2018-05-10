@@ -9,8 +9,8 @@ $this->mainMenu()->setActiveItemId('admin');
 <?= $this->flashMessenger()->render('info', ['alert', 'alert-info']); ?>
 
 <h1>View User <?= $this->escapeHtml($user->getEveUsername()); ?>&nbsp;
-<img src="http://imageserver.eveonline.com/Corporation/<?= $user->getEveCorpid()->getCorporationId(); ?>_64.png">&nbsp;
-<img src="http://imageserver.eveonline.com/Character/<?= $user->getEveUserid(); ?>_64.jpg">
+<img src="https://imageserver.eveonline.com/Corporation/<?= $user->getEveCorpid()->getCorporationId(); ?>_64.png">&nbsp;
+<img src="https://imageserver.eveonline.com/Character/<?= $user->getEveUserid(); ?>_64.jpg">
 </h1>
 
 <p>

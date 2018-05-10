@@ -115,7 +115,7 @@ class NavManager
             $items[] = [
                 'id' => 'logout',
                 'label' => $this->authService->getIdentity(),
-				'avatar' => 'http://imageserver.eveonline.com/Character/'.$this->sso_manager->getIdentityID().'_32.jpg',
+				'avatar' => 'https://imageserver.eveonline.com/Character/'.$this->sso_manager->getIdentityID().'_32.jpg',
                 'float' => 'right',
                 'dropdown' => [
                     [
