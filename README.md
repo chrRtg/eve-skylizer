@@ -27,6 +27,10 @@ Feel free to add your scans (or some from pastebin) to the tool.
 
 ## Changelog
 
+2018-05-10
+
+* solved issue #5: update all "http://imageserver.eveonline.com/*" links to use "https" instead of "http".
+
 2018-04-10
 
 * fixed problem with login, thanks to Elexia Beacon for the bug report
