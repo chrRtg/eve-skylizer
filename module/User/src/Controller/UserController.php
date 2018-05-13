@@ -118,7 +118,7 @@ class UserController extends AbstractActionController
         if ($this->getRequest()->isPost()) {
             
             // Fill in the form with POST data
-            $data = $this->params()->fromPost();            
+            $data = $this->params()->fromPost();
             
             $form->setData($data);
             
@@ -133,7 +133,7 @@ class UserController extends AbstractActionController
                 
                 // Redirect to "view" page
                 return $this->redirect()->toRoute('users', 
-                        ['action'=>'view', 'id'=>$user->getId()]);                
+                        ['action'=>'view', 'id'=>$user->getId()]);
             }               
         } else {
             

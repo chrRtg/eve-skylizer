@@ -35,7 +35,7 @@ class AuthController extends AbstractActionController
     }
     
     /**
-     * Authenticates user given email address and password credentials.     
+     * Authenticates user against EVE SSO
      */
     public function indexAction()
     {

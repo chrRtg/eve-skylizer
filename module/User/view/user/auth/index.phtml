@@ -1,5 +1,14 @@
 <?php
 $this->headTitle("AUTH-Problem");
+if(is_array($msg)) {
+	$msgarr = '';
+	foreach($msg as $singlemsg) {
+		$msgarr .= $singlemsg . '</br>';
+	}
+	$msg = $msgarr;
+}
+
+
 ?>
 
 <h1>Authorization Problem</h1>

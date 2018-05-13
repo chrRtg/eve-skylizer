@@ -34,7 +34,7 @@ class Role
     protected $dateCreated;
 
     /**
-     * @ORM\ManyToMany(targetEntity="User\Entity\Role")
+     * @ORM\ManyToMany(targetEntity="User\Entity\Role", inversedBy="childRoles")
      * @ORM\JoinTable(name="role_hierarchy",
      *      joinColumns={@ORM\JoinColumn(name="child_role_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="parent_role_id", referencedColumnName="id")}
@@ -43,7 +43,7 @@ class Role
     private $parentRoles;
     
     /**
-     * @ORM\ManyToMany(targetEntity="User\Entity\Role")
+     * @ORM\ManyToMany(targetEntity="User\Entity\Role", mappedBy="parentRoles")
      * @ORM\JoinTable(name="role_hierarchy",
      *      joinColumns={@ORM\JoinColumn(name="parent_role_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="child_role_id", referencedColumnName="id")}
@@ -52,7 +52,7 @@ class Role
     protected $childRoles;
     
     /**
-     * @ORM\ManyToMany(targetEntity="User\Entity\Permission")
+     * @ORM\ManyToMany(targetEntity="User\Entity\Permission", inversedBy="roles")
      * @ORM\JoinTable(name="role_permission",
      *      joinColumns={@ORM\JoinColumn(name="role_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="permission_id", referencedColumnName="id")}
@@ -132,7 +132,39 @@ class Role
     {
         return $this->permissions;
     }
-}
 
+    public function addParent(Role $role)
+    {
+        if ($this->getId() == $role->getId()) {
+            return false;
+        }
+        if (!$this->hasParent($role)) {
+            $this->parentRoles[] = $role;
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Clear parent roles
+     */
+    public function clearParentRoles()
+    {
+        $this->parentRoles = new ArrayCollection();
+    }
+
+    /**
+     * Check if parent role exists
+     * @param Role $role
+     * @return bool
+     */
+    public function hasParent(Role $role)
+    {
+        if ($this->getParentRoles()->contains($role)) {
+            return true;
+        }
+        return false;
+    }
+}
 
 

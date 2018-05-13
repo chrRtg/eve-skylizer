@@ -5,7 +5,6 @@ use Zend\Form\Form;
 use Zend\Form\Fieldset;
 use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\ArrayInput;
-use User\Validator\UserExistsValidator;
 
 /**
  * This form is used to collect user's email, full name, password and status. The form 

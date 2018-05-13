@@ -251,6 +251,11 @@ class EveSSOManager {
 		$authAdapter->setEveId($sso_user->getCharacterId());
 		$authAdapter->setEveName($sso_user->getCharacterName());
 		$result = $this->authService->authenticate();
+		if (!isset($result) || $result->getCode() != 1 ) {
+			$this->logger->notice("login attempt failed for " . $sso_user->getCharacterName() . " [" . $corporation->name . "], reason: " . print_r($result->getMessages(),true));
+			$this->responseMessage = $result->getMessages();
+			return(false);
+		}
 
 		return(true);
 	}

@@ -117,6 +117,7 @@ class UserManager {
 	 */
 	public function updateUser($user, $data)
 	{
+		$user->setStatus($data['status']); 
 		// Assign roles to user.
 		$this->assignRoles($user, $data['roles']);
 
