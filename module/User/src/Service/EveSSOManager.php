@@ -293,14 +293,15 @@ class EveSSOManager {
 		} else if (isset($auth['user_allow']) && in_array($user, $auth['user_allow'])) {
 			$this->logger->debug("auth true by user_allow");
 			$authenticated = true;
-		} else if (isset($auth['admin']) && in_array($user, $auth['admin'])) {
-			$this->logger->debug("auth true by admin");
-			$this->isAdmin = true;
-			return(true);
 		} else if (isset($auth['allow_all']) && $auth['allow_all'] === 'YeS') {
 			$this->logger->debug("auth true for anybody");
 			$authenticated = true;
-			return(true);
+		}
+		
+		if (isset($auth['admin']) && in_array($user, $auth['admin'])) {
+			$this->logger->debug("auth true by admin");
+			$this->isAdmin = true;
+			$authenticated = true;
 		}
 
 		return($authenticated);
