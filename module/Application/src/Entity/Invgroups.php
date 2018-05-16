@@ -17,7 +17,7 @@ class Invgroups
      *
      * @ORM\Column(name="groupID", type="integer", nullable=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="NONE")
      */
     private $groupid;
 

@@ -17,7 +17,7 @@ class Invtypes
      *
      * @ORM\Column(name="typeID", type="integer", nullable=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="NONE")
      */
     private $typeid;
 

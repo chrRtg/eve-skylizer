@@ -17,7 +17,7 @@ class Invmetagroups
      *
      * @ORM\Column(name="metaGroupID", type="smallint", nullable=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="NONE")
      */
     private $metagroupid;
 

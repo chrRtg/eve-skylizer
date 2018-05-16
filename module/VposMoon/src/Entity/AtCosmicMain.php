@@ -15,9 +15,9 @@ class AtCosmicMain
     /**
      * @var integer
      *
-     * @ORM\Column(name="cosmic_main_id", type="integer", nullable=false)
+     * @ORM\Column(name="cosmic_main_id", type="integer", length=11, nullable=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+	 * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $cosmicMainId;
 

@@ -17,7 +17,7 @@ class Invmarketgroups
      *
      * @ORM\Column(name="marketGroupID", type="integer", nullable=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="NONE")
      */
     private $marketgroupid;
 

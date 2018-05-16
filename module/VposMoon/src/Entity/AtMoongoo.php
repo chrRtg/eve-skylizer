@@ -31,14 +31,14 @@ class AtMoongoo
     /**
      * @var float
      *
-     * @ORM\Column(name="goo_amount", type="float", precision=10, scale=0, nullable=false)
+     * @ORM\Column(name="goo_amount", type="float", precision=12, scale=6, nullable=false)
      */
     private $gooAmount = '0';
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="created_by", type="integer", nullable=false)
+     * @ORM\Column(name="created_by", type="integer", nullable=false, options={"default":0})
      */
     private $createdBy = '0';
 
@@ -52,7 +52,7 @@ class AtMoongoo
     /**
      * @var integer
      *
-     * @ORM\Column(name="lastseen_by", type="integer", nullable=false)
+     * @ORM\Column(name="lastseen_by", type="integer", nullable=false, options={"default":0})
      */
     private $lastseenBy = '0';
 

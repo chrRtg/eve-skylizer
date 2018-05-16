@@ -13,23 +13,23 @@ class Permission
 {
     /**
      * @ORM\Id
-     * @ORM\Column(name="id")
+     * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\GeneratedValue
      */
     protected $id;
 
     /** 
-     * @ORM\Column(name="name")  
+     * @ORM\Column(name="name", type="string", length=128, nullable=false, unique=true)
      */
     protected $name;
     
     /** 
-     * @ORM\Column(name="description")  
+     * @ORM\Column(name="description", type="string", length=1024, nullable=false)
      */
     protected $description;
 
     /** 
-     * @ORM\Column(name="date_created")  
+     * @ORM\Column(name="date_created", type="datetime", nullable=false)
      */
     protected $dateCreated;
     

@@ -7,7 +7,11 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * EveCorporation
  *
- * @ORM\Table(name="eve_corporation", indexes={@ORM\Index(name="k_ticker", columns={"ticker"})})
+ * @ORM\Table(name="eve_corporation", 
+ *		indexes={
+ *			@ORM\Index(name="k_ticker", columns={"ticker"}),
+ *			@ORM\Index(name="k_name", columns={"corporation_name"})
+ *		})
  * @ORM\Entity
  */
 class EveCorporation
@@ -15,7 +19,7 @@ class EveCorporation
     /**
      * @var integer
      *
-     * @ORM\Column(name="corporation_id", type="integer", nullable=false)
+     * @ORM\Column(name="corporation_id", type="integer", nullable=false, options={"default":0})
 	 * @ORM\Id
 	 * @ORM\GeneratedValue(strategy="NONE")     
 	 */
@@ -24,14 +28,14 @@ class EveCorporation
     /**
      * @var string
      *
-     * @ORM\Column(name="corporation_name", type="string", length=120, nullable=false)
+     * @ORM\Column(name="corporation_name", type="string", length=120, nullable=false, options={"default":""})
      */
     private $corporationName = '';
 
     /**
      * @var string
      *
-     * @ORM\Column(name="ticker", type="string", length=5, nullable=false)
+     * @ORM\Column(name="ticker", type="string", length=5, nullable=false, options={"default":"", "fixed":true})
      */
     private $ticker = '';
 

@@ -17,7 +17,7 @@ class Invcategories
      *
      * @ORM\Column(name="categoryID", type="integer", nullable=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="NONE")
      */
     private $categoryid;
 

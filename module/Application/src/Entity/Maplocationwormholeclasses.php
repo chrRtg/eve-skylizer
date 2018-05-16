@@ -17,7 +17,7 @@ class Maplocationwormholeclasses
      *
      * @ORM\Column(name="locationID", type="integer", nullable=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="NONE")
      */
     private $locationid;
 

@@ -15,7 +15,7 @@ class EveAlly
     /**
      * @var integer
      *
-     * @ORM\Column(name="alliance_id", type="integer", nullable=false)
+     * @ORM\Column(name="alliance_id", type="integer", nullable=false, options={"default":0})
      * @ORM\Id
      */
     private $allianceId = '0';
@@ -23,14 +23,14 @@ class EveAlly
     /**
      * @var string
      *
-     * @ORM\Column(name="alliance_name", type="string", length=128, nullable=false)
+     * @ORM\Column(name="alliance_name", type="string", length=128, nullable=false, options={"default":""})
      */
     private $allianceName = '';
 
     /**
      * @var string
      *
-     * @ORM\Column(name="ticker", type="string", length=5, nullable=false)
+     * @ORM\Column(name="ticker", type="string", length=5, nullable=false, options={"default":"", "fixed":true})
      */
     private $ticker = '';
 

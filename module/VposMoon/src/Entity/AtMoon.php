@@ -40,7 +40,7 @@ class AtMoon
     /**
      * @var integer
      *
-     * @ORM\Column(name="created_by", type="integer", nullable=false)
+     * @ORM\Column(name="created_by", type="integer", nullable=false, options={"default":0})
      */
     private $createdBy = '0';
 
@@ -54,7 +54,7 @@ class AtMoon
     /**
      * @var integer
      *
-     * @ORM\Column(name="lastseen_by", type="integer", nullable=false)
+     * @ORM\Column(name="lastseen_by", type="integer", nullable=false, options={"default":0})
      */
     private $lastseenBy = '0';
 
