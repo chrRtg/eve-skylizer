@@ -27,6 +27,12 @@ Feel free to add your scans (or some from pastebin) to the tool.
 
 ## Changelog
 
+2018-05-16
+
+* big code update to allow smooth database structure update to prepare future improvements
+* small bug fixes to improve the user manangement
+* from root directory start the db-migration with `./vendor/doctrine/doctrine-module/bin/doctrine-module migrations:migrate`. You may add ` --dry-run` to read first about the changes to your database.
+
 2018-05-10
 
 * solved issue #5: update all "http://imageserver.eveonline.com/*" links to use "https" instead of "http".
@@ -35,7 +41,6 @@ Feel free to add your scans (or some from pastebin) to the tool.
 
 * fixed problem with login, thanks to Elexia Beacon for the bug report
 * small changes and updates on the layout
-
 
 ## Requirement
 
@@ -123,8 +128,9 @@ quit
 Import database from your skŸlizer respository:
 
 ```
+cd ./ressource/db_import/
 bunzip2 *.bz2
-mysql -u root -p skylizer <./ressource/db_import/sl_full_dump_*.sql
+mysql -u root -p skylizer <./sl_full_dump_*.sql
 ```
 
 ## Apache virtual host
