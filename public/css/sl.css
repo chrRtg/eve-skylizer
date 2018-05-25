@@ -23,6 +23,26 @@ footer {
 .modal-backdrop.in {
     opacity: 0.8;
 }
+.modal-body {
+	background-color: #515151;
+}
+
+.blockMsg {
+    width:  40%;
+    top:    30%;
+    left:   30%;
+    text-align: center;
+    background-color: #f00;
+    border: 1px solid #ddd;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)"; 
+    filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=50); 
+    -moz-opacity:.70;
+    opacity:.70;
+    padding: 15px;
+    color: #fff;
+}
 
 /* less room for forms */
 .form-control,
@@ -136,6 +156,7 @@ thead div.sub {
 .gooval {
 /*	font-weight: bold; */
 }
+.secondarytext,
 .gooprice {
 	color: #3c9887;
 }
