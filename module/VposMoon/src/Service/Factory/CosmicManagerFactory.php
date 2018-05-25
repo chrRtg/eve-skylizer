@@ -20,7 +20,10 @@ class CosmicManagerFactory {
 		$entityManager = $container->get('doctrine.entitymanager.orm_default');
 		$logger = $container->get('MyLogger');
 
-		return new CosmicManager($entityManager, $logger);
+		return new CosmicManager(
+			$entityManager, 
+			$container->get(\User\Service\EveSSOManager::class),
+			$logger);
 	}
 
 }

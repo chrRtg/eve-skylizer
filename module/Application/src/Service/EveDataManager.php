@@ -119,6 +119,32 @@ class EveDataManager {
 		return($queryBuilder->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_SCALAR));
 	}
 
+
+	/**
+	 * Fetch a list of Eve Items by their groupID.
+	 * 
+	 * @param array $ids group ids
+	 * @return \Doctrine\ORM\Query::HYDRATE_SCALAR result
+	 * @throws Exception
+	 */
+	public function getTypeByGroupIDs($ids)
+	{
+		if (!is_array($ids) ) {
+			throw new Exception('Parameter for getTypeByGroupIDs() must be an array!');
+		}
+		
+		$queryBuilder = $this->entityManager->createQueryBuilder();
+
+		$queryBuilder->select('it.typeid, it.typename')
+			->from(Invtypes::class, 'it')
+			->add('where', $queryBuilder->expr()->in('it.groupid', $ids))
+			->andWhere('it.published = 1')
+			->orderBy('it.typename', 'ASC');
+
+		return($queryBuilder->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_SCALAR));
+	}
+
+
 	/**
 	 * Fetch inventory prices from EVE-ESI. 
 	 * 

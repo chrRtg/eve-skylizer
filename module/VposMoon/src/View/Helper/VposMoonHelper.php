@@ -278,6 +278,29 @@ class VposMoonHelper extends AbstractHelper {
 		}
 		return($res);
 	}
+	
+	
+
+
+	public function getEveTypesListAsOptions($group_ids, $selected_id = 0)
+	{
+		if (!is_array($group_ids)) {
+			return false;
+		}
+
+		$data = $this->eveDataManager->getTypeByGroupIDs($group_ids) ;
+		if (empty($data)) {
+			return (false);
+		}
+		
+		$res = '';
+
+		foreach ($data as $option) {
+			$res .= '<option '.(intval($selected_id) == intval($option['typeid']) ? 'selected' : '').' value="'.$option['typeid'].'">'.$option['typename'].'</option>';
+		}
+		return($res);
+	}	
+	
 
 	/**
 	 * Convert moon names to shortform "PxMy"

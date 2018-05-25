@@ -10,7 +10,6 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="at_structure", 
  *		indexes={
  *			@ORM\Index(name="idx_invitem", columns={"item_id"}), 
- *			@ORM\Index(name="idx_group", columns={"group_id"}), 
  *			@ORM\Index(name="idx_invtype", columns={"type_id"})
  *		})
  * @ORM\Entity
@@ -39,13 +38,6 @@ class AtStructure
      * @ORM\Column(name="item_id", type="bigint", length=20, nullable=true, options={"comment":"invNames -> mapDenormalize in case of celestials"})
      */
     private $itemId;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="group_id", type="integer", precision=0, scale=0, nullable=false)
-     */
-    private $groupId;
 
     /**
      * @var integer
@@ -146,30 +138,6 @@ class AtStructure
     public function getItemId()
     {
         return $this->itemId;
-    }
-
-    /**
-     * Set groupId
-     *
-     * @param integer $groupId
-     *
-     * @return AtStructure
-     */
-    public function setGroupId($groupId)
-    {
-        $this->groupId = $groupId;
-
-        return $this;
-    }
-
-    /**
-     * Get groupId
-     *
-     * @return integer
-     */
-    public function getGroupId()
-    {
-        return $this->groupId;
     }
 
     /**

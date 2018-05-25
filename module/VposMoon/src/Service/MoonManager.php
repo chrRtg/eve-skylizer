@@ -4,6 +4,7 @@ namespace VposMoon\Service;
 
 use VposMoon\Entity\AtMoon;
 use VposMoon\Entity\AtMoongoo;
+
 use Seat\Eseye\Eseye;
 
 /**
@@ -232,6 +233,7 @@ class MoonManager {
 			->addSelect("SUM(itmt.baseprice * itm.quantity) as oreval")
 			->addSelect("GROUP_CONCAT(DISTINCT itmt.typename) as hasmaterial")
 			->addSelect("GROUP_CONCAT(IDENTITY(mg.eveInvtypesTypeid), '|', mg.gooAmount, '|', it.typename, '|',  itmt.typeid, '|', itm.quantity, '|', itmt.typename, '|', itmt.baseprice SEPARATOR '#') as materiallist")
+			->addSelect("GROUP_CONCAT(DISTINCT atstruct.id) as structid, GROUP_CONCAT(DISTINCT atstruct.typeId) as structtype, GROUP_CONCAT(DISTINCT itmt2.typename) as structname,  GROUP_CONCAT(DISTINCT atstruct.corporationId) as structcorp, GROUP_CONCAT(DISTINCT atstruct.structureName) as structgivename")
 			->from(\VposMoon\Entity\AtMoon::class, 'm')
 			->leftJoin(\VposMoon\Entity\AtMoongoo::class, 'mg', 'WITH', 'm.moonId = mg.moon')
 			->leftJoin(\Application\Entity\Invtypes::class, 'it', 'WITH', 'it.typeid = mg.eveInvtypesTypeid')
@@ -239,6 +241,8 @@ class MoonManager {
 			->leftJoin(\Application\Entity\Invtypematerials::class, 'itm', 'WITH', 'itm.typeid = mg.eveInvtypesTypeid')
 			->leftJoin(\Application\Entity\Invtypes::class, 'itmt', 'WITH', 'itmt.typeid = itm.materialtypeid')
 			->leftJoin(\User\Entity\User::class, 'uchgd', 'WITH', 'm.lastseenBy = uchgd.eveUserid')
+			->leftJoin(\VposMoon\Entity\AtStructure::class , 'atstruct', 'WITH', 'm.eveMapdenormalizeItemid = atstruct.itemId')
+			->leftJoin(\Application\Entity\Invtypes::class, 'itmt2', 'WITH', 'itmt2.typeid = atstruct.typeId')
 			->groupBy('m.moonId')
 			->having('hasmaterial is not null');
 

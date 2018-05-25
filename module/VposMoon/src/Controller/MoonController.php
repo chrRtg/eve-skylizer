@@ -7,6 +7,8 @@ use VposMoon\Form\MoonForm;
 use Zend\Uri\Uri;
 use Zend\View\Model\ViewModel;
 use Zend\View\Model\JsonModel;
+use VposMoon\Entity\AtMoon;
+
 
 /**
  * The MoonController is about Moons, Survey Scans and Moon Goo
@@ -65,7 +67,7 @@ class MoonController extends AbstractActionController {
 	{
 		$message = null;
 
-		// Create login form
+		// Create scan input form
 		$form = new MoonForm();
 
 		// Check if user has submitted the form
@@ -178,6 +180,52 @@ class MoonController extends AbstractActionController {
 		// Return Response to avoid default view rendering
 		return $this->getResponse();
 	}
+	
+	/**
+	 * 
+	 * @return JsonModel
+	 */
+	public function editStructureAction()
+	{
+        $request = $this->getRequest();
+		$response = $this->getResponse();
+		$response->getHeaders()->addHeaderLine("Content-Type", "application/json");
+		// Checks if the request is valid
+		if (!$request->isPost() || !$request->isXmlHttpRequest()) {
+			$response->setContent(Json::encode(['error' => ['Very bad request']]));
+			return $response;
+		}
+
+		$params = $this->params()->fromPost();
+
+		//$this->logger->debug('editStructureAction() ' . print_r($params, true));
+
+		// take corp id
+		// @todo
+		// 
+		// take celestial ID by MoonID
+		$map_denormalize_itemid = 0;
+		if($params['moonid']) {
+			$moon_entity = $this->entityManager->getRepository(AtMoon::class)->findOneByMoonId((int) $params['moonid']);
+
+			if ($moon_entity !== null) {
+				$map_denormalize_itemid = $moon_entity->getEveMapdenormalizeItemid()->getItemid();
+				
+				// Any required data available, now we can access the structure
+				$res = $this->cosmicManager->writeStructure($params['structureid'], $params['struct_item_id'], $map_denormalize_itemid, 0, trim($params['struct_name']));
+
+				return new JsonModel([
+					'status' => 'SUCCESS',
+					'items' => $res,
+					'moonid' => (int) $params['moonid']
+				]);
+			}
+		}
+
+		return new JsonModel([
+			'error' => 'Moon not found or not given'
+		]);
+	}
 
 	/**
 	 * Fetch a list of systems and constellations from map by a search term.
@@ -212,6 +260,7 @@ class MoonController extends AbstractActionController {
 		]);
 	}
 
+
 	/**
 	 * Delete a Moon and his Goo
 	 * 
@@ -226,6 +275,7 @@ class MoonController extends AbstractActionController {
 
 		return $this->redirect()->toRoute('vposmoon', ['action' => 'index']);
 	}
+
 
 	/**
 	 * Analyse scan results

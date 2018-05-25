@@ -13,6 +13,7 @@ $form->get('scan')->setAttributes([
 
 //ini_set('xdebug.var_display_max_depth', 3);
 //var_dump($filters);
+//var_dump($moon_list);
 
 if (empty($filters['info_system']['constellation'])) {
 	$location_string = $filters['info_system']['itemname'] . ' (Constellation in ' . $filters['info_system']['region'] . ')';
@@ -97,6 +98,7 @@ if (empty($filters['info_system']['constellation'])) {
 					</thead>
 					<tbody>
 					<?php foreach ($moon_list as $key => $moon): ?>
+						<tr>
 						<td><?= $this->escapeHtml($moon[0]->getEveMapdenormalizeItemid()->getItemname()); ?>&nbsp;
 							[<?= $this->vpViewTool()->convertMoonToShortform($moon[0]->getEveMapdenormalizeItemid()->getItemname()); ?>]
 							<span  class="actions">
@@ -111,9 +113,14 @@ if (empty($filters['info_system']['constellation'])) {
 						<td><?= $this->vpViewTool()->renderMoonMateriallist($moon['materiallist']); ?></td>
 					<?php endif; ?>
 						<td><?= number_format(round(intval($this->vpViewTool()->renderMoonMaterialValue($moon['materiallist'])) / 1000), 0); ?> k</td>
-						<td>tbd</td>
-						<td>tbd</td>
-						<td><?= date_format($moon[0]->getLastseenDate(), 'Y-m-d H:i:s'); ?><br /> <?= $moon['uchgddat']; ?></td>
+						<td>
+							<a href="#structeditModal" data-toggle="modal" data-structid="<?=$moon['structid']; ?>" data-structtype="<?=$moon['structtype']; ?>" data-structgivename="<?=$moon['structgivename']; ?>" data-moonid="<?= $moon[0]->getMoonId(); ?>" data-target="#structureEditModal">
+								<?=($moon['structname'] ? $moon['structname'] : '---'); ?></a><br /><span class="secondarytext"><?=$moon['structgivename']; ?></span></td>
+						<td>
+							<a href="#structeditModal" data-toggle="modal" data-structid="<?=$moon['structid']; ?>" data-structtype="<?=$moon['structtype']; ?>" data-structgivename="<?=$moon['structgivename']; ?>" data-moonid="<?= $moon[0]->getMoonId(); ?>" data-target="#structureEditModal">
+								tbd</a></td>
+						<td><?= date_format($moon[0]->getLastseenDate(), 'Y-m-d H:i:s'); ?><br />
+							<span class="secondarytext"><?= $moon['uchgddat']; ?></span></td>
 						</tr>
 					<?php endforeach; ?>						
 					</tbody>
@@ -142,6 +149,51 @@ if (empty($filters['info_system']['constellation'])) {
 			</form>
 		</div>
 	</div>
+</div>
+
+<!-- Structure Edit Modal -->
+<div class="modal fade" id="structureEditModal" tabindex="-1" role="dialog" aria-labelledby="structeditLabel" aria-hidden="true">
+    <div class="modal-dialog">
+		<form id="structureEditForm" role="form" action="/vposmoon/editStructure/0" method="POST">
+			<input type="hidden" name="moonid" id="structureEditFormMoonId" value="0">
+			<input type="hidden" name="structureid" id="structureEditFormStructureId" value="0">
+			<div class="modal-content">
+				<!-- Modal Header -->
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">
+						<span aria-hidden="true">&times;</span>
+						<span class="sr-only">Close</span>
+					</button>
+					<h4 class="modal-title" id="myModalLabel">Edit Structure</h4>
+				</div>
+
+				<!-- Modal Body -->
+				<div class="modal-body">
+					  <div class="form-group">
+						<label for="structedittype">Type of Structure</label>
+						<select class="form-control" name="struct_item_id" id="structedittype">
+							<option value="0">please select a structure</option>
+							<?= $this->vpViewTool()->getEveTypesListAsOptions([1406]); ?>
+						</select>						
+					  </div>
+					  <div class="form-group">
+						<label for="structeditcorp">Owning Corporation</label>
+						  <input type="text" name="owning_corp" class="form-control" id="structeditcorp" placeholder="placeholder"/>
+					  </div>
+					  <div class="form-group">
+						<label for="structeditname">Name of Structure</label>
+						  <input type="text" name="struct_name" class="form-control" id="structeditname" placeholder="placeholder"/>
+					  </div>
+				</div>
+
+				<!-- Modal Footer -->
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-primary" type="submit" value="submit" id="structureEditFormSubmit">Save changes</button>
+				</div>
+			</div>
+		</form>
+    </div>
 </div>
 
 
