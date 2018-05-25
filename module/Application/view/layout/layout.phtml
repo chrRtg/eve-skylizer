@@ -21,8 +21,7 @@
 				->prependStylesheet($this->basePath('css/sl.css'))
 				->prependStylesheet($this->basePath('css/jquery.toast.css'))
 				->prependStylesheet('https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.4/css/select2.css')
-				->prependStylesheet($this->basePath('css/responsive.bootstrap.min.css'))
-				->prependStylesheet($this->basePath('css/dataTables.bootstrap.min.css'))
+				->prependStylesheet('https://cdn.datatables.net/v/bs/jqc-1.12.3/dt-1.10.16/fh-3.1.3/r-2.2.1/datatables.min.css')
 				->prependStylesheet($this->basePath('css/skylizer.css'))
 				//->prependStylesheet($this->basePath('css/custom.min.css'))
 		?>
@@ -33,10 +32,7 @@
 			->prependFile($this->basePath('js/jquery.toast.js'))
 			->prependFile($this->basePath('js/jquery.blockUI.js'))
 			->prependFile('https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.4/js/select2.full.min.js')
-			->prependFile($this->basePath('js/responsive.bootstrap.min.js'))
-			->prependFile($this->basePath('js/dataTables.responsive.min.js'))
-			->prependFile($this->basePath('js/dataTables.bootstrap.min.js'))
-			->prependFile($this->basePath('js/jquery.dataTables.min.js'))
+			->prependFile('https://cdn.datatables.net/v/bs/jqc-1.12.3/dt-1.10.16/fh-3.1.3/r-2.2.1/datatables.min.js')
 			->prependFile($this->basePath('js/bootstrap.min.js'))
 			->prependFile($this->basePath('js/jquery-2.2.4.min.js'))
 		?>
@@ -44,7 +40,7 @@
 	<body>
 		<div class="navbar navbar-default navbar-fixed-top">
 			<div class="container-fluid">
-			<div class="navbar-header">
+			<div class="navbar-header" id="skylizer_navbar">
 				<a href="../"><img src="<?= $this->basePath('img/'); ?>skylizer_logo.png" height="40" width="120"></a>
 				
 				<!-- Navigation bar -->

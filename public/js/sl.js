@@ -1,50 +1,13 @@
 $(document).ready(function ()
 {
 	//datatable for moonTable
-	$('#moontable').DataTable();
-	//$(document).ajaxStart($.blockUI).ajaxStop($.unblockUI);
-
-
-	$('#structureEditModal').on('show.bs.modal', function (e) {
-		var called_by = e.relatedTarget; // calling object (the link to open the modal)
-		$("#structureEditFormMoonId").val( called_by.getAttribute('data-moonid') ); // insert moonIt into structure edit form modal
-		$("#structureEditFormStructureId").val( called_by.getAttribute('data-structid') ); // insert moonIt into structure edit form modal
-		$("#structeditname").val( called_by.getAttribute('data-structgivename') ); // insert player given name
-		var structtype = called_by.getAttribute('data-structtype');
-		$("#structedittype").val( (structtype ? structtype : 0 ) ); // set proper selection
-	})
-	
-	// activate structure edit form submit button
-	$("#structureEditFormSubmit").on('click', function () {
-		
-		$.ajax({
-			url: $(this.form).attr('action'),
-			type: "post",
-			data: $(this.form).serializeArray(),
-			beforeSend: function (e) { $("#structureEditModal").block({ message: '<h1>update structure...</h1>' }); }, 
-			complete: function (e) { 
-				location.reload(); // no complex auto update page yet
-				//$('#structureEditModal').modal('hide');
-				//$("#structureEditModal").unblock(); 
-			}, 
-			success: function (data, status) {
-				//
-			},
-			error: function(xhr) {
-				$.toast({
-					text: "An AJAX error occured: " + xhr.status + " " + xhr.statusText,
-					heading: 'ERROR',
-					icon: 'error',
-					hideAfter: 5000,
-					position: 'top-right',
-					loader: true,
-					loaderBg: '#4e433c'
-				});				
-			}
-		});
+	var moon_table = $('#moontable').DataTable({
+		fixedHeader: true,
+		responsive: true
 	});
-
-
+	moon_table.fixedHeader.headerOffset( $('#skylizer_navbar').height() );
+	//$(document).ajaxStart($.blockUI).ajaxStop($.unblockUI);
+	
 
 	// auto-submit checkboxes
 	$("#detail_filter_composition").change(function() {
@@ -125,7 +88,56 @@ $(document).ready(function ()
 		templateSelection: formatRepoSelection
 	});
 
-	// show toaster messages
+
+	/***********************************************
+	 * Structure Edit Modal
+	 *************************************************/
+
+	$('#structureEditModal').on('show.bs.modal', function (e) {
+		var called_by = e.relatedTarget; // calling object (the link to open the modal)
+		$("#structureEditFormMoonId").val( called_by.getAttribute('data-moonid') ); // insert moonIt into structure edit form modal
+		$("#structureEditFormStructureId").val( called_by.getAttribute('data-structid') ); // insert moonIt into structure edit form modal
+		$("#structeditname").val( called_by.getAttribute('data-structgivename') ); // insert player given name
+		var structtype = called_by.getAttribute('data-structtype');
+		$("#structedittype").val( (structtype ? structtype : 0 ) ); // set proper selection
+	})
+	
+	// activate structure edit form submit button
+	$("#structureEditFormSubmit").on('click', function () {
+		
+		$.ajax({
+			url: $(this.form).attr('action'),
+			type: "post",
+			data: $(this.form).serializeArray(),
+			beforeSend: function (e) { $("#structureEditModal").block({ message: '<h1>update structure...</h1>' }); }, 
+			complete: function (e) { 
+				location.reload(); // no complex auto update page yet
+				//$('#structureEditModal').modal('hide');
+				//$("#structureEditModal").unblock(); 
+			}, 
+			success: function (data, status) {
+				//
+			},
+			error: function(xhr) {
+				$.toast({
+					text: "An AJAX error occured: " + xhr.status + " " + xhr.statusText,
+					heading: 'ERROR',
+					icon: 'error',
+					hideAfter: 5000,
+					position: 'top-right',
+					loader: true,
+					loaderBg: '#4e433c'
+				});				
+			}
+		});
+	});
+
+
+
+	/***********************************************
+	 * toaster messages
+	 *************************************************/
+
 	// see http://kamranahmed.info/toast
 	if (typeof sl_messages !== 'undefined' && sl_messages) {
 		for (const val of Object.values(sl_messages)) {

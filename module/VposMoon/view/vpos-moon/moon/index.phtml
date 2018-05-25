@@ -82,15 +82,15 @@ if (empty($filters['info_system']['constellation'])) {
 				<table id="moontable" class="table table-hover table-striped table-responsive" cellspacing="0" width="100%">
 					<thead>
 						<tr>
-							<th>Planet / Moon</th>
+							<th data-priority="1">Planet / Moon</th>
 						<?php if (!empty($filters['detail_filter_composition'] && $filters['detail_filter_composition'] == "1")): ?>
-							<th>Composition<div class="sub">(<span class="gooval">amount</span> / <span class="gooname">name</span> / <span class="gooprice">ISK</span>)</div></th>
+							<th data-priority="3">Composition<div class="sub">(<span class="gooval">amount</span> / <span class="gooname">name</span> / <span class="gooprice">ISK</span>)</div></th>
 						<?php endif; ?>
-							<th>Value</th>
+							<th data-priority="2">Value</th>
 						<?php if (!empty($filters['detail_filter_ore'] && $filters['detail_filter_ore'] == "1")): ?>
-							<th>Ore<div class="sub">(<span class="gooval">amount</span> / <span class="gooname">name</span> / <span class="gooprice">ISK</span>)</div></th>
+							<th data-priority="3">Ore<div class="sub">(<span class="gooval">amount</span> / <span class="gooname">name</span> / <span class="gooprice">ISK</span>)</div></th>
 						<?php endif; ?>
-							<th>Ore-Value</th>
+							<th data-priority="2">Ore-Value</th>
 							<th>Structure</th>
 							<th>Owner</th>
 							<th>Scanned</th>
