@@ -12,7 +12,7 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {
-        "php": "^5.6 || ^7.0",
+        "php": "^7.1",
         "ext-gd": "*",
         "ext-intl": "*",
         "zendframework/zend-component-installer": "^1.0 || ^0.5 || ^1.0.0-dev@dev",
@@ -33,7 +33,7 @@
         "zendframework/zend-log": "^2.9",
         "beberlei/DoctrineExtensions": "^1.0",
         "evelabs/oauth2-eveonline": "^1.1",
-        "eveseat/eseye": "^0.0.10",
+        "eveseat/eseye": "^1.0.0",
         "illchuk/zf3-symfony-console": "^0.1.1"
     },
     "autoload": {

@@ -45,7 +45,7 @@ Feel free to add your scans (or some from pastebin) to the tool.
 ## Requirement
 
 * Webserver, e.g. Apache
-* PHP v.7 or later with `gd` and `intl` extensions
+* PHP 7.1 or later with `gd` and `intl` extensions
 * MySQL 5.6 or later.
 
 ## Features of the framework (for developers)
