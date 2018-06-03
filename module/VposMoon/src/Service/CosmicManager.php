@@ -127,4 +127,11 @@ class CosmicManager {
 
 		return($structure_array);
 	}
+	
+	
+	public function ping($param = '')
+	{
+		return('CosmicManager-ping ' . $param);
+	}
+
 }

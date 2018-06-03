@@ -125,13 +125,35 @@ class MoonController extends AbstractActionController {
 			'cnt' => $cnt,
 		]);
 	}
-	
+
+
+	/**
+	 * Initiate a Price Update from Console	 Application
+	 * @see \Application\Service\EveDataManager::updatePrices()
+	 * 
+	 * @return ViewModel
+	 */
 	public function priceUpdateConsole()
 	{
-		$request = $this->getRequest();
-		
 		return $this->eveDataManager->updatePrices();
 	}
+
+
+	/**
+	 * Fetch Alliance and Corporation Information from ESI.
+	 * 
+	 * To be called from the shell
+	 * 
+	 * @param bool $force
+	 * @param char $mode	a for alliance, c for corporation or b for both
+	 * @return string	Information about the actions taken
+	 */	
+	public function allyCorpUpdateConsole($force=false, $mode=false)
+	{
+		return $this->eveDataManager->updateAllyCorp($force, $mode);
+	}	
+
+
 
 	/**
 	 * Export Moons and Moongoo as a CSV and offer a download link.
@@ -198,7 +220,7 @@ class MoonController extends AbstractActionController {
 
 		$params = $this->params()->fromPost();
 
-		//$this->logger->debug('editStructureAction() ' . print_r($params, true));
+		$this->logger->debug('editStructureAction() ' . print_r($params, true));
 
 		// take corp id
 		// @todo
@@ -319,6 +341,28 @@ class MoonController extends AbstractActionController {
 		}
 
 		return(array('message' => $message, 'counter' => $res_counter));
+	}
+
+	
+	public function ping($msg, $what=null)
+	{
+		echo 'PING MoonController with msg: ' . $msg . PHP_EOL;
+		
+		switch ($what){
+			case 'EveDataManager':
+				echo 'PING MoonController ping to: EveDataManager' . PHP_EOL;
+				return($this->eveDataManager->ping($msg));
+				break;
+			case 'MoonManager':
+				echo 'PING MoonController ping to: MoonManager' . PHP_EOL;
+				return($this->moonManager->ping($msg));
+				break;
+			case 'CosmicManager':
+				echo 'PING MoonController ping to: CosmicManager' . PHP_EOL;
+				return($this->cosmicManager->ping($msg));
+				break;
+		}
+		return(false);
 	}
 
 	/**

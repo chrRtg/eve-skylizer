@@ -404,4 +404,10 @@ class MoonManager {
 		return($res);
 	}
 
+	
+	public function ping($param = '')
+	{
+		return('MoonManager-ping ' . $param);
+	}
+
 }
