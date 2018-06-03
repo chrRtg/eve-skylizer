@@ -18,7 +18,6 @@ class EveEsiManager {
 	 * @var Zend\Session\Container;
 	 */
 	private $sessionContainer;
-	
 	private $logger;
 
 	/**
@@ -34,12 +33,16 @@ class EveEsiManager {
 		// disable Eseye internal logging
 		$configuration->logger = \Seat\Eseye\Log\NullLogger::class;
 
+		$configuration->http_user_agent = 'Skylizer';
+
 		// set cache dir
 		$configuration->file_cache_location = getcwd() . '/data/cache/esicache/';
 	}
 
 	/**
 	 * Send a request to Eve ESI which does not require authentification
+	 * 
+	 * If ESI answers with an error code of 502 the request will be repeated five times.
 	 * 
 	 * @param string Method of the request (e.g. get, post )
 	 * @param string the request (e.g. /characters/{character_id} )
@@ -51,9 +54,41 @@ class EveEsiManager {
 		$esi = new Eseye();
 
 		// make a call
-		$res = $esi->invoke($method, $request, $params);
+		//$res = $esi->invoke($method, $request, $params);
+		$try_cnt = 0;
+		$max_tries = 5;
 
-		return($res);
+		do {
+			try {
+				$res = $esi->invoke($method, $request, $params);
+			} catch (\Seat\Eseye\Exceptions\RequestFailedException $e) {
+				// ref: https://github.com/eveseat/eseye/wiki/Handling-Exceptions
+
+				$esirepsonse = $e->getEsiResponse();
+				$err_code = $e->getCode();
+				echo PHP_EOL . '#E(' . $err_code . ')[' . $esirepsonse->error_limit . '][' . $request . ']';
+
+				switch ((int) $err_code) {
+					case 502:
+						break;
+					default:
+						// rethrow exception - to be handled by the global exception handling
+						throw $e;
+						break; 
+				}
+
+				$try_cnt++;
+				sleep(1);
+				continue;
+			}
+			// if not caught return the result
+			return($res);
+			
+		} while ($try_cnt < $max_tries);
+
+		// If we reach this point we found a exception to be handled by the global exception handling
+		throw $e;
+		return (false);
 	}
 
 	/**
@@ -67,7 +102,7 @@ class EveEsiManager {
 	public function authedRequest($method, $request, $params)
 	{
 		// does the application is authed against Eve SSO?
-		if(empty($this->sessionContainer->eveauth['eve_app']['client_id']) || empty($this->sessionContainer->eveauth['eve_user']['token'])) {
+		if (empty($this->sessionContainer->eveauth['eve_app']['client_id']) || empty($this->sessionContainer->eveauth['eve_user']['token'])) {
 			throw new \Exception('authedRequest to Eve ESI without having client_id and user-token');
 		}
 
