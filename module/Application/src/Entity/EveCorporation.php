@@ -7,10 +7,11 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * EveCorporation
  *
- * @ORM\Table(name="eve_corporation", 
+ * @ORM\Table(name="eve_corporation",
  *		indexes={
  *			@ORM\Index(name="k_ticker", columns={"ticker"}),
- *			@ORM\Index(name="k_name", columns={"corporation_name"})
+ *			@ORM\Index(name="k_name", columns={"corporation_name"}),
+ *			@ORM\Index(name="k_alliance", columns={"alliance_id"})
  *		})
  * @ORM\Entity
  */
@@ -21,7 +22,7 @@ class EveCorporation
      *
      * @ORM\Column(name="corporation_id", type="integer", nullable=false, options={"default":0})
 	 * @ORM\Id
-	 * @ORM\GeneratedValue(strategy="NONE")     
+	 * @ORM\GeneratedValue(strategy="NONE")
 	 */
     private $corporationId = '0';
 
@@ -39,7 +40,14 @@ class EveCorporation
      */
     private $ticker = '';
 
-	
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="alliance_id", type="integer", nullable=false, options={"default":0})
+     */
+    private $allianceId = '0';
+
+
 	public function setCorporationId($corporationId)
     {
 		$this->corporationId = $corporationId;
@@ -104,4 +112,27 @@ class EveCorporation
     {
         return $this->ticker;
     }
+
+    /**
+     * Set allianceId
+     *
+     * @return EveCorporation
+     */
+	public function setAllianceId($allianceId)
+    {
+		$this->allianceId = $allianceId;
+
+        return $this;
+    }
+
+    /**
+     * Get allianceId
+     *
+     * @return integer
+     */
+    public function getAllianceId()
+    {
+        return $this->allianceId;
+    }	
+
 }

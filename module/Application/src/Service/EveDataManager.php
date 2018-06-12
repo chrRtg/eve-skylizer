@@ -143,6 +143,29 @@ class EveDataManager {
 		return($queryBuilder->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_SCALAR));
 	}
 
+
+	/**
+	 * Fetch a list of corporations where corporation name or ticker begins with $partial
+	 * 
+	 * @param string $partial
+	 * @return \Doctrine\ORM\Query::HYDRATE_SCALAR result
+	 * @throws Exception
+	 */
+	public function getCorporationByPartial($partial, $limit = 10)
+	{
+		$queryBuilder = $this->entityManager->createQueryBuilder();
+
+		$queryBuilder->select('c.corporationId as id, c.corporationId, c.corporationName, c.ticker, a.allianceName')
+			->from(EveCorporation::class, 'c')
+			->leftJoin(EveAlly::class, 'a', 'WITH', 'c.allianceId = a.allianceId')
+			->where('c.corporationName LIKE :word')
+			->orWhere('c.ticker LIKE :word')
+			->setParameter('word', '%'.addcslashes($partial, '%_').'%')
+			->setMaxResults($limit);
+
+		return($queryBuilder->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_SCALAR));
+	}
+
 	/**
 	 * Fetch inventory prices from EVE-ESI. 
 	 * 

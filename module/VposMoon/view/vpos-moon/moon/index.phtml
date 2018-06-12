@@ -11,9 +11,8 @@ $form->get('scan')->setAttributes([
 	'required' => true
 ]);
 
-//ini_set('xdebug.var_display_max_depth', 3);
-//var_dump($filters);
-//var_dump($moon_list);
+// ini_set('xdebug.var_display_max_depth', 3); var_dump($moon_list);
+//ini_set('xdebug.var_display_max_depth', 3); var_dump($filters);
 
 if (empty($filters['info_system']['constellation'])) {
 	$location_string = $filters['info_system']['itemname'] . ' (Constellation in ' . $filters['info_system']['region'] . ')';
@@ -30,9 +29,9 @@ if (empty($filters['info_system']['constellation'])) {
 <?= $this->flashMessenger()->render('info', ['alert', 'alert-info']); ?>
 
 <div class="row">
-	<div class="col-lg-9 col-sm-8">
+	<div class="col-md-9 col-sm-10">
 		<div class="row">
-			<div class="col-sm-6">
+			<div class="col-md-5 col-sm-4">
 				<!-- start system name -->
 				<div class="form-group form-group-lg addpaddingtop20">
 					<select class="form-control select2-typeahead-system" name="selectsystem" id="selectsystem">
@@ -44,36 +43,33 @@ if (empty($filters['info_system']['constellation'])) {
 				</div>
 			</div>
 			<!-- start filter area -->
-			<div class="col-sm-3">
+			<div class="col-md-3 col-sm-4">
+				<div class="checkbox">
+					<label>
+						<input type="checkbox" id="filter_gooonly" <?= (!empty($filters['filter_gooonly'] && $filters['filter_gooonly'] == "1") ? 'checked' : '' ) ?>>
+						show all moons
+					</label>
+				</div>
+			</div>
+			<div class="col-md-4 col-sm-4">
 				<!-- facette filter Composition -->
 				<div class="form-group form-group-sm">
-					<label for="selectcomposition">Composition - Filter <?= (!empty($filters['composition']) ? '&nbsp; <a href="/" class="resetswitch" data-id="selectcomposition">reset</a>' : ''); ?></label>
+					<input type="checkbox" id="detail_filter_composition" <?= (!empty($filters['detail_filter_composition'] && $filters['detail_filter_composition'] == "1") ? 'checked' : '' ) ?>>
+					<label for="detail_filter_composition">
+						Composition - Filter <?= (!empty($filters['composition']) ? '&nbsp; <a href="/" class="resetswitch" data-id="selectcomposition">reset</a>' : ''); ?></label>
 					<select class="form-control" name="selectcomposition" id="selectcomposition">
-						<option value="0">please select a value</option>
+						<option value="0">please select to filter by Composition</option>
 						<?= $this->vpViewTool()->getCompositionListAsOptions($filters['info_system']['id'], (!empty($filters['composition']) ? $filters['composition'] : 0)); ?>
 					</select>
 				</div>
-				<div class="checkbox">
-					<label>
-						<input type="checkbox"" id="detail_filter_composition" <?= (!empty($filters['detail_filter_composition'] && $filters['detail_filter_composition'] == "1") ? 'checked' : '' ) ?>>
-						show Composition details in table
-					</label>
-				</div>				
-			</div>
-			<div class="col-sm-3">
 				<!-- facette filter Ore -->
 				<div class="form-group form-group-sm">
-					<label for="selectore">Ore - Filter <?= (!empty($filters['ore']) ? '&nbsp; <a href="/" class="resetswitch" data-id="selectore">reset</a>' : ''); ?></label>
+					<input type="checkbox" id="detail_filter_ore" <?= (!empty($filters['detail_filter_ore'] && $filters['detail_filter_ore'] == "1") ? 'checked' : '' ) ?>>
+					<label for="detail_filter_ore">Ore - Filter <?= (!empty($filters['ore']) ? '&nbsp; <a href="/" class="resetswitch" data-id="selectore">reset</a>' : ''); ?></label>
 					<select class="form-control" name="selectore" id="selectore">
-						<option value="0">please select a value</option>
+						<option value="0">please select to filter by Ore</option>
 						<?= $this->vpViewTool()->getOreListAsOptions($filters['info_system']['id'], (!empty($filters['ore']) ? $filters['ore'] : 0)); ?>
 					</select>
-				</div>
-				<div class="checkbox">
-					<label>
-						<input type="checkbox" id="detail_filter_ore" <?= (!empty($filters['detail_filter_ore'] && $filters['detail_filter_ore'] == "1") ? 'checked' : '' ) ?>>
-						show Ore details in table
-					</label>
 				</div>
 			</div>
 		</div>
@@ -83,13 +79,13 @@ if (empty($filters['info_system']['constellation'])) {
 					<thead>
 						<tr>
 							<th data-priority="1">Planet / Moon</th>
-						<?php if (!empty($filters['detail_filter_composition'] && $filters['detail_filter_composition'] == "1")): ?>
-							<th data-priority="3">Composition<div class="sub">(<span class="gooval">amount</span> / <span class="gooname">name</span> / <span class="gooprice">ISK</span>)</div></th>
-						<?php endif; ?>
+							<?php if (!empty($filters['detail_filter_composition'] && $filters['detail_filter_composition'] == "1")): ?>
+								<th data-priority="3">Composition<div class="sub">(<span class="gooval">amount</span> / <span class="gooname">name</span> / <span class="gooprice">ISK</span>)</div></th>
+							<?php endif; ?>
 							<th data-priority="2">Value</th>
-						<?php if (!empty($filters['detail_filter_ore'] && $filters['detail_filter_ore'] == "1")): ?>
-							<th data-priority="3">Ore<div class="sub">(<span class="gooval">amount</span> / <span class="gooname">name</span> / <span class="gooprice">ISK</span>)</div></th>
-						<?php endif; ?>
+							<?php if (!empty($filters['detail_filter_ore'] && $filters['detail_filter_ore'] == "1")): ?>
+								<th data-priority="3">Ore<div class="sub">(<span class="gooval">amount</span> / <span class="gooname">name</span> / <span class="gooprice">ISK</span>)</div></th>
+							<?php endif; ?>
 							<th data-priority="2">Ore-Value</th>
 							<th>Structure</th>
 							<th>Owner</th>
@@ -97,39 +93,58 @@ if (empty($filters['info_system']['constellation'])) {
 						</tr>
 					</thead>
 					<tbody>
-					<?php foreach ($moon_list as $key => $moon): ?>
-						<tr>
-						<td><?= $this->escapeHtml($moon[0]->getEveMapdenormalizeItemid()->getItemname()); ?>&nbsp;
-							[<?= $this->vpViewTool()->convertMoonToShortform($moon[0]->getEveMapdenormalizeItemid()->getItemname()); ?>]
-							<span  class="actions">
-								<a class="btn btn-xs btn-danger"  data-toggle="modal" data-target="#nopeModal"
-								   href="<?= $this->url('vposmoon', ['action' => 'delete', 'id' => $moon[0]->getMoonId()]); ?>" 
-								   title="delete Moon"><span class="glyphicon glyphicon-remove"></span></a></span></td>
-					<?php if (!empty($filters['detail_filter_composition'] && $filters['detail_filter_composition'] == "1")): ?>
-						<td><?= $this->vpViewTool()->renderMoonComposition($moon['goo']); ?></td>
-					<?php endif; ?>
-						<td><?= $this->vpViewTool()->calculateMoonComposition($moon['goo']); ?></td>
-					<?php if (!empty($filters['detail_filter_ore'] && $filters['detail_filter_ore'] == "1")): ?>
-						<td><?= $this->vpViewTool()->renderMoonMateriallist($moon['materiallist']); ?></td>
-					<?php endif; ?>
-						<td><?= number_format(round(intval($this->vpViewTool()->renderMoonMaterialValue($moon['materiallist'])) / 1000), 0); ?> k</td>
-						<td>
-							<a href="#structeditModal" data-toggle="modal" data-structid="<?=$moon['structid']; ?>" data-structtype="<?=$moon['structtype']; ?>" data-structgivename="<?=$moon['structgivename']; ?>" data-moonid="<?= $moon[0]->getMoonId(); ?>" data-target="#structureEditModal">
-								<?=($moon['structname'] ? $moon['structname'] : '---'); ?></a><br /><span class="secondarytext"><?=$moon['structgivename']; ?></span></td>
-						<td>
-							<a href="#structeditModal" data-toggle="modal" data-structid="<?=$moon['structid']; ?>" data-structtype="<?=$moon['structtype']; ?>" data-structgivename="<?=$moon['structgivename']; ?>" data-moonid="<?= $moon[0]->getMoonId(); ?>" data-target="#structureEditModal">
-								tbd</a></td>
-						<td><?= date_format($moon[0]->getLastseenDate(), 'Y-m-d H:i:s'); ?><br />
-							<span class="secondarytext"><?= $moon['uchgddat']; ?></span></td>
-						</tr>
-					<?php endforeach; ?>						
+						<?php foreach ($moon_list as $key => $moon): ?>
+							<tr>
+								<td><?= $this->escapeHtml($moon['moonname']); ?>&nbsp;
+									[<?= $this->vpViewTool()->convertMoonToShortform($moon['moonname']); ?>]
+									<span  class="actions">
+										<?php if($moon['atmoonid']): ?>
+										<a class="btn btn-xs btn-danger"  data-toggle="modal" data-target="#nopeModal"
+										   href="<?= $this->url('vposmoon', ['action' => 'delete', 'id' => $moon[0]->getMoonId()]); ?>" 
+										   title="delete Moon"><span class="glyphicon glyphicon-remove"></span></a>
+										<?php endif; ?>
+									</span></td>
+									<?php if (!empty($filters['detail_filter_composition'] && $filters['detail_filter_composition'] == "1")): ?>
+								<td><?= $this->vpViewTool()->renderMoonComposition($moon['goo']); ?></td>
+								<?php endif; ?>
+								<td>
+								<?php if($moon['atmoonid']): ?>
+									<?= $this->vpViewTool()->calculateMoonComposition($moon['goo']); ?>
+								<?php endif; ?>
+								</td>
+								<?php if (!empty($filters['detail_filter_ore'] && $filters['detail_filter_ore'] == "1")): ?>
+									<td><?= $this->vpViewTool()->renderMoonMateriallist($moon['materiallist']); ?></td>
+								<?php endif; ?>
+								<td>
+								<?php if($moon['atmoonid']): ?>
+									<?= number_format(round(intval($this->vpViewTool()->renderMoonMaterialValue($moon['materiallist'])) / 1000), 0); ?> k
+								<?php endif; ?>
+								</td>
+								<td>
+									<a href="#" data-toggle="modal" data-structid="<?= $moon['structid']; ?>" data-structtype="<?= $moon['structtype']; ?>" data-structgivename="<?= $moon['structgivename']; ?>" data-scorpid="<?= $moon['structcorpid']; ?>" data-scorpname="<?= $moon['structcorpname']; ?>"  data-scorpticker="<?= $moon['structcorpticker']; ?>" data-moonid="<?= $moon['moonid']; ?>" data-target="#structureEditModal">
+										<?= ($moon['structname'] ? $moon['structname'] : '<i class="glyphicon glyphicon-plus passive"></i>'); ?></a><br /><span class="secondarytext"><?= $moon['structgivename']; ?></span>
+								</td>
+								<td>
+									<a href="#" data-toggle="modal" data-structid="<?= $moon['structid']; ?>" data-structtype="<?= $moon['structtype']; ?>" data-structgivename="<?= $moon['structgivename']; ?>"  data-scorpid="<?= $moon['structcorpid']; ?>" data-scorpname="<?= $moon['structcorpname']; ?>"  data-scorpticker="<?= $moon['structcorpticker']; ?>" data-moonid="<?= $moon['moonid']; ?>" data-target="#structureEditModal">
+										<?= ($moon['structcorpticker'] ? $this->escapeHtml($moon['structcorpticker']) : '<i class="glyphicon glyphicon-plus passive"></i>'); ?></a>
+								</td>
+								<td>
+								<?php if($moon['atmoonid']): ?>									
+									<?= date_format($moon[0]->getLastseenDate(), 'Y-m-d H:i:s'); ?><br />
+										<span class="secondarytext"><?= $moon['uchgddat']; ?></span>
+								<?php else: ?>
+									not scanned
+								<?php endif; ?>
+								</td>
+							</tr>
+						<?php endforeach; ?>						
 					</tbody>
 				</table>
 			</div>
 		</div>
 	</div>
 	<!-- start scan area -->
-	<div class="col-lg-3 col-sm-4">
+	<div class="col-md-3 col-sm-2">
 		<div class="row">
 			<button type="button" class="btn btn-info btn-sm pull-right" data-toggle="modal" data-target="#helpModal">
 				<span class="glyphicon glyphicons-question-sign"></span> Help
@@ -152,12 +167,10 @@ if (empty($filters['info_system']['constellation'])) {
 </div>
 
 <!-- Structure Edit Modal -->
-<div class="modal fade" id="structureEditModal" tabindex="-1" role="dialog" aria-labelledby="structeditLabel" aria-hidden="true">
+<div class="modal fade" id="structureEditModal"  style="overflow:hidden;" role="dialog" aria-labelledby="structeditLabel">
     <div class="modal-dialog">
-		<form id="structureEditForm" role="form" action="/vposmoon/editStructure/0" method="POST">
-			<input type="hidden" name="moonid" id="structureEditFormMoonId" value="0">
-			<input type="hidden" name="structureid" id="structureEditFormStructureId" value="0">
-			<div class="modal-content">
+		<div class="modal-content">
+			<form id="structureEditForm" role="form" action="/vposmoon/editStructure/0" method="POST">
 				<!-- Modal Header -->
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal">
@@ -169,37 +182,39 @@ if (empty($filters['info_system']['constellation'])) {
 
 				<!-- Modal Body -->
 				<div class="modal-body">
-					  <div class="form-group">
+					<input type="hidden" name="moonid" id="structureEditFormMoonId" value="0">
+					<input type="hidden" name="structureid" id="structureEditFormStructureId" value="0">
+					<div class="form-group">
 						<label for="structedittype">Type of Structure</label>
 						<select class="form-control" name="struct_item_id" id="structedittype">
 							<option value="0">please select a structure</option>
 							<?= $this->vpViewTool()->getEveTypesListAsOptions([1406]); ?>
 						</select>						
-					  </div>
-					  <div class="form-group">
+					</div>
+					<div class="form-group">
 						<label for="structeditcorp">Owning Corporation</label>
-						  <input type="text" name="owning_corp" class="form-control" id="structeditcorp" placeholder="placeholder"/>
-					  </div>
-					  <div class="form-group">
+						<select class="form-control" name="owning_corp" id="structeditcorp"></select>
+					</div>
+					<div class="form-group">
 						<label for="structeditname">Name of Structure</label>
-						  <input type="text" name="struct_name" class="form-control" id="structeditname" placeholder="placeholder"/>
-					  </div>
+						<input type="text" name="struct_name" class="form-control" id="structeditname" placeholder="placeholder"/>
+					</div>
 				</div>
 
 				<!-- Modal Footer -->
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-					<button type="button" class="btn btn-primary" type="submit" value="submit" id="structureEditFormSubmit">Save changes</button>
+					<input type="submit" class="btn btn-primary" type="submit" value="Save changes" id="structureEditFormSubmit">
 				</div>
-			</div>
-		</form>
+			</form>
+		</div>
     </div>
 </div>
 
 
 
 <!-- Help Modal -->
-<div class="modal fade" id="helpModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<div class="modal fade" id="helpModal" role="dialog" aria-labelledby="myModalLabel">
 	<div class="modal-dialog modal-lg" role="document">
 		<div class="modal-content">
 			<div class="modal-header">

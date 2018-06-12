@@ -1,13 +1,14 @@
 $(document).ready(function ()
 {
+	//$.fn.modal.Constructor.prototype.enforceFocus = function() {};
+
+
 	//datatable for moonTable
 	var moon_table = $('#moontable').DataTable({
 		fixedHeader: true,
 		responsive: true
 	});
 	moon_table.fixedHeader.headerOffset( $('#skylizer_navbar').height() );
-	//$(document).ajaxStart($.blockUI).ajaxStop($.unblockUI);
-	
 
 	// auto-submit checkboxes
 	$("#detail_filter_composition").change(function() {
@@ -26,6 +27,13 @@ $(document).ready(function ()
 		}
 	});	
 
+	$("#filter_gooonly").change(function() {
+		if (this.checked) {
+			buildFilterQuery({type:"filter_gooonly", id:"1"});
+		} else {
+			buildFilterQuery({type:"filter_gooonly", id:"-1"});
+		}
+	});	
 	// auto-submit links
 	$('a.sytemswitch').click(function() {
 		buildFilterQuery({type:"selectsystem", id:$(this).data("id")});
@@ -74,7 +82,7 @@ $(document).ready(function ()
 			},
 			processResults: function (data, params) {
 				return {
-					results: data.items,
+					results: data.items
 				};
 			},
 			cache: true
@@ -92,7 +100,6 @@ $(document).ready(function ()
 	/***********************************************
 	 * Structure Edit Modal
 	 *************************************************/
-
 	$('#structureEditModal').on('show.bs.modal', function (e) {
 		var called_by = e.relatedTarget; // calling object (the link to open the modal)
 		$("#structureEditFormMoonId").val( called_by.getAttribute('data-moonid') ); // insert moonIt into structure edit form modal
@@ -100,16 +107,78 @@ $(document).ready(function ()
 		$("#structeditname").val( called_by.getAttribute('data-structgivename') ); // insert player given name
 		var structtype = called_by.getAttribute('data-structtype');
 		$("#structedittype").val( (structtype ? structtype : 0 ) ); // set proper selection
-	})
+		var corpname = called_by.getAttribute('data-scorpname');
+		if(corpname) { 
+			$("#structeditcorp").empty();
+			$("#structeditcorp").append(new Option(called_by.getAttribute('data-scorpname'), called_by.getAttribute('data-scorpid')));
+		}
+	});
+
 	
-	// activate structure edit form submit button
-	$("#structureEditFormSubmit").on('click', function () {
+	/*
+	 * On open structure edit modal
+	 * 
+	 */
+	$('#structureEditModal').on('shown.bs.modal', function (e) {
 		
+		// activate select2 for structure seletion
+		$('#select2-sample').select2({
+			dropdownParent: $('#structureEditModal')
+		});
+		
+		// activate select2 for corp seletion with AJAX call for autosuggest
+		$('#structeditcorp').select2({
+			dropdownParent: $('#structureEditModal'),
+			ajax: {
+				url: "/vposmoon/getCorporationsJson",
+				dataType: 'json',
+				delay: 250,
+				data: function (params) {
+					return {
+						q: params.term
+					};
+				},
+				processResults: function (data, params) {
+					return {
+						results: data.items
+					};
+				},
+				cache: true
+			},
+			placeholder: 'Search by name or ticker',
+			allowClear: true,
+			escapeMarkup: function (markup) {
+				return markup;
+			},
+			minimumInputLength: 2,
+			templateResult: formatCorpDropDown,
+			templateSelection: formatCorpSelection
+		});
+	});
+
+
+	/*
+	 * close the structure edit modal
+	 */
+	$('#structureEditModal').on('hidden.bs.modal', function() {
+	  $('#select2-sample').select2('destroy');
+	  $('#structeditcorp').select2('destroy');
+	});
+
+
+	/*
+	 * on structure edit form submission
+	 */
+	$("#structureEditForm").on('submit', function (e) {
+		e.preventDefault(); // do not send the form via his action
+
 		$.ajax({
-			url: $(this.form).attr('action'),
+			url: $(this).attr('action'),
 			type: "post",
-			data: $(this.form).serializeArray(),
-			beforeSend: function (e) { $("#structureEditModal").block({ message: '<h1>update structure...</h1>' }); }, 
+			data: $(this).serializeArray(),
+			beforeSend: function (e) { 
+				$("#structureEditModal").block({ message: '<h1>update structure...</h1>' }); 
+			}, 
 			complete: function (e) { 
 				location.reload(); // no complex auto update page yet
 				//$('#structureEditModal').modal('hide');
@@ -189,13 +258,54 @@ $(document).ready(function ()
 			}
 		}
 	}
+
 });
 
+/*
+ * Format Select2 dropdown selector element for Corporation Selector
+ * 
+ * @param {type} repo
+ * @return {String}
+ */
+function formatCorpDropDown(repo) {
+
+	if (repo.loading) {
+		return repo.text;
+	}
+
+	var markup = "<div class='select2-result-repository clearfix'>" +
+			"<div class='select2-result-repository__title'>" + repo.corporationName + " [" + repo.ticker + "]</div>";
+	if(repo.allianceName == null) {
+		markup += "<div class='select2-result-repository__description'>not affilated / no alliance</div>";
+	} else {
+		markup += "<div class='select2-result-repository__description'>Member of " + repo.allianceName + "</div>";
+	}
+
+
+	markup += "</div>";
+
+	return markup;
+}
+
+/*
+ * Format Select2 dropdown selected element for Corporation Selector
+ * 
+ * @param {type} repo
+ * @return {String}
+ */
+function formatCorpSelection(repo) {
+	
+	if(repo.corporationName == null) {
+		return repo.text;
+	}
+
+	return repo.corporationName + '  ('+repo.ticker+')';
+}
 
 
 
 /**
- * Format select2 drop down elements
+ * Format select2 drop down elements for ssystem or region selector
  * 
  * @param {array} repo
  * @return {String}
@@ -221,7 +331,7 @@ function formatRepo(repo) {
 }
 
 /**
- * Format select2 selected value
+ * Format select2 selected value for ssystem or region selector
  * 
  * @param {array} repo
  * @return {String}
@@ -287,16 +397,18 @@ function buildFilterQuery(filter_param)
 		if(filter_param.type === 'detail_filter_ore') {
 			url_param['detail_filter_ore'] = filter_param.id;
 		}
+		if(filter_param.type === 'filter_gooonly') {
+			url_param['filter_gooonly'] = filter_param.id;
+		}
 	}
 
 	if(url_param) {
 		for (var key in url_param) {
-//				if(url_param[key] && url_param[key] != 'null') {
 			if(url_param[key] != null && url_param[key] != 'null') {
 				url += (url ? '&' : '') + key + '=' + url_param[key];
 			}
 		}
-		console.log(url);
+		//console.log(url);
 		if(url && url != '') {
 			console.debug('gogo: ' +  url);
 			location.href = '/vposmoon?' + url;

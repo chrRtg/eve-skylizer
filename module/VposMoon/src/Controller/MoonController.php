@@ -220,28 +220,17 @@ class MoonController extends AbstractActionController {
 
 		$params = $this->params()->fromPost();
 
-		$this->logger->debug('editStructureAction() ' . print_r($params, true));
+		// $this->logger->debug('editStructureAction() ' . print_r($params, true));
 
-		// take corp id
-		// @todo
-		// 
-		// take celestial ID by MoonID
-		$map_denormalize_itemid = 0;
 		if($params['moonid']) {
-			$moon_entity = $this->entityManager->getRepository(AtMoon::class)->findOneByMoonId((int) $params['moonid']);
+			// Any required data available, now we can access the structure
+			$res = $this->cosmicManager->writeStructure($params['structureid'], $params['struct_item_id'], $params['moonid'], (isset($params['owning_corp']) ? $params['owning_corp'] : null), trim($params['struct_name']));
 
-			if ($moon_entity !== null) {
-				$map_denormalize_itemid = $moon_entity->getEveMapdenormalizeItemid()->getItemid();
-				
-				// Any required data available, now we can access the structure
-				$res = $this->cosmicManager->writeStructure($params['structureid'], $params['struct_item_id'], $map_denormalize_itemid, 0, trim($params['struct_name']));
-
-				return new JsonModel([
-					'status' => 'SUCCESS',
-					'items' => $res,
-					'moonid' => (int) $params['moonid']
-				]);
-			}
+			return new JsonModel([
+				'status' => 'SUCCESS',
+				'items' => $res,
+				'moonid' => (int) $params['moonid']
+			]);
 		}
 
 		return new JsonModel([
@@ -249,6 +238,32 @@ class MoonController extends AbstractActionController {
 		]);
 	}
 
+	public function getCorporationsJsonAction()
+	{
+		$limit = 25;
+		$query = $this->params()->fromQuery('q');
+
+		if (!empty($query)) {
+			$res = $this->eveDataManager->getCorporationByPartial($query);
+
+			if (!empty($res)) {
+				return new JsonModel([
+					'status' => 'SUCCESS',
+					'items' => $res
+				]);
+			}
+
+			return new JsonModel([
+				'status' => 'EMPTY',
+			]);
+		}
+
+		return new JsonModel([
+			'status' => 'FAIL',
+		]);
+	}
+	
+	
 	/**
 	 * Fetch a list of systems and constellations from map by a search term.
 	 * 

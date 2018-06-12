@@ -43,22 +43,22 @@ class MoonManager {
 	private $sessionContainer;
 
 	/**
-	 * Regular Expression to identify a Moon/Survey Scan Headline
+	 * Regular Expression to identify a Moon/Survey Scan Headline by his first words
 	 * @var string
 	 */
-	private $moon_scan_headline_regexp = '/^Moon\s+Moon Product\s+Quantity\s+Ore TypeID\s+SolarSystemID\s+PlanetID\s+MoonID$/';
+	private $moon_scan_headline_regexp = '/^\s?+(Moon|Mond|Луна|Lune)/';
 
 	/**
 	 * Regular Expression to identify a Moon/Survey line with the Moon name
 	 * @var string
 	 */
-	private $moon_scan_moonline_regexp = '/^[a-zA-Z0-9\-]+\b\s+[IVX]{1,4}\s-\sMoon\b\s[1-9]{1,2}/';
+	private $moon_scan_moonline_regexp = '/^[a-zA-Z0-9\-]+\b\s+[IVX]{1,4}\s-\s(Moon|Mond|Луна|Lune)\b\s[1-9]{1,2}(\*)?/';
 
 	/**
 	 * Regular Expression to identify a Moon/Survey data-line (that's what we're looking for)
 	 * @var string
 	 */
-	private $moon_scan_gooline_regexp = '/^\s+[A-Za-z ]+\s+(0\.[0-9]+)\s+([0-9]+)\s+([0-9]+)\s+([0-9]+)\s+([0-9]+)/';
+	private $moon_scan_gooline_regexp = '/^\s+[A-Za-z \*]+\s+(0\.[0-9]+)\s+([0-9]+)\s+([0-9]+)\s+([0-9]+)\s+([0-9]+)/';
 
 	/**
 	 * To collect moon goo data
@@ -99,10 +99,20 @@ class MoonManager {
 	public function isMoonScan($line, $eve_user)
 	{
 		$this->eve_userid = $eve_user;
+		
+		// strip all XML Tags (<localized hint="F-8Y13 II - Moon 1">
+		$clean_line = strip_tags($line);
+		
+		$line_arr = explode("\t", $clean_line);
+		
+		// $this->logger->debug('Check Line __' . $clean_line . '__'); 
 
-		if (preg_match($this->moon_scan_headline_regexp, $line) || preg_match($this->moon_scan_moonline_regexp, $line)) {
+
+		if (count($line_arr) == 7 && preg_match($this->moon_scan_headline_regexp, $clean_line)) {
 			return(true);
-		} else if (preg_match($this->moon_scan_gooline_regexp, $line, $matches)) {
+		} else if (preg_match($this->moon_scan_moonline_regexp, $clean_line)) {
+			return(true);
+		} else if (preg_match($this->moon_scan_gooline_regexp, $clean_line, $matches)) {
 			$this->collectGoo($matches['1'], $matches['2'], $matches['5']);
 			return(true);
 		}
@@ -228,23 +238,30 @@ class MoonManager {
 
 		$queryBuilder = $this->entityManager->createQueryBuilder();
 
-		$queryBuilder->select('m, sum(mg.gooAmount) as ga, uchgd.eveUsername as uchgddat')
+		$queryBuilder->select('md.itemid as moonid, md.itemname as moonname')
+			->addselect('m, m.moonId as atmoonid, sum(mg.gooAmount) as ga, uchgd.eveUsername as uchgddat')
 			->addSelect("GROUP_CONCAT(DISTINCT mg.gooAmount, '|', it.typename , '|', it.baseprice order by mg.gooAmount desc SEPARATOR '#') as goo")
 			->addSelect("SUM(itmt.baseprice * itm.quantity) as oreval")
 			->addSelect("GROUP_CONCAT(DISTINCT itmt.typename) as hasmaterial")
 			->addSelect("GROUP_CONCAT(IDENTITY(mg.eveInvtypesTypeid), '|', mg.gooAmount, '|', it.typename, '|',  itmt.typeid, '|', itm.quantity, '|', itmt.typename, '|', itmt.baseprice SEPARATOR '#') as materiallist")
-			->addSelect("GROUP_CONCAT(DISTINCT atstruct.id) as structid, GROUP_CONCAT(DISTINCT atstruct.typeId) as structtype, GROUP_CONCAT(DISTINCT itmt2.typename) as structname,  GROUP_CONCAT(DISTINCT atstruct.corporationId) as structcorp, GROUP_CONCAT(DISTINCT atstruct.structureName) as structgivename")
-			->from(\VposMoon\Entity\AtMoon::class, 'm')
+			->addSelect("GROUP_CONCAT(DISTINCT atstruct.id) as structid, GROUP_CONCAT(DISTINCT atstruct.typeId) as structtype, GROUP_CONCAT(DISTINCT itmt2.typename) as structname,  GROUP_CONCAT(DISTINCT atstruct.structureName) as structgivename")
+			->addSelect("GROUP_CONCAT(DISTINCT atstruct.corporationId) as structcorpid, GROUP_CONCAT(DISTINCT ec.corporationName) as structcorpname, GROUP_CONCAT(DISTINCT ec.ticker) as structcorpticker")
+			->from(\Application\Entity\Mapdenormalize::class, 'md')
+			//->from(\VposMoon\Entity\AtMoon::class, 'm')
+			->leftJoin(\VposMoon\Entity\AtMoon::class, 'm', 'WITH', 'md.itemid = m.eveMapdenormalizeItemid')
 			->leftJoin(\VposMoon\Entity\AtMoongoo::class, 'mg', 'WITH', 'm.moonId = mg.moon')
 			->leftJoin(\Application\Entity\Invtypes::class, 'it', 'WITH', 'it.typeid = mg.eveInvtypesTypeid')
-			->leftJoin(\Application\Entity\Mapdenormalize::class, 'md', 'WITH', 'md.itemid = m.eveMapdenormalizeItemid')
+			//->leftJoin(\Application\Entity\Mapdenormalize::class, 'md', 'WITH', 'md.itemid = m.eveMapdenormalizeItemid')
 			->leftJoin(\Application\Entity\Invtypematerials::class, 'itm', 'WITH', 'itm.typeid = mg.eveInvtypesTypeid')
 			->leftJoin(\Application\Entity\Invtypes::class, 'itmt', 'WITH', 'itmt.typeid = itm.materialtypeid')
 			->leftJoin(\User\Entity\User::class, 'uchgd', 'WITH', 'm.lastseenBy = uchgd.eveUserid')
-			->leftJoin(\VposMoon\Entity\AtStructure::class , 'atstruct', 'WITH', 'm.eveMapdenormalizeItemid = atstruct.itemId')
+			->leftJoin(\VposMoon\Entity\AtStructure::class , 'atstruct', 'WITH', 'md.itemid = atstruct.itemId')
 			->leftJoin(\Application\Entity\Invtypes::class, 'itmt2', 'WITH', 'itmt2.typeid = atstruct.typeId')
-			->groupBy('m.moonId')
-			->having('hasmaterial is not null');
+			->leftJoin(\Application\Entity\EveCorporation::class, 'ec', 'WITH', 'atstruct.corporationId = ec.corporationId')
+			->andWhere('md.typeid = 14')
+			->groupBy('md.itemid, m.moonId');
+			//->groupBy('m.moonId')
+			//->having('hasmaterial is not null');
 
 		/*
 		 * now add the filters to the query
@@ -274,6 +291,10 @@ class MoonManager {
 		if (!empty($filters['system'])) {
 			$queryBuilder->andWhere('md.solarsystemid = :mditemid or md.constellationid = :mditemid');
 		}
+		
+		if (!empty($filters['filter_gooonly']) &&  $filters['filter_gooonly'] == -1) {
+			$queryBuilder->having('atmoonid is not null OR structid is not null');
+		}
 
 		$res = $queryBuilder->getQuery()->getResult();
 		return($res);
@@ -297,10 +318,11 @@ class MoonManager {
 			$filters = array();
 			$filters['detail_filter_composition'] = "1";
 			$filters['detail_filter_ore'] = "1";
+			$filters['filter_gooonly'] = "1";
 		} else {
 			$filters = $this->sessionContainer->filter;
 		}
-		
+
 		// start with the view filters
 		if (!empty($get_parameters['detail_filter_composition'])) {
 			$filters['detail_filter_composition'] = $get_parameters['detail_filter_composition'];
@@ -308,8 +330,11 @@ class MoonManager {
 		if (!empty($get_parameters['detail_filter_ore'])) {
 			$filters['detail_filter_ore'] = $get_parameters['detail_filter_ore'];
 		}
+		if (!empty($get_parameters['filter_gooonly'])) {
+			$filters['filter_gooonly'] = $get_parameters['filter_gooonly'];
+		}
 
-		
+
 		// system or constellation
 		if (!empty($get_parameters['system'])) {
 			$filters['system'] = $get_parameters['system'];
@@ -343,7 +368,8 @@ class MoonManager {
 		}
 		$filters['info_system'] = $eveDataManager->getSystemByID($filters['system'])[0];
 
-
+		//$this->logger->debug('filters: ' . print_r($filters, true));
+		
 		// persist filter into user session
 		$this->sessionContainer->filter = $filters;
 		return($filters);

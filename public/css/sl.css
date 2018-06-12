@@ -26,7 +26,13 @@ footer {
 .modal-body {
 	background-color: #515151;
 }
+.modal-header .close {
+  font-size: 40px;
+  margin-top: -10px;
+}
 
+
+/* BLOCKUI styling */
 .blockMsg {
     width:  40%;
     top:    30%;
@@ -52,10 +58,12 @@ footer {
 	font-family: "Lucida Console", Monaco, monospace;
 }
 
+/* primary color */
 .syklizer {
 	color: #df691a;
 }
 
+/* buttons */
 button.btn, a.btn {
 	margin:2px;
 }
@@ -80,6 +88,14 @@ button.btn, a.btn {
 
 .btn.btn-system:hover, .btn.btn-constellation:hover {
 	border: 1px solid #df691a; 
+}
+
+i.glyphicon.passive {
+	padding: 0 10px;
+	color: #3c9887;
+}
+i.glyphicon.passive:hover {
+	color: #df691a;
 }
 
 .alert.alert-warning {

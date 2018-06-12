@@ -27,6 +27,15 @@ Feel free to add your scans (or some from pastebin) to the tool.
 
 ## Changelog
 
+
+2018-06-00
+
+ * Structures - which kind structure has been anchored, who is the owner and what is the name of the structure?
+ * Moons - now skŸlizer show all moons, regardless of some scanned him or not
+ * Internationalization - regardles if you play Eve with English, Russian, German or French, your moon-scan is understood by skŸlizer
+ * Stability & Security - core parts of the code has been improved for stability and safety
+ 
+
 2018-05-16
 
 * big code update to allow smooth database structure update to prepare future improvements

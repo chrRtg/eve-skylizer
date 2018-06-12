@@ -87,7 +87,7 @@ class CosmicManager {
 	 * @param string $structure_name	The player given name of the structure
 	 * @return type
 	 */
-	public function writeStructure($structure_id=0, $inv_types_typeid=0, $map_denormalize_itemid=0, $corp_id=0, $structure_name=null)
+	public function writeStructure($structure_id=0, $inv_types_typeid=null, $map_denormalize_itemid=null, $corp_id=null, $structure_name=null)
 	{
 		$structure_entity = $this->entityManager->getRepository(AtStructure::class)->findOneById($structure_id);
 
@@ -96,19 +96,21 @@ class CosmicManager {
 			$structure_entity = new AtStructure();
 			$structure_entity->setCreateDate(new \DateTime("now"));
 			$structure_entity->setCreatedBy($this->eveSSOManager->getIdentityID());
-			$structure_entity->setItemId(0);
-			$structure_entity->setTypeId(0);
-			$structure_entity->setCorporationId(0);
 		}
-
+		
+		// default values
+		$structure_entity->setItemId(null);
+		$structure_entity->setTypeId(null);
+		$structure_entity->setCorporationId(null);
+			
 		if($map_denormalize_itemid) {
-			$structure_entity->setItemId($map_denormalize_itemid); // mapDenormalize.itemID in case of celestials,
+			$structure_entity->setItemId((int) $map_denormalize_itemid); // mapDenormalize.itemID in case of celestials,
 		}
 		if($inv_types_typeid) {
 			$structure_entity->setTypeId($inv_types_typeid); // invTypes.typeID (the structure)
 		}
 		if($corp_id) {
-			$structure_entity->setCorporationId($corp_id); // owner: EveCorporation.corporationId
+			$structure_entity->setCorporationId((int) $corp_id); // owner: EveCorporation.corporationId
 		}
 		if($structure_name) {
 			$structure_entity->setStructureName($structure_name);

@@ -225,7 +225,7 @@ class EveSSOManager {
 
 		// check if user is allowed to log in (by player name or because of his corporation
 		if (isset($corporation->name) && !$this->checkEveCredentials($sso_user->getCharacterName(), $corporation->name)) {
-			$this->logger->notice("login attempt failed for " . $sso_user->getCharacterName() . " [" . $corporation->name . "]");
+			
 			$this->responseMessage = 'This user is not allowed to use this tool.';
 			return(false);
 		}

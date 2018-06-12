@@ -47,6 +47,19 @@ class EveAlly
     }
 
     /**
+     * Set allianceId
+     *
+     * @param int $allianceID
+     *
+     * @return EveAlly
+     */
+    public function setAllianceId($allianceId)
+    {
+        $this->allianceId = $allianceId;
+
+        return $this;
+    }
+    /**
      * Set allianceName
      *
      * @param string $allianceName
