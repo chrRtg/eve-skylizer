@@ -23,5 +23,6 @@ wget https://www.fuzzwork.co.uk/dump/latest/mapSolarSystemJumps.sql.bz2
 wget https://www.fuzzwork.co.uk/dump/latest/trnTranslations.sql.bz2
 
 ## then unzip and import to your DB
-bunzip *.bz2
-cat *.sql | mysql -u root -p skylizer
+bzcat *.bz2 | mysql <your db> -u root -p 
+
+## afterwards update the indices with post_update.sql
