@@ -4,8 +4,6 @@ skŸlizer is a tool for Eve Online to handle any kind of scans.
 
 ![skylizer-1](https://raw.githubusercontent.com/wiki/chrRtg/eve-skylizer/img/skylizer_1.jpg)
 
-
-
 At the moment only survey scans of moon and storing mining structures is supported, more to come.
 
 ## Features
