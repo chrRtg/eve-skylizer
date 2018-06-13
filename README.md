@@ -2,30 +2,49 @@
 
 skŸlizer is a tool for Eve Online to handle any kind of scans. 
 
-At the moment only survey scans of moon and storing mining structures is supported, more to come.
+![skylizer-1](https://raw.githubusercontent.com/wiki/chrRtg/eve-skylizer/img/skylizer_1.jpg)
 
-![skylizer-1](/wiki/img/skylizer_1.jpg)
+
+
+At the moment only survey scans of moon and storing mining structures is supported, more to come.
 
 ## Features
 
-* [for the impatient - a screenshot](https://raw.githubusercontent.com/chrRtg/eve-skylizer/master/public/img/skylizer_screenshot_1.jpg)
-* read Moon scan data from Eve Online. Press below the scan results "copy to clipboard", then navigate to skŸlizer and paste the scan to the area to the right and then the button "submit your scan" below the area.
-* search by Systemname or Constellation with autosuggest, just start typing
-* easily navigate to neighbour systems, constellation or show all scanned moons in the current constellation
-* show the composition, amount and value of the goo for each moon
-* show the composition, amount and value of the refined minerals ("Ore") for each moon
-* *filter* by goo or refined minerals
-* order by value (which moon is the R64 equivalent)
-* polls current prices from Eve via ESI call
+1. **Scan moons **
+2. **copy'n paste your scan to skŸlizer **
+3. **view & filter by value and ore - find the ISK ** (or your next targets)
+4. **share your findings with your mates** 
+
+
+
+* Easily identify the valuable moons (ISK!) in a system or the whole constellation
+* How to use: copy moon scan data from Eve Online. Press below the scan results "copy to clipboard", then navigate to skŸlizer and paste the scan to the area to the right and then the button "submit your scan" below the area.
+* **search** by system-name or constellation, just start typing - autosuggest fill the gaps
+* easily **navigate** to neighbour systems, a constellation or show all scanned moons in the current constellation
+* show the **composition, amount and ISK for the goo** for each moon
+* show the **composition, amount and ISK of the refined minerals ("Ore")** for each moon
+* filter by goo or refined minerals
+* order by value (which moon is the R64 equivalent?)
+* polls **daily prices from Eve** via ESI call
+* add structures, owning corporation and the structure name or some notes to any moon
 * Help Function
 * for Moon-Managers (specific right in the tool) create CSV exports
 * and much more to be come...
 
 In the future skŸlizer will become a tool to share moon, scan and dscan results and to combine the scan results. It will e.g. show after a scan which kind of structure has been anchored on a moon or somewhere else.
 
+# If you want to have a look:
+
 ## [PUBLIC Demo of skŸlizer](https://skylizer.eve-tools.info)
 
-Data available in the public demo for: 3QE-9Q, Alparena, Daras, F-TE1T, Hakonen, HM-UVD, L-C3O7, Reschard, Taisy and ZOYW-O, see [PUBLIC Demo of skŸlizer](https://skylizer.eve-tools.info)
+Data available in the public demo for: 
+
+* 3QE-9Q 
+* Alparena
+* Daras
+* F-TE1T
+* Hakonen
+* HM-UVD,  L-C3O7, Reschard, Taisy and ZOYW-O, see [PUBLIC Demo of skŸlizer](https://skylizer.eve-tools.info)
 
 Feel free to add your scans (or some from pastebin) to the tool. 
 
