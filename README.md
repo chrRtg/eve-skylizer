@@ -8,9 +8,9 @@ At the moment only survey scans of moon and storing mining structures is support
 
 ## Features
 
-1. **Scan moons **
-2. **copy'n paste your scan to skŸlizer **
-3. **view & filter by value and ore - find the ISK ** (or your next targets)
+1. **Scan moons**
+2. **copy'n paste your scan to skŸlizer**
+3. **view & filter by value and ore - find the ISK** (or your next targets)
 4. **share your findings with your mates** 
 
 
