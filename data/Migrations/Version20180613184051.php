@@ -14,7 +14,8 @@ final class Version20180613184051 extends AbstractMigration
     {
         // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
-
+		
+		$this->addSql('SET FOREIGN_KEY_CHECKS = 0');
         $this->addSql('ALTER TABLE eve_corporation CHANGE alliance_id alliance_id INT DEFAULT 0 NOT NULL');
         $this->addSql('ALTER TABLE eve_corporation RENAME INDEX k_ticker TO ix_c_ticker');
         $this->addSql('ALTER TABLE eve_corporation RENAME INDEX k_name TO ix_c_name');
@@ -57,13 +58,15 @@ final class Version20180613184051 extends AbstractMigration
         $this->addSql('ALTER TABLE at_structure DROP group_id');
         $this->addSql('ALTER TABLE at_structure RENAME INDEX idx_invitem TO idx_st_invitem');
         $this->addSql('ALTER TABLE at_structure RENAME INDEX idx_invtype TO idx_st_invtype');
+		$this->addSql('SET FOREIGN_KEY_CHECKS = 1');
     }
 
     public function down(Schema $schema) : void
     {
         // this down() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
-
+		
+		$this->addSql('SET FOREIGN_KEY_CHECKS = 0');
         $this->addSql('ALTER TABLE at_cosmic_detail RENAME INDEX idx_cd_main_id TO idx_cosmic_main_id');
         $this->addSql('ALTER TABLE at_cosmic_detail RENAME INDEX idx_cd_name_en TO idx_name_en');
         $this->addSql('ALTER TABLE at_cosmic_detail RENAME INDEX idx_cd_name_de TO idx_name_de');
@@ -106,5 +109,7 @@ final class Version20180613184051 extends AbstractMigration
         $this->addSql('ALTER TABLE mapDenormalize RENAME INDEX ix_md_groupsystem TO md_IX_groupid');
         $this->addSql('ALTER TABLE mapSolarSystemJumps RENAME INDEX ix_mssj_fromsolar TO IDX_fromSolar');
         $this->addSql('ALTER TABLE mapSolarSystemJumps RENAME INDEX ix_mssj_tosolar TO IDX_toSolar');
+		$this->addSql('SET FOREIGN_KEY_CHECKS = 1');
+
     }
 }
