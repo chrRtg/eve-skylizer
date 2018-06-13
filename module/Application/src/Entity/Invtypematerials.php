@@ -7,7 +7,10 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Invtypematerials
  *
- * @ORM\Table(name="invTypeMaterials", indexes={@ORM\Index(name="k_typeid", columns={"typeID"}), @ORM\Index(name="k_mtypeid", columns={"materialTypeID"})})
+ * @ORM\Table(name="invTypeMaterials", 
+ *	indexes={
+ *		@ORM\Index(name="ix_tm_typeid", columns={"typeID"}), 
+ *		@ORM\Index(name="ix_tm_mtypeid", columns={"materialTypeID"})})
  * @ORM\Entity
  */
 class Invtypematerials

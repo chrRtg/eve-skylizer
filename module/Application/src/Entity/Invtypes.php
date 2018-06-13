@@ -7,7 +7,12 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Invtypes
  *
- * @ORM\Table(name="invTypes", indexes={@ORM\Index(name="ix_invTypes_groupID", columns={"groupID"}), @ORM\Index(name="marketGroupID_idx", columns={"marketGroupID"})})
+ * @ORM\Table(name="invTypes", 
+ *		indexes={
+ *			@ORM\Index(name="ix_it_groupid", columns={"groupID"}), 
+ *			@ORM\Index(name="ix_it_mgroup", columns={"marketGroupID"}),
+ *			@ORM\Index(name="ix_it_name", columns={"typeName"})
+ *	})
  * @ORM\Entity
  */
 class Invtypes

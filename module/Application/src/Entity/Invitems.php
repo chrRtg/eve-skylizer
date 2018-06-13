@@ -7,7 +7,10 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Invitems
  *
- * @ORM\Table(name="invItems", indexes={@ORM\Index(name="IDX_invItems_LID", columns={"locationID"}), @ORM\Index(name="IDX_invItems_OID_LID", columns={"ownerID", "locationID"})})
+ * @ORM\Table(name="invItems", 
+ *	indexes={
+ *		@ORM\Index(name="ix_ii_locationid", columns={"locationID"}), 
+ *		@ORM\Index(name="ix_ii_ownerid_locationid", columns={"ownerID", "locationID"})})
  * @ORM\Entity
  */
 class Invitems

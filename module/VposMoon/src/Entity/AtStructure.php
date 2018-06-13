@@ -9,8 +9,8 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="at_structure", 
  *		indexes={
- *			@ORM\Index(name="idx_invitem", columns={"item_id"}), 
- *			@ORM\Index(name="idx_invtype", columns={"type_id"})
+ *			@ORM\Index(name="idx_st_invitem", columns={"item_id"}), 
+ *			@ORM\Index(name="idx_st_invtype", columns={"type_id"})
  *		})
  * @ORM\Entity
  */

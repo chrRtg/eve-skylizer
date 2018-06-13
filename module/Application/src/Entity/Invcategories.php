@@ -7,7 +7,10 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Invcategories
  *
- * @ORM\Table(name="invCategories")
+ * @ORM\Table(name="invCategories", 
+ *		indexes={
+ *			@ORM\Index(name="ix_ic_catname", columns={"categoryName"})
+ *		})
  * @ORM\Entity
  */
 class Invcategories

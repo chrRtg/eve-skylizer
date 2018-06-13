@@ -7,7 +7,10 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Mapsolarsystemjumps
  *
- * @ORM\Table(name="mapSolarSystemJumps", indexes={@ORM\Index(name="IDX_fromSolar", columns={"fromSolarSystemID"}), @ORM\Index(name="IDX_toSolar", columns={"toSolarSystemID"})})
+ * @ORM\Table(name="mapSolarSystemJumps", 
+ *	indexes={
+ *		@ORM\Index(name="ix_mssj_fromsolar", columns={"fromSolarSystemID"}), 
+ *		@ORM\Index(name="ix_mssj_tosolar", columns={"toSolarSystemID"})})
  * @ORM\Entity
  */
 class Mapsolarsystemjumps

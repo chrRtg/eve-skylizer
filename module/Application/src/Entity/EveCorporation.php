@@ -9,9 +9,9 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="eve_corporation",
  *		indexes={
- *			@ORM\Index(name="k_ticker", columns={"ticker"}),
- *			@ORM\Index(name="k_name", columns={"corporation_name"}),
- *			@ORM\Index(name="k_alliance", columns={"alliance_id"})
+ *			@ORM\Index(name="ix_c_ticker", columns={"ticker"}),
+ *			@ORM\Index(name="ix_c_name", columns={"corporation_name"}),
+ *			@ORM\Index(name="ix_c_alliance", columns={"alliance_id"})
  *		})
  * @ORM\Entity
  */
