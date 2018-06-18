@@ -9,8 +9,8 @@ nbproject
 .nbproject
 .settings
 composer.lock
-vendor/
-eve-skylizer.wiki/
+/vendor/
+/eve-skylizer.wiki/
 /ressource/db_model.mwb.bak
 /ressource/private/
 /bin/example.php

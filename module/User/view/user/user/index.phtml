@@ -30,8 +30,10 @@ $this->mainMenu()->setActiveItemId('admin');
 					<?= $this->escapeHtml($user->getEveUsername()); ?>
 				</td>
 				<td>
+				<?php if ($user->getEveCorpid()): ?>	
 					<img src="https://imageserver.eveonline.com/Corporation/<?= $user->getEveCorpid()->getCorporationId(); ?>_32.png">&nbsp;
 					<?= $this->escapeHtml($user->getEveCorpid()->getCorporationName()); ?>
+				<?php endif; ?>
 				</td>
 				<td>
 					<?= $this->escapeHtml($user->getRolesAsString()); ?></a> 

@@ -65,7 +65,7 @@ class User
     /**
      * @var \Application\Entity\EveCorporation
      *
-     * @ORM\ManyToOne(targetEntity="Application\Entity\EveCorporation")
+     * @ORM\ManyToOne(targetEntity="Application\Entity\EveCorporation", fetch="EAGER")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="eve_corpid", referencedColumnName="corporation_id")
      * })
