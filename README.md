@@ -50,8 +50,8 @@ Feel free to add your scans (or some from pastebin) to the tool.
 
 Please have a look into the wiki to understand how to install and maintain skŸlizer:
 
-* [Changelog](/eve-skylizer/wiki/Changelog)
-* [Update the application](/eve-skylizer/wiki/Updates)
+* [Changelog](./eve-skylizer/wiki/Changelog)
+* [Update the application](./wiki/Updates)
 * [How to install](/eve-skylizer/wiki/Install)
 
 ## Features of the framework (for developers)
