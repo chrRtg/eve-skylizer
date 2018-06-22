@@ -50,7 +50,7 @@ Feel free to add your scans (or some from pastebin) to the tool.
 
 Please have a look into the wiki to understand how to install and maintain skŸlizer:
 
-* [Changelog](/wiki/Changelog)
+* [Changelog](/eve-skylizer/Changelog)
 * [Update the application](/wiki/Updates)
 * [How to install](/wiki/Install)
 
