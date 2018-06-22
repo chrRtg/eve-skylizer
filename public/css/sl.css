@@ -59,8 +59,12 @@ footer {
 }
 
 /* primary color */
-.syklizer {
+.skylizer {
 	color: #df691a;
+}
+
+.skylizer_dim {
+	color: #c8bdb6;
 }
 
 /* buttons */
@@ -215,5 +219,18 @@ thead div.sub {
  */
 .addpaddingtop20 {
 	padding-top: 20px;
+}
+.addpaddingtop10 {
+	padding-top: 10px;
+}
+
+.addfontsize1 {
+	font-size: 1.25rem;
+}
+.addfontsize2 {
+	font-size: 1.5rem;
+}
+.addfontsize3 {
+	font-size: 1.75rem;
 }
 

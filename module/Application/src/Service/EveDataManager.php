@@ -9,6 +9,8 @@ use Application\Entity\Invmarketgroups;
 use Application\Entity\Invcategories;
 use Application\Entity\EveAlly;
 use Application\Entity\EveCorporation;
+use VposMoon\Entity\AtStructure;
+use User\Entity\User;
 use Application\Entity\Mapdenormalize;
 use Application\Entity\Maplocationwormholeclasses;
 use Application\Entity\Mapsolarsystemjumps;
@@ -165,6 +167,35 @@ class EveDataManager {
 
 		return($queryBuilder->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_SCALAR));
 	}
+
+	/**
+	 * Fetch a structure with details by structure-id
+	 * 
+	 * @param type $structure_id
+	 * @return Array
+	 */
+	public function getStructureById($structure_id=0) 
+	{
+		$queryBuilder = $this->entityManager->createQueryBuilder();
+
+		$queryBuilder->select('ats.structureName, ats.corporationId, ec.corporationName, ec.ticker corporationTicker, ec.allianceId, ea.allianceName, ea.ticker allianceTicker')
+			->addSelect('it.typename structItemname, it.typeid, ig.groupname, crea.eveUsername as creaName, ats.createDate, ats.lastseenDate, chgn.eveUsername lastseenName')
+			->from(AtStructure::class, 'ats')
+			->leftJoin(EveCorporation::class, 'ec', 'WITH', 'ats.corporationId = ec.corporationId')
+			->leftJoin(EveAlly::class, 'ea', 'WITH', 'ec.allianceId = ea.allianceId')
+			->leftJoin(invTypes::class, 'it', 'WITH', 'ats.typeId = it.typeid')
+			->leftJoin(invGroups::class, 'ig', 'WITH', 'it.groupid = ig.groupid')
+			->leftJoin(User::class, 'crea', 'WITH', 'ats.createdBy = crea.eveUserid')
+			->leftJoin(User::class, 'chgn', 'WITH', 'ats.lastseenBy = chgn.eveUserid')
+			->where('ats.id = :q')
+			->setParameter('q', $structure_id)
+			->setMaxResults(1);
+
+		return($queryBuilder->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_SCALAR));
+	}
+
+
+
 
 	/**
 	 * Fetch inventory prices from EVE-ESI. 

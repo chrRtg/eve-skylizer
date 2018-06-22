@@ -203,11 +203,19 @@ class MoonController extends AbstractActionController {
 		return $this->getResponse();
 	}
 	
+	
 	/**
+	 * Create or edit a structure.
+	 * 
+	 * A structure consist of the eve-type, a celestial (moon, planet, sun, gate, station) the structure is nearby,
+	 * the owning corporation and the player given name of the structure
+	 * 
+	 * @todo support more structures than moons
+	 * @todo support distance to celestial
 	 * 
 	 * @return JsonModel
 	 */
-	public function editStructureAction()
+	public function editStructureJsonAction()
 	{
         $request = $this->getRequest();
 		$response = $this->getResponse();
@@ -238,6 +246,40 @@ class MoonController extends AbstractActionController {
 		]);
 	}
 
+
+	public function getStructureJsonAction() 
+	{
+		$query = $this->params()->fromQuery('q');
+
+		$this->logger->debug('getStructureJson() ' . print_r($query, true));
+
+
+		if (!empty($query)) {
+			$res = $this->eveDataManager->getStructureById($query);
+
+			if (!empty($res)) {
+				return new JsonModel([
+					'status' => 'SUCCESS',
+					'items' => $res
+				]);
+			}
+
+			return new JsonModel([
+				'status' => 'EMPTY',
+			]);
+		}
+
+		return new JsonModel([
+			'status' => 'FAIL',
+		]);
+	}
+
+
+	/**
+	 * Find a corporation by a part of her name or ticker
+	 * 
+	 * @return JsonModel
+	 */
 	public function getCorporationsJsonAction()
 	{
 		$limit = 25;

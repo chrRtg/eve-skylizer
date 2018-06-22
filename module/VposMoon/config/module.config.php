@@ -43,7 +43,7 @@ return [
         'controllers' => [
             Controller\MoonController::class => [
                 // Allow autorized users to visit "index"
-                ['actions' => ['index', 'getSystemsJson', 'getCorporationsJson', 'editStructure'], 'allow' => '@'],
+                ['actions' => ['index', 'getSystemsJson', 'getCorporationsJson', 'editStructureJson', 'getStructureJson'], 'allow' => '@'],
                 // Give access to "delete" "moon.manage" permission.
                 ['actions' => ['delete', 'dlMoonsCsv', 'priceUpdate'], 'allow' => '+moon.manage']
             ],

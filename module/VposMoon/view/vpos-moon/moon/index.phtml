@@ -121,11 +121,11 @@ if (empty($filters['info_system']['constellation'])) {
 								<?php endif; ?>
 								</td>
 								<td>
-									<a href="#" data-toggle="modal" data-structid="<?= $moon['structid']; ?>" data-structtype="<?= $moon['structtype']; ?>" data-structgivename="<?= $moon['structgivename']; ?>" data-scorpid="<?= $moon['structcorpid']; ?>" data-scorpname="<?= $moon['structcorpname']; ?>"  data-scorpticker="<?= $moon['structcorpticker']; ?>" data-moonid="<?= $moon['moonid']; ?>" data-target="#structureEditModal">
+									<a href="#" class="structlink" data-toggle="modal" data-structid="<?= $moon['structid']; ?>" data-structtype="<?= $moon['structtype']; ?>" data-structgivename="<?= $moon['structgivename']; ?>" data-scorpid="<?= $moon['structcorpid']; ?>" data-scorpname="<?= $moon['structcorpname']; ?>"  data-scorpticker="<?= $moon['structcorpticker']; ?>" data-moonid="<?= $moon['moonid']; ?>" data-target="#structureEditModal">
 										<?= ($moon['structname'] ? $moon['structname'] : '<i class="glyphicon glyphicon-plus passive"></i>'); ?></a><br /><span class="secondarytext"><?= $moon['structgivename']; ?></span>
 								</td>
 								<td>
-									<a href="#" data-toggle="modal" data-structid="<?= $moon['structid']; ?>" data-structtype="<?= $moon['structtype']; ?>" data-structgivename="<?= $moon['structgivename']; ?>"  data-scorpid="<?= $moon['structcorpid']; ?>" data-scorpname="<?= $moon['structcorpname']; ?>"  data-scorpticker="<?= $moon['structcorpticker']; ?>" data-moonid="<?= $moon['moonid']; ?>" data-target="#structureEditModal">
+									<a href="#" class="structlink" data-toggle="modal" data-structid="<?= $moon['structid']; ?>" data-structtype="<?= $moon['structtype']; ?>" data-structgivename="<?= $moon['structgivename']; ?>" data-scorpid="<?= $moon['structcorpid']; ?>" data-scorpname="<?= $moon['structcorpname']; ?>"  data-scorpticker="<?= $moon['structcorpticker']; ?>" data-moonid="<?= $moon['moonid']; ?>" data-target="#structureEditModal">
 										<?= ($moon['structcorpticker'] ? $this->escapeHtml($moon['structcorpticker']) : '<i class="glyphicon glyphicon-plus passive"></i>'); ?></a>
 								</td>
 								<td>
@@ -170,7 +170,7 @@ if (empty($filters['info_system']['constellation'])) {
 <div class="modal fade" id="structureEditModal"  style="overflow:hidden;" role="dialog" aria-labelledby="structeditLabel">
     <div class="modal-dialog">
 		<div class="modal-content">
-			<form id="structureEditForm" role="form" action="/vposmoon/editStructure/0" method="POST">
+			<form id="structureEditForm" role="form" action="/vposmoon/editStructureJson/0" method="POST">
 				<!-- Modal Header -->
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal">
@@ -204,7 +204,7 @@ if (empty($filters['info_system']['constellation'])) {
 				<!-- Modal Footer -->
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-					<input type="submit" class="btn btn-primary" type="submit" value="Save changes" id="structureEditFormSubmit">
+					<input type="submit" class="btn btn-primary" value="Save changes" id="structureEditFormSubmit">
 				</div>
 			</form>
 		</div>
@@ -255,3 +255,4 @@ if (empty($filters['info_system']['constellation'])) {
 		</div>
 	</div>
 </div>
+by <strong>Another Pilot name</strong> <span class="secondarytext">(2018-06-18 19:14:08)</span></div>
