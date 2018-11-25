@@ -23,8 +23,7 @@ return [
 		'redirectUri'       => '<your application base URL>/auth/index',
 		'scope' => [
 			// @ while generating your EVE application take care to add these scopes
-			'publicData', 
-			'characterLocationRead', 
+			'publicData',
 			'esi-location.read_location.v1'
 		],
 		'auth' => [
