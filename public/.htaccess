@@ -6,7 +6,7 @@ RewriteEngine On
 ## this application offers to rename _maintenance.html to maintenance.html in order to
 ## activate a maintenance page
 ## 
-RewriteCond %{REMOTE_ADDR} !^178\.202\.182\.90
+RewriteCond %{REMOTE_ADDR} !^101\.202\.111\.222
 RewriteCond %{REQUEST_URI} !maintenance.html$ [NC]
 RewriteCond %{REQUEST_URI} !\.(jpe?g?|png|gif) [NC]
 # Check if the maintenance.html file exists,
