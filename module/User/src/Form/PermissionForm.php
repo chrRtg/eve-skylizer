@@ -41,7 +41,8 @@ class PermissionForm extends Form
     protected function addElements() 
     {
         // Add "name" field
-        $this->add([           
+        $this->add(
+            [           
             'type'  => 'text',
             'name' => 'name',
             'attributes' => [
@@ -50,10 +51,12 @@ class PermissionForm extends Form
             'options' => [
                 'label' => 'Permission Name',
             ],
-        ]);
+            ]
+        );
         
         // Add "description" field
-        $this->add([            
+        $this->add(
+            [            
             'type'  => 'textarea',
             'name' => 'description',
             'attributes' => [
@@ -62,20 +65,24 @@ class PermissionForm extends Form
             'options' => [
                 'label' => 'Description',
             ],
-        ]);
+            ]
+        );
         
         // Add the Submit button
-        $this->add([
+        $this->add(
+            [
             'type'  => 'submit',
             'name' => 'submit',
             'attributes' => [                
                 'value' => 'Create',
                 'id' => 'submit',
             ],
-        ]);
+            ]
+        );
         
         // Add the CSRF field
-        $this->add([
+        $this->add(
+            [
             'type' => 'csrf',
             'name' => 'csrf',
             'options' => [
@@ -83,7 +90,8 @@ class PermissionForm extends Form
                 'timeout' => 600
                 ]
             ],
-        ]);
+            ]
+        );
     }
     
     /**
@@ -96,7 +104,8 @@ class PermissionForm extends Form
         $this->setInputFilter($inputFilter);
         
         // Add input for "name" field
-        $inputFilter->add([
+        $inputFilter->add(
+            [
                 'name'     => 'name',
                 'required' => true,
                 'filters'  => [
@@ -118,10 +127,12 @@ class PermissionForm extends Form
                         ],
                     ], 
                 ],
-            ]);                          
+            ]
+        );                          
         
         // Add input for "description" field
-        $inputFilter->add([
+        $inputFilter->add(
+            [
                 'name'     => 'description',
                 'required' => true,
                 'filters'  => [
@@ -136,7 +147,8 @@ class PermissionForm extends Form
                         ],
                     ],
                 ],
-            ]);                                    
+            ]
+        );                                    
     }           
 }
 

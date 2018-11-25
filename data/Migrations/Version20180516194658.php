@@ -50,7 +50,7 @@ class Version20180516194658 extends AbstractMigration
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
         $this->addSql('SET FOREIGN_KEY_CHECKS = 0');
-		$this->addSql('DROP TABLE at_structure');
+        $this->addSql('DROP TABLE at_structure');
         $this->addSql('ALTER TABLE at_cosmic_detail CHANGE cosmic_detail_id cosmic_detail_id INT NOT NULL, CHANGE cosmic_main_id cosmic_main_id INT NOT NULL');
         $this->addSql('ALTER TABLE at_cosmic_main CHANGE cosmic_main_id cosmic_main_id INT NOT NULL');
         $this->addSql('ALTER TABLE at_moon CHANGE eve_mapdenormalize_itemid eve_mapdenormalize_itemid INT DEFAULT 0 NOT NULL, CHANGE eve_invtypes_typeid eve_invtypes_typeid INT DEFAULT 0 NOT NULL');

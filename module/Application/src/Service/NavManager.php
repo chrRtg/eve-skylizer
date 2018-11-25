@@ -9,23 +9,26 @@ class NavManager
 {
     /**
      * Auth service.
+     *
      * @var Zend\Authentication\Authentication
      */
     private $authService;
     
     /**
      * Url view helper.
+     *
      * @var Zend\View\Helper\Url
      */
     private $urlHelper;
     
     /**
      * RBAC manager.
+     *
      * @var User\Service\RbacManager
      */
     private $rbacManager;
-	
-	private $sso_manager;
+    
+    private $sso_manager;
     
     /**
      * Constructs the service.
@@ -35,7 +38,7 @@ class NavManager
         $this->authService = $authService;
         $this->urlHelper = $urlHelper;
         $this->rbacManager = $rbacManager;
-		$this->sso_manager = $sso_manager;
+        $this->sso_manager = $sso_manager;
     }
     
     /**
@@ -59,12 +62,20 @@ class NavManager
         ];
         
         if ($this->authService->hasIdentity()) {
-			$items[] = [
-				'id' => 'vposmoon',
-				'label' => 'Moons',
-				'link'  => $url('vposmoon')
-			];
-		}
+            $items[] = [
+            'id' => 'vposmoon',
+            'label' => 'Moons',
+            'link'  => $url('vposmoon')
+            ];
+        }
+        
+        if ($this->authService->hasIdentity()) {
+            $items[] = [
+            'id' => 'vpos',
+            'label' => '(D)Scan',
+            'link'  => $url('vpos')
+            ];
+        }
         
         // Display "Login" menu item for not authorized user only. On the other hand,
         // display "Admin" and "Logout" menu items only for authorized users.
@@ -115,13 +126,13 @@ class NavManager
             $items[] = [
                 'id' => 'logout',
                 'label' => $this->authService->getIdentity(),
-				'avatar' => 'https://imageserver.eveonline.com/Character/'.$this->sso_manager->getIdentityID().'_32.jpg',
+            'avatar' => 'https://imageserver.eveonline.com/Character/'.$this->sso_manager->getIdentityID().'_32.jpg',
                 'float' => 'right',
                 'dropdown' => [
                     [
                         'id' => 'logout',
                         'label' => 'Sign out',
-						'link' => $url('auth', ['action'=>'logout'])
+            'link' => $url('auth', ['action'=>'logout'])
                     ],
                 ]
             ];

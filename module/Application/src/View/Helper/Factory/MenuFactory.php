@@ -15,7 +15,7 @@ class MenuFactory implements FactoryInterface
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $navManager = $container->get(NavManager::class);
-		
+        
         // Get menu items.
         $items = $navManager->getMenuItems();
         

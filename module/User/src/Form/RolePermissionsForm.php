@@ -41,17 +41,20 @@ class RolePermissionsForm extends Form
         $this->add($fieldset);
         
         // Add the Submit button
-        $this->add([
+        $this->add(
+            [
             'type'  => 'submit',
             'name' => 'submit',
             'attributes' => [                
                 'value' => 'Create',
                 'id' => 'submit',
             ],
-        ]);
+            ]
+        );
         
         // Add the CSRF field
-        $this->add([
+        $this->add(
+            [
             'type' => 'csrf',
             'name' => 'csrf',
             'options' => [
@@ -59,13 +62,15 @@ class RolePermissionsForm extends Form
                 'timeout' => 600
                 ]
             ],
-        ]);
+            ]
+        );
     }
     
     public function addPermissionField($name, $label, $isDisabled = false)
     {
         // Add a permission field
-        $this->get('permissions')->add([            
+        $this->get('permissions')->add(
+            [            
             'type'  => 'checkbox',
             'name' => $name,
             'attributes' => [
@@ -75,10 +80,12 @@ class RolePermissionsForm extends Form
             'options' => [
                 'label' => $label
             ],
-        ]);
+            ]
+        );
         
         // Add input 
-        $this->getInputFilter()->get('permissions')->add([
+        $this->getInputFilter()->get('permissions')->add(
+            [
                 'name'     => $name,
                 'required' => false,
                 'filters'  => [                    
@@ -86,7 +93,8 @@ class RolePermissionsForm extends Form
                 'validators' => [
                     ['name' => 'IsInt'],
                 ],
-            ]);  
+            ]
+        );  
     }
     
     /**

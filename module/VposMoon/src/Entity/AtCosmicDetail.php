@@ -8,13 +8,13 @@ use Doctrine\ORM\Mapping as ORM;
  * AtCosmicDetail
  *
  * @ORM\Table(name="at_cosmic_detail", 
- *	indexes={
-*		@ORM\Index(name="idx_cd_main_id", columns={"cosmic_main_id"}), 
- *		@ORM\Index(name="idx_cd_name_en", columns={"typeName"}), 
- *		@ORM\Index(name="idx_cd_name_de", columns={"typeName_de"}), 
- *		@ORM\Index(name="idx_cd_type", columns={"type"}), 
- *		@ORM\Index(name="idx_cd_class", columns={"class"})
- *	})
+ *    indexes={
+ * @ORM\Index(name="idx_cd_main_id",   columns={"cosmic_main_id"}), 
+ * @ORM\Index(name="idx_cd_name_en",   columns={"typeName"}), 
+ * @ORM\Index(name="idx_cd_name_de",   columns={"typeName_de"}), 
+ * @ORM\Index(name="idx_cd_type",      columns={"type"}), 
+ * @ORM\Index(name="idx_cd_class",     columns={"class"})
+ *    })
  * @ORM\Entity
  */
 class AtCosmicDetail
@@ -22,9 +22,9 @@ class AtCosmicDetail
     /**
      * @var integer
      *
-     * @ORM\Column(name="cosmic_detail_id", type="integer", length=11, nullable=false)
+     * @ORM\Column(name="cosmic_detail_id",     type="integer", length=11, nullable=false)
      * @ORM\Id
-	 * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $cosmicDetailId;
 
@@ -82,7 +82,7 @@ class AtCosmicDetail
      *
      * @ORM\ManyToOne(targetEntity="VposMoon\Entity\AtCosmicMain")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="cosmic_main_id", referencedColumnName="cosmic_main_id")
+     * @ORM\JoinColumn(name="cosmic_main_id",                      referencedColumnName="cosmic_main_id")
      * })
      */
     private $cosmicMain;

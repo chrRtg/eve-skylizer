@@ -16,9 +16,9 @@ class AuthControllerFactory implements FactoryInterface
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {   
         return new AuthController(
-				$container->get('doctrine.entitymanager.orm_default'), 
-				$container->get(EveSSOManager::class),
-				$container->get('MyLogger')
-			);
+            $container->get('doctrine.entitymanager.orm_default'), 
+            $container->get(EveSSOManager::class),
+            $container->get('MyLogger')
+        );
     }
 }

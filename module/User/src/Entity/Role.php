@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * This class represents a role.
+ *
  * @ORM\Entity()
  * @ORM\Table(name="role")
  */
@@ -72,6 +73,7 @@ class Role
     
     /**
      * Returns role ID.
+     *
      * @return integer
      */
     public function getId() 
@@ -81,6 +83,7 @@ class Role
 
     /**
      * Sets role ID. 
+     *
      * @param int $id    
      */
     public function setId($id) 
@@ -155,7 +158,8 @@ class Role
 
     /**
      * Check if parent role exists
-     * @param Role $role
+     *
+     * @param  Role $role
      * @return bool
      */
     public function hasParent(Role $role)

@@ -15,7 +15,7 @@ class Invmetatypes
     /**
      * @var integer
      *
-     * @ORM\Column(name="typeID", type="integer", nullable=false)
+     * @ORM\Column(name="typeID",           type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
      */

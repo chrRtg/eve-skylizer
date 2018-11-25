@@ -8,9 +8,9 @@ use Doctrine\ORM\Mapping as ORM;
  * Invtypematerials
  *
  * @ORM\Table(name="invTypeMaterials", 
- *	indexes={
- *		@ORM\Index(name="ix_tm_typeid", columns={"typeID"}), 
- *		@ORM\Index(name="ix_tm_mtypeid", columns={"materialTypeID"})})
+ *    indexes={
+ * @ORM\Index(name="ix_tm_typeid",     columns={"typeID"}), 
+ * @ORM\Index(name="ix_tm_mtypeid",    columns={"materialTypeID"})})
  * @ORM\Entity
  */
 class Invtypematerials
@@ -18,7 +18,7 @@ class Invtypematerials
     /**
      * @var integer
      *
-     * @ORM\Column(name="typeID", type="integer", nullable=false)
+     * @ORM\Column(name="typeID",           type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
      */
@@ -27,7 +27,7 @@ class Invtypematerials
     /**
      * @var integer
      *
-     * @ORM\Column(name="materialTypeID", type="integer", nullable=false)
+     * @ORM\Column(name="materialTypeID",   type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
      */

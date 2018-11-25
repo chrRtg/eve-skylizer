@@ -4,363 +4,512 @@ namespace VposMoon\View\Helper;
 
 use Zend\View\Helper\AbstractHelper;
 
-class VposMoonHelper extends AbstractHelper {
+class VposMoonHelper extends AbstractHelper
+{
 
-	private $eveDataManager;
-	private $moonManager;
+    private $eveDataManager;
+    private $moonManager;
+    private $config;
 
-	/**
-	 * Constructor.
-	 * @param array $items Menu items.
-	 */
-	public function __construct($eveDataManager, $moonManager)
-	{
-		$this->eveDataManager = $eveDataManager;
-		$this->moonManager = $moonManager;
-	}
+    /**
+     * Constructor.
+     *
+     * @param array $items Menu items.
+     */
+    public function __construct($eveDataManager, $moonManager, $config)
+    {
+        $this->eveDataManager = $eveDataManager;
+        $this->moonManager = $moonManager;
+        $this->config = $config;
+    }
 
-	/**
-	 * Takes 'goo' string from MoonController Index action and renders the output
-	 * 
-	 * @param string $input
-	 * @return string rendered HTML
-	 */
-	public function renderMoonComposition($input)
-	{
+    /**
+     *
+     * @param  type $vpos
+     * @return string
+     */
+    public function determineVposType($vpos_elem)
+    {
+        $type = ['cat' => 'unknown', 'type' => 'unscanned', 'name' => 'unscanned'];
+        /*
+        .vpos-pos
+        .vpos-refinery
+        .vpos-engineering
+        .vpos-citadel
+        .vpos-wh
+        .vpos-relic
+        .vpos-data
+        .vpos-anomaly
+        .vpos-unrated
+        .vpos-plex
+        .vpos-gas
+        .vpos-ore
+        .vpos-faction
+        .vpos-ghost
+        .vpos-unscanned
+         */
+        // echo('<pre>' . $vpos_elem['at_groupId'] . ' :: ' . $vpos_elem['grp_name'] . ' :: ' . $vpos_elem['it_typename'] . ' :: ' . $vpos_elem['acd_type'] . '</pre>');
+        switch ($vpos_elem['at_groupId']) {
+            case '365':
+                $type = ['cat' => 'structure', 'type' => 'pos', 'name' => 'Pos'];
+                break;
+            case '1406':
+                $type = ['cat' => 'structure', 'type' => 'refinery', 'name' => 'Refinery'];
+                break;
+            case '1404':
+                $type = ['cat' => 'structure', 'type' => 'engineering', 'name' => 'Engineering'];
+                break;
+            case '1657':
+                $type = ['cat' => 'structure', 'type' => 'citadel', 'name' => 'Citadel'];
+                break;
+            case '988':
+                $type = ['cat' => 'celestial', 'type' => 'wh', 'name' => 'Wormhole'];
+                break;
+            case '885':
+                if ($vpos_elem['acd_type'] == 'anomaly') {
+                    $type = ['cat' => 'anomaly', 'type' => 'anomaly', 'name' => 'Anomaly'];
+                } elseif ($vpos_elem['acd_type'] == 'faction') {
+                    $type = ['cat' => 'anomaly', 'type' => 'faction', 'name' => 'Faction :' . $vpos_elem['acd_class']];
+                } elseif ($vpos_elem['acd_type'] == 'unrated') {
+                    $type = ['cat' => 'anomaly', 'type' => 'unrated', 'name' => 'unrated'];
+                } elseif ($vpos_elem['acd_type'] == 'gas') {
+                    $type = ['cat' => 'anomaly', 'type' => 'gas', 'name' => 'Gas'];
+                } elseif ($vpos_elem['acd_type'] == 'ore') {
+                    $type = ['cat' => 'anomaly', 'type' => 'ore', 'name' => 'Ore'];
+                }
+                break;
+            case '502':
+                if ($vpos_elem['acd_type'] == 'data') {
+                    $type = ['cat' => 'signature', 'type' => 'data', 'name' => 'Data'];
+                } elseif ($vpos_elem['acd_type'] == 'ghost') {
+                    $type = ['cat' => 'signature', 'type' => 'ghost', 'name' => 'Ghost'];
+                } elseif ($vpos_elem['acd_type'] == 'relic') {
+                    $type = ['cat' => 'signature', 'type' => 'relic', 'name' => 'Relic'];
+                } elseif ($vpos_elem['acd_type'] == 'plex') {
+                    $type = ['cat' => 'signature', 'type' => 'plex', 'name' => 'Plex :' . $vpos_elem['acd_class']];
+                }
+                break;
+        }
+        return $type;
+    }
 
-		$moons = explode('#', $input);
+    /**
+     * Takes 'goo' string from MoonController Index action and renders the output
+     *
+     * @param  string $input
+     * @return string rendered HTML
+     */
+    public function renderMoonComposition($input)
+    {
 
-		$res = '';
+        $moons = explode('#', $input);
 
-		if (!empty($moons)) {
-			foreach ($moons as $moon) {
-				if (!empty($moon)) {
-					$goo = explode('|', $moon);
-					if (!empty($goo)) {
-						$res .= '<span class="gooval">' . round(((float) $goo[0] * 100), 0) . '%</span>&nbsp;';
-						$res .= '<span class="gooname">' . $goo[1] . '</span>&nbsp;';
-						$res .= '<span class="gooprice">' . number_format(floatval($goo[2]), 0) . '</span><br />';
-					}
-				}
-			}
-		}
+        $res = '';
 
-		return ($res);
-	}
+        if (!empty($moons)) {
+            foreach ($moons as $moon) {
+                if (!empty($moon)) {
+                    $goo = explode('|', $moon);
+                    if (!empty($goo)) {
+                        $res .= '<span class="gooval">' . round(((float) $goo[0] * 100), 0) . '%</span>&nbsp;';
+                        $res .= '<span class="gooname">' . $goo[1] . '</span>&nbsp;';
+                        $res .= '<span class="gooprice">' . number_format(floatval($goo[2]), 0) . '</span><br />';
+                    }
+                }
+            }
+        }
 
-	/**
-	 * Takes 'goo' string from MoonController Index action and calculates the normalilzed base price
-	 * 
-	 * @param string $input
-	 * @return string rendered HTML
-	 */
-	public function calculateMoonComposition($input)
-	{
+        return ($res);
+    }
 
-		$moons = explode('#', $input);
+    /**
+     * Takes 'goo' string from MoonController Index action and calculates the normalilzed base price
+     *
+     * @param  string $input
+     * @return string rendered HTML
+     */
+    public function calculateMoonComposition($input)
+    {
 
-		$val = 0;
+        $moons = explode('#', $input);
 
-		if (!empty($moons)) {
-			foreach ($moons as $moon) {
-				if (!empty($moon)) {
-					$goo = explode('|', $moon);
-					$val += floatval($goo[0]) * floatval($goo[2]);
-				}
-			}
-		}
+        $val = 0;
 
-		$res = '<span class="goopricesum">' . number_format(round($val), 0) . '</span>';
+        if (!empty($moons)) {
+            foreach ($moons as $moon) {
+                if (!empty($moon)) {
+                    $goo = explode('|', $moon);
+                    $val += floatval($goo[0]) * floatval($goo[2]);
+                }
+            }
+        }
 
-		return ($res);
-	}
+        $res = '<span class="goopricesum">' . number_format(round($val), 0) . '</span>';
 
-	/**
-	 * Takes 'goo' string from MoonController Index action and calculates the normalilzed base price
-	 * 
-	 * @param string $input
-	 * @return string rendered HTML
-	 */
-	public function renderMoonMateriallist($input)
-	{
-		$res = '';
-		$val = 0;
+        return ($res);
+    }
 
-		$data = $this->calculateMoonMateriallist($input);
+    /**
+     * Takes 'goo' string from MoonController Index action and calculates the normalilzed base price
+     *
+     * @param  string $input
+     * @return string rendered HTML
+     */
+    public function renderMoonMateriallist($input)
+    {
+        $res = '';
+        $val = 0;
 
-		// sort ore by baseprice
-		uasort($data,array($this, 'sortWorthForRenderMoonMateriallist'));
+        $data = $this->calculateMoonMateriallist($input);
 
-		// second step, create view
-		if (!empty($data)) {
-			foreach ($data as $k => $row) {
-				if (!empty($row) && $k != 'val') {
-					$res .= '<span class="gooval">' . number_format(round(((float) $row['qty'] * 100), 0)) . '</span>&nbsp;';
-					$res .= '<span class="gooname">' . $row['name'] . '</span>&nbsp;';
-					$res .= '<span class="gooprice">' . number_format(floatval($row['worth']), 0) . '</span><br />';
-				}
-			}
-		}
+        // sort ore by baseprice
+        uasort($data, array($this, 'sortWorthForRenderMoonMateriallist'));
 
-		return ($res);
-	}
-	
-	
-	/**
-	 * Utility function for @see renderMoonMateriallist()
-	 * Sort array by worth, used by uasort()
-	 *  
-	 * @param type $a
-	 * @param type $b
-	 * @return type 
-	 */	
-	private function sortWorthForRenderMoonMateriallist($a,$b)
-	{
-	  return $a["worth"] <= $b["worth"];
-	}
-	
-	
-	public function renderMoonMaterialValue($input)
-	{
-		$res = '';
+        // second step, create view
+        if (!empty($data)) {
+            foreach ($data as $k => $row) {
+                if (!empty($row) && $k != 'val') {
+                    $res .= '<span class="gooval">' . number_format(round(((float) $row['qty'] * 100), 0)) . '</span>&nbsp;';
+                    $res .= '<span class="gooname">' . $row['name'] . '</span>&nbsp;';
+                    $res .= '<span class="gooprice">' . number_format(floatval($row['worth']), 0) . '</span><br />';
+                }
+            }
+        }
 
-		$data = $this->calculateMoonMateriallist($input);
+        return ($res);
+    }
 
-		if (!empty($data)) {
-			$res = $data['val'];
-		}
+    /**
+     * Utility function for @see renderMoonMateriallist()
+     * Sort array by worth, used by uasort()
+     *
+     * @param  type $a
+     * @param  type $b
+     * @return type
+     */
+    private function sortWorthForRenderMoonMateriallist($a, $b)
+    {
+        return $a["worth"] <= $b["worth"];
+    }
 
-		return($res);
-	}
+    /**
+     *
+     * @param  type $input
+     * @return type
+     */
+    public function renderMoonMaterialValue($input)
+    {
+        $res = '';
 
-	/**
-	 * Utility function for @see renderMoonMateriallist() and calculateMoonMateriallist()
-	 * Parse input string with material list for a single moon into a array.
-	 * 
-	 * @param string $input
-	 * @return array
-	 */
-	private function calculateMoonMateriallist($input)
-	{
-		$data = [];
-		$data['val'] = 0;
+        $data = $this->calculateMoonMateriallist($input);
 
-		$moons = explode('#', $input);
+        if (!empty($data)) {
+            $res = $data['val'];
+        }
 
-		// first step is to parse the string into a array and perform some calculation
-		if (!empty($moons)) {
-			foreach ($moons as $moon) {
-				if (!empty($moon)) {
-					$goo = explode('|', $moon);
-					if (!empty($goo)) {
-						$data[$goo['3']]['name'] = $goo['5'];
-						$data[$goo['3']]['worth'] = $goo['6'];
-						if (empty($data[$goo['3']]['qty'])) {
-							$data[$goo['3']]['qty'] = (floatval($goo['1']) * floatval($goo['4']));
-						} else {
-							$data[$goo['3']]['qty'] += (floatval($goo['1']) * floatval($goo['4']));
-						}
-						$data['val'] += floatval($data[$goo['3']]['worth']) * (floatval($goo['1']) * floatval($goo['4']));
-					}
-				}
-			}
-		}
-		return ($data);
-	}
+        return ($res);
+    }
 
-	/**
-	 * Creates a list of links to the neighbours, systems as well constellations.
-	 * If the selected location in $system_data is a constellation, a list of links to the systems in the constellation is beeing created.
-	 * 
-	 * @param array $system_data
-	 * @return string
-	 */
-	public function createNeighboursNavigation($system_data)
-	{
-		$text = '';
+    /**
+     * Utility function for @see renderMoonMateriallist() and calculateMoonMateriallist()
+     * Parse input string with material list for a single moon into a array.
+     *
+     * @param  string $input
+     * @return array
+     */
+    private function calculateMoonMateriallist($input)
+    {
+        $data = [];
+        $data['val'] = 0;
 
-		$neighbour_list = $this->createNeighboursNavigationList($system_data);
+        $moons = explode('#', $input);
 
-		if (!empty($neighbour_list['constellation_current'])) {
-			$id = key($neighbour_list['constellation_current']);
-			$text .= '<a href="/vposmoon?system=' . $id . '" class="btn btn-constellation btn-xs sytemswitch" data-id="'.$id.'">' . current($neighbour_list['constellation_current']) . '</a>';
-		}
+        // first step is to parse the string into a array and perform some calculation
+        if (!empty($moons)) {
+            foreach ($moons as $moon) {
+                if (!empty($moon)) {
+                    $goo = explode('|', $moon);
+                    if (!empty($goo)) {
+                        $data[$goo['3']]['name'] = $goo['5'];
+                        $data[$goo['3']]['worth'] = $goo['6'];
+                        if (empty($data[$goo['3']]['qty'])) {
+                            $data[$goo['3']]['qty'] = (floatval($goo['1']) * floatval($goo['4']));
+                        } else {
+                            $data[$goo['3']]['qty'] += (floatval($goo['1']) * floatval($goo['4']));
+                        }
+                        $data['val'] += floatval($data[$goo['3']]['worth']) * (floatval($goo['1']) * floatval($goo['4']));
+                    }
+                }
+            }
+        }
+        return ($data);
+    }
 
-		if (!empty($neighbour_list['system'])) {
-			foreach ($neighbour_list['system'] as $id => $name) {
-				$text .= '<a href="/vposmoon?system=' . $id . '" class="btn btn-system btn-xs sytemswitch" data-id="'.$id.'">' . $name . '</a>';
-			}
-		}
+    /**
+     * Creates a list of links to the neighbours, systems as well constellations.
+     * If the selected location in $system_data is a constellation, a list of links to the systems in the constellation is beeing created.
+     *
+     * @param  array  $system_data
+     * @param  string $current_route default = '/vposmoon'
+     * @return string
+     */
+    public function createNeighboursNavigation($system_data, $current_route = '/vposmoon')
+    {
+        $text = '';
 
-		if (!empty($neighbour_list['constellation'])) {
-			foreach ($neighbour_list['constellation'] as $id => $name) {
-				$text .= '<a href="/vposmoon?system=' . $id . '" class="btn btn-constellation btn-xs sytemswitch" data-id="'.$id.'">' . $name . '</a>';
-			}
-		}
+        $neighbour_list = $this->createNeighboursNavigationList($system_data);
 
-		return($text);
-	}
+        if (!empty($neighbour_list['constellation_current'])) {
+            $id = key($neighbour_list['constellation_current']);
+            $text .= '<a href="/' . $current_route . '?system=' . $id . '" class="btn btn-constellation btn-xs sytemswitch" data-id="' . $id . '">' . current($neighbour_list['constellation_current']) . '</a>';
+        }
 
-	/**
-	 * Calculates neighbour systems and constellations.
-	 * If $system_data is about a constellation, a list of systems in the constellation is created as well. 
-	 * 
-	 * @param array $system_data
-	 * @return array
-	 */
-	private function createNeighboursNavigationList($system_data)
-	{
+        if (!empty($neighbour_list['system'])) {
+            foreach ($neighbour_list['system'] as $id => $name) {
+                $text .= '<a href="/' . $current_route . '?system=' . $id . '" class="btn btn-system btn-xs sytemswitch" data-id="' . $id . '">' . $name . '</a>';
+            }
+        }
 
-		$neighbour_list = array();
+        if (!empty($neighbour_list['constellation'])) {
+            foreach ($neighbour_list['constellation'] as $id => $name) {
+                $text .= '<a href="/' . $current_route . '?system=' . $id . '" class="btn btn-constellation btn-xs sytemswitch" data-id="' . $id . '">' . $name . '</a>';
+            }
+        }
 
+        return ($text);
+    }
 
-		$res = $this->eveDataManager->getNeighboursByID($system_data['itemid']);
+    /**
+     * Calculates neighbour systems and constellations.
+     * If $system_data is about a constellation, a list of systems in the constellation is created as well.
+     *
+     * @param  array $system_data
+     * @return array
+     */
+    private function createNeighboursNavigationList($system_data)
+    {
 
-		if (empty($system_data['constellationid'])) {
-			// mode: constellation
-			foreach ($res as $system) {
-				if ($system['mdc_id'] != $system_data['constellationid'] && $system['mdc_id'] != $system_data['itemid']) {
-					$neighbour_list['constellation'][$system['mdc_id']] = $system['mdc_name'] . ' <span class="system">('.$system['mds_name'].')</span>';
-				} else {
-					$neighbour_list['system'][$system['mds_id']] = $system['mds_name'];
-				}
-			}
-		} else {
-			// mode: system
-			$neighbour_list['constellation_current'][$system_data['constellationid']] = $system_data['constellation'];
-			foreach ($res as $system) {
-				$neighbour_list['system'][$system['mds_id']] = $system['mds_name'];
+        $neighbour_list = array();
 
-				if ($system['mdc_id'] != $system_data['constellationid'] && $system['mdc_id'] != $system_data['itemid']) {
-					$neighbour_list['constellation'][$system['mdc_id']] = $system['mdc_name'] . ' <span class="system">('.$system['mds_name'].')</span>';
-				}
-			}
-		}
+        $res = $this->eveDataManager->getNeighboursByID($system_data['itemid']);
 
-		return($neighbour_list);
-	}
+        if (empty($system_data['constellationid'])) {
+            // mode: constellation
+            foreach ($res as $system) {
+                if ($system['mdc_id'] != $system_data['constellationid'] && $system['mdc_id'] != $system_data['itemid']) {
+                    $neighbour_list['constellation'][$system['mdc_id']] = $system['mdc_name'] . ' <span class="system">(' . $system['mds_name'] . ')</span>';
+                } else {
+                    $neighbour_list['system'][$system['mds_id']] = $system['mds_name'];
+                }
+            }
+        } else {
+            // mode: system
+            $neighbour_list['constellation_current'][$system_data['constellationid']] = $system_data['constellation'];
+            foreach ($res as $system) {
+                $neighbour_list['system'][$system['mds_id']] = $system['mds_name'];
 
-	public function getOreListAsOptions($solar, $selected_id = 0)
-	{
-		if (empty($solar)) {
-			return false;
-		}
+                if ($system['mdc_id'] != $system_data['constellationid'] && $system['mdc_id'] != $system_data['itemid']) {
+                    $neighbour_list['constellation'][$system['mdc_id']] = $system['mdc_name'] . ' <span class="system">(' . $system['mds_name'] . ')</span>';
+                }
+            }
+        }
 
-		$data = $this->moonManager->getOreList($solar);
-		if (empty($data)) {
-			return (false);
-		}
-		
-		$res = '';
+        return ($neighbour_list);
+    }
 
-		foreach ($data as $option) {
-			$res .= '<option '.(intval($selected_id)==intval($option['id']) ? 'selected' : '').' value="'.$option['id'].'">'.$option['name'].' ('.$option['cnt'].')</option>';
-		}
-		return($res);
-	}
+    /**
+     * Create Ore Option List to be used in HTML select
+     *
+     * @param  type $solar
+     * @param  type $selected_id
+     * @return boolean
+     */
+    public function getOreListAsOptions($solar, $selected_id = 0)
+    {
+        if (empty($solar)) {
+            return false;
+        }
 
+        $data = $this->moonManager->getOreList($solar);
+        if (empty($data)) {
+            return (false);
+        }
 
-	public function getCompositionListAsOptions($solar, $selected_id = 0)
-	{
-		if (empty($solar)) {
-			return false;
-		}
+        $res = '';
 
-		$data = $this->moonManager->getCompositionList($solar);
-		if (empty($data)) {
-			return (false);
-		}
-		
-		$res = '';
+        foreach ($data as $option) {
+            $res .= '<option ' . (intval($selected_id) == intval($option['id']) ? 'selected' : '') . ' value="' . $option['id'] . '">' . $option['name'] . ' (' . $option['cnt'] . ')</option>';
+        }
+        return ($res);
+    }
 
-		foreach ($data as $option) {
-			$res .= '<option '.(intval($selected_id) == intval($option['id']) ? 'selected' : '').' value="'.$option['id'].'">'.$option['name'].' ('.$option['cnt'].')</option>';
-		}
-		return($res);
-	}
-	
-	
+    /**
+     * Create Ore-Compositions Option List to be used in HTML select
+     *
+     * @param  type $solar
+     * @param  type $selected_id
+     * @return boolean
+     */
+    public function getCompositionListAsOptions($solar, $selected_id = 0)
+    {
+        if (empty($solar)) {
+            return false;
+        }
 
+        $data = $this->moonManager->getCompositionList($solar);
+        if (empty($data)) {
+            return (false);
+        }
 
-	public function getEveTypesListAsOptions($group_ids, $selected_id = 0)
-	{
-		if (!is_array($group_ids)) {
-			return false;
-		}
+        $res = '';
 
-		$data = $this->eveDataManager->getTypeByGroupIDs($group_ids) ;
-		if (empty($data)) {
-			return (false);
-		}
-		
-		$res = '';
+        foreach ($data as $option) {
+            $res .= '<option ' . (intval($selected_id) == intval($option['id']) ? 'selected' : '') . ' value="' . $option['id'] . '">' . $option['name'] . ' (' . $option['cnt'] . ')</option>';
+        }
+        return ($res);
+    }
 
-		foreach ($data as $option) {
-			$res .= '<option '.(intval($selected_id) == intval($option['typeid']) ? 'selected' : '').' value="'.$option['typeid'].'">'.$option['typename'].'</option>';
-		}
-		return($res);
-	}	
-	
+    public function getEveTypesListAsOptions($group_ids, $selected_id = 0)
+    {
+        if (!is_array($group_ids)) {
+            return false;
+        }
 
-	/**
-	 * Convert moon names to shortform "PxMy"
-	 * The shortform is better suited for filtering.
-	 * 
-	 * Example:
-	 * "Zaid VIII - Moon 2" becomes "P8M2"
-	 * 
-	 * @param string $moonname
-	 * @return string
-	 */
-	public function convertMoonToShortform($moonname)
-	{
+        $data = $this->eveDataManager->getTypeByGroupIDs($group_ids);
+        if (empty($data)) {
+            return (false);
+        }
 
-		$regex = '/^[\w-]+\s([IXV]+)\s-\sMoon\s(\d+)$/';
-		preg_match($regex, $moonname, $matches);
+        $res = '';
 
-		if (!empty($matches) && !empty($matches['1']) && !empty($matches['2'])) {
-			return('P' . $this->romansToNumber($matches['1']) . 'M' . $matches['2']);
-		}
+        foreach ($data as $option) {
+            $res .= '<option ' . (intval($selected_id) == intval($option['typeid']) ? 'selected' : '') . ' value="' . $option['typeid'] . '">' . $option['typename'] . '</option>';
+        }
+        return ($res);
+    }
 
-		return('');
-	}
+    /**
+     * Create a URL to a "show me all details about a system" webiste for a given system by his name.
+     *
+     * Differentiate between regular systems and wormholes, uses individual URLs for both.
+     *
+     * @param  string $system_name
+     * @return type
+     */
+    public function createExternalSystemURL($system_name)
+    {
+        if (isset($this->config['settings']['ext_system_url'])) {
+            $ext_system_url = $this->config['settings']['ext_system_url'];
+        } else {
+            $ext_system_url = 'https://eve-prism.com/?view=system&name=%s';
+        }
 
-	/**
-	 * Convert roman number to decimal
-	 * 
-	 * @param string $roman
-	 * @return string
-	 */
-	private function romansToNumber($roman)
-	{
+        if (isset($this->config['settings']['ext_wh_url'])) {
+            $ext_wh_url = $this->config['settings']['ext_wh_url'];
+        } else {
+            $ext_wh_url = 'http://anoik.is/systems/%s';
+        }
 
-		// from http://stackoverflow.com/questions/6265596/how-to-convert-a-roman-numeral-to-integer-in-php
+        $wh_regex = '/J[0-9]{6}/';
+        if (preg_match($wh_regex, $system_name)) {
+            return (sprintf($ext_wh_url, $system_name));
+        } else {
+            return (sprintf($ext_system_url, $system_name));
+        }
+    }
 
-		$romans = array(
-			'M' => 1000,
-			'CM' => 900,
-			'D' => 500,
-			'CD' => 400,
-			'C' => 100,
-			'XC' => 90,
-			'L' => 50,
-			'XL' => 40,
-			'X' => 10,
-			'IX' => 9,
-			'V' => 5,
-			'IV' => 4,
-			'I' => 1,
-		);
+    /**
+     * Create a system class string from L and H ClassID
+     *
+     * @param int $classidH SystemClassID
+     * @param int $classidL regionClassID
+     * @return string Class as string
+     */
+    public function formatClassid($classidH, $classidL)
+    {
+        if (!$classidL || $classidL === 0) {
+            return '';
+        }
 
-		$result = 0;
+        $val = 0;
+        if ($classidH && $classidH !== 0) {
+            $val = (int) $classidH;
+        } else {
+            $val = (int) $classidL;
+        }
 
-		foreach ($romans as $key => $value) {
-			while (strpos($roman, $key) === 0) {
-				$result += $value;
-				$roman = substr($roman, strlen($key));
-			}
-		}
-		return($result);
-	}
+        switch ($val) {
+            case 7:
+                return '(high)';
+            case 8:
+                return '(low)';
+            case 9:
+                return '(0.0)';
+            case 10:
+                return '(WH)';
+            default:
+                return '(C' . $val . ')';
+        }
+    }
 
+    /**
+     * Convert moon names to shortform "PxMy"
+     * The shortform is better suited for filtering.
+     *
+     * Example:
+     * "Zaid VIII - Moon 2" becomes "P8M2"
+     *
+     * @param  string $moonname
+     * @return string
+     */
+    public function convertMoonToShortform($moonname)
+    {
+
+        $regex = '/^[\w-]+\s([IXV]+)\s-\sMoon\s(\d+)$/';
+        preg_match($regex, $moonname, $matches);
+
+        if (!empty($matches) && !empty($matches['1']) && !empty($matches['2'])) {
+            return ('P' . $this->romansToNumber($matches['1']) . 'M' . $matches['2']);
+        }
+
+        return ('');
+    }
+
+    /**
+     * Convert roman number to decimal
+     *
+     * @param  string $roman
+     * @return string
+     */
+    private function romansToNumber($roman)
+    {
+
+        // from http://stackoverflow.com/questions/6265596/how-to-convert-a-roman-numeral-to-integer-in-php
+
+        $romans = array(
+            'M' => 1000,
+            'CM' => 900,
+            'D' => 500,
+            'CD' => 400,
+            'C' => 100,
+            'XC' => 90,
+            'L' => 50,
+            'XL' => 40,
+            'X' => 10,
+            'IX' => 9,
+            'V' => 5,
+            'IV' => 4,
+            'I' => 1,
+        );
+
+        $result = 0;
+
+        foreach ($romans as $key => $value) {
+            while (strpos($roman, $key) === 0) {
+                $result += $value;
+                $roman = substr($roman, strlen($key));
+            }
+        }
+        return ($result);
+    }
 }

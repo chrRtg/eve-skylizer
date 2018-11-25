@@ -15,7 +15,7 @@ class AtMoongoo
     /**
      * @var integer
      *
-     * @ORM\Column(name="moongoo_id", type="integer", nullable=false)
+     * @ORM\Column(name="moongoo_id",           type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -68,7 +68,7 @@ class AtMoongoo
      *
      * @ORM\ManyToOne(targetEntity="Application\Entity\Invtypes")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="eve_invtypes_typeid", referencedColumnName="typeID")
+     * @ORM\JoinColumn(name="eve_invtypes_typeid",                referencedColumnName="typeID")
      * })
      */
     private $eveInvtypesTypeid;
@@ -78,7 +78,7 @@ class AtMoongoo
      *
      * @ORM\ManyToOne(targetEntity="VposMoon\Entity\AtMoon", inversedBy="moon_id")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="moon_id", referencedColumnName="moon_id")
+     * @ORM\JoinColumn(name="moon_id",                       referencedColumnName="moon_id")
      * })
      */
     private $moon;

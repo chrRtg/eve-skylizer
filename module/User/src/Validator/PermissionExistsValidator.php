@@ -7,10 +7,11 @@ use User\Entity\Permission;
  * This validator class is designed for checking if there is an existing permission 
  * with such a name.
  */
-class PermissionExistsValidator extends AbstractValidator 
+class PermissionExistsValidator extends AbstractValidator
 {
     /**
      * Available validator options.
+     *
      * @var array
      */
     protected $options = array(
@@ -24,6 +25,7 @@ class PermissionExistsValidator extends AbstractValidator
         
     /**
      * Validation failure messages.
+     *
      * @var array
      */
     protected $messageTemplates = array(
@@ -38,10 +40,12 @@ class PermissionExistsValidator extends AbstractValidator
     {
         // Set filter options (if provided).
         if(is_array($options)) {            
-            if(isset($options['entityManager']))
+            if(isset($options['entityManager'])) {
                 $this->options['entityManager'] = $options['entityManager'];
-            if(isset($options['permission']))
+            }
+            if(isset($options['permission'])) {
                 $this->options['permission'] = $options['permission'];
+            }
         }
         
         // Call the parent class constructor
@@ -62,15 +66,16 @@ class PermissionExistsValidator extends AbstractValidator
         $entityManager = $this->options['entityManager'];
         
         $permission = $entityManager->getRepository(Permission::class)
-                ->findOneByName($value);
+            ->findOneByName($value);
         
         if($this->options['permission']==null) {
             $isValid = ($permission==null);
         } else {
-            if($this->options['permission']->getName()!=$value && $permission!=null) 
+            if($this->options['permission']->getName()!=$value && $permission!=null) { 
                 $isValid = false;
-            else 
+            } else { 
                 $isValid = true;
+            }
         }
         
         // If there were an error, set error message.

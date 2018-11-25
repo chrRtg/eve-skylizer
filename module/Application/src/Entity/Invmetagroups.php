@@ -15,7 +15,7 @@ class Invmetagroups
     /**
      * @var integer
      *
-     * @ORM\Column(name="metaGroupID", type="smallint", nullable=false)
+     * @ORM\Column(name="metaGroupID",      type="smallint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
      */

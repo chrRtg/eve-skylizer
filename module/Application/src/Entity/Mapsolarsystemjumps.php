@@ -8,9 +8,9 @@ use Doctrine\ORM\Mapping as ORM;
  * Mapsolarsystemjumps
  *
  * @ORM\Table(name="mapSolarSystemJumps", 
- *	indexes={
- *		@ORM\Index(name="ix_mssj_fromsolar", columns={"fromSolarSystemID"}), 
- *		@ORM\Index(name="ix_mssj_tosolar", columns={"toSolarSystemID"})})
+ *    indexes={
+ * @ORM\Index(name="ix_mssj_fromsolar",   columns={"fromSolarSystemID"}), 
+ * @ORM\Index(name="ix_mssj_tosolar",     columns={"toSolarSystemID"})})
  * @ORM\Entity
  */
 class Mapsolarsystemjumps
@@ -41,7 +41,7 @@ class Mapsolarsystemjumps
     /**
      * @var integer
      *
-     * @ORM\Column(name="toSolarSystemID", type="integer", nullable=false)
+     * @ORM\Column(name="toSolarSystemID",  type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
      */

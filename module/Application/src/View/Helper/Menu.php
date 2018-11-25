@@ -6,26 +6,29 @@ use Zend\View\Helper\AbstractHelper;
 /**
  * This view helper class displays a menu bar.
  */
-class Menu extends AbstractHelper 
+class Menu extends AbstractHelper
 {
     /**
      * Menu items array.
+     *
      * @var array 
      */
     protected $items = [];
     
     /**
      * Active item's ID.
+     *
      * @var string  
      */
     protected $activeItemId = '';
-	
-	
-	private $avatar_img = '';
+    
+    
+    private $avatar_img = '';
 
 
-	/**
+    /**
      * Constructor.
+     *
      * @param array $items Menu items.
      */
     public function __construct($items=[]) 
@@ -35,6 +38,7 @@ class Menu extends AbstractHelper
     
     /**
      * Sets menu items.
+     *
      * @param array $items Menu items.
      */
     public function setItems($items) 
@@ -44,6 +48,7 @@ class Menu extends AbstractHelper
     
     /**
      * Sets ID of the active items.
+     *
      * @param string $activeItemId
      */
     public function setActiveItemId($activeItemId) 
@@ -53,16 +58,18 @@ class Menu extends AbstractHelper
     
     /**
      * Renders the menu.
+     *
      * @return string HTML code of the menu.
      */
     public function render() 
     {
-		$result = '';
-		
-        if (count($this->items)==0)
+        $result = '';
+        
+        if (count($this->items)==0) {
             return ''; // Do nothing if there are no items.
-		
-		$avatar = $this->getAvatar();
+        }
+        
+        $avatar = $this->getAvatar();
         
         $result .= '<button type="button" class="navbar-toggle" data-toggle="collapse"';
         $result .= 'data-target=".navbar-ex1-collapse">';
@@ -78,42 +85,46 @@ class Menu extends AbstractHelper
         
         // Render items
         foreach ($this->items as $item) {
-            if(!isset($item['float']) || $item['float']=='left')
+            if(!isset($item['float']) || $item['float']=='left') {
                 $result .= $this->renderItem($item);
+            }
         }
         
         $result .= '</ul>';
         $result .= '<ul class="nav navbar-nav navbar-right">';
-		
+        
         // Render items
         foreach ($this->items as $item) {
-            if(isset($item['float']) && $item['float']=='right')
+            if(isset($item['float']) && $item['float']=='right') {
                 $result .= $this->renderItem($item);
+            }
         }
         
         $result .= '</ul>';
-		if(!empty($this->avatar_img)) {
-			$result .= '<img src="'.$this->avatar_img.'" class="nav-avatar navbar-right">';
-		}
+        if(!empty($this->avatar_img)) {
+            $result .= '<img src="'.$this->avatar_img.'" class="nav-avatar navbar-right">';
+        }
         
         return $result;
         
     }
     
-	
-	private function getAvatar() {
+    
+    private function getAvatar()
+    {
         foreach ($this->items as $item) {
             if(isset($item['avatar'])) {
                 $this->avatar_img = $item['avatar'];
-				return $this->avatar_img;
-			}
-        }		
-		return false;
-	}
-	
+                return $this->avatar_img;
+            }
+        }        
+        return false;
+    }
+    
     /**
      * Renders an item.
-     * @param array $item The menu item info.
+     *
+     * @param  array $item The menu item info.
      * @return string HTML code of the item.
      */
     protected function renderItem($item) 

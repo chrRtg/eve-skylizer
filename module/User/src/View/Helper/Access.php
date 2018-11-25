@@ -6,7 +6,7 @@ use Zend\View\Helper\AbstractHelper;
 /**
  * This view helper is used to check user permissions.
  */
-class Access extends AbstractHelper 
+class Access extends AbstractHelper
 {
     private $rbacManager = null;
     

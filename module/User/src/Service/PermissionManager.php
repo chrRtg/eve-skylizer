@@ -10,12 +10,14 @@ class PermissionManager
 {
     /**
      * Doctrine entity manager.
+     *
      * @var Doctrine\ORM\EntityManager
      */
     private $entityManager;  
     
     /**
      * RBAC manager.
+     *
      * @var User\Service\RbacManager
      */
     private $rbacManager;
@@ -31,12 +33,13 @@ class PermissionManager
     
     /**
      * Adds a new permission.
+     *
      * @param array $data
      */
     public function addPermission($data)
     {
         $existingPermission = $this->entityManager->getRepository(Permission::class)
-                ->findOneByName($data['name']);
+            ->findOneByName($data['name']);
         if ($existingPermission!=null) {
             throw new \Exception('Permission with such name already exists');
         }
@@ -56,13 +59,14 @@ class PermissionManager
     
     /**
      * Updates an existing permission.
+     *
      * @param Permission $permission
-     * @param array $data
+     * @param array      $data
      */
     public function updatePermission($permission, $data)
     {
         $existingPermission = $this->entityManager->getRepository(Permission::class)
-                ->findOneByName($data['name']);
+            ->findOneByName($data['name']);
         if ($existingPermission!=null && $existingPermission!=$permission) {
             throw new \Exception('Another permission with such name already exists');
         }
@@ -94,9 +98,10 @@ class PermissionManager
     public function createDefaultPermissionsIfNotExist()
     {
         $permission = $this->entityManager->getRepository(Permission::class)
-                ->findOneBy([]);
-        if ($permission!=null)
+            ->findOneBy([]);
+        if ($permission!=null) {
             return; // Some permissions already exist; do nothing.
+        }
         
         $defaultPermissions = [
             'user.manage' => 'Manage users',

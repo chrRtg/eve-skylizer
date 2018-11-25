@@ -13,16 +13,18 @@ use User\Form\PasswordChangeForm;
  * This controller is responsible for user management (adding, editing, 
  * viewing users and changing user's password).
  */
-class UserController extends AbstractActionController 
+class UserController extends AbstractActionController
 {
     /**
      * Entity manager.
+     *
      * @var Doctrine\ORM\EntityManager
      */
     private $entityManager;
     
     /**
      * User manager.
+     *
      * @var User\Service\UserManager 
      */
     private $userManager;
@@ -49,11 +51,13 @@ class UserController extends AbstractActionController
         }
         
         $users = $this->entityManager->getRepository(User::class)
-                ->findBy([], ['id'=>'ASC']);
+            ->findBy([], ['id'=>'ASC']);
         
-        return new ViewModel([
+        return new ViewModel(
+            [
             'users' => $users
-        ]);
+            ]
+        );
     } 
     
   
@@ -70,16 +74,18 @@ class UserController extends AbstractActionController
         
         // Find a user with such ID.
         $user = $this->entityManager->getRepository(User::class)
-                ->find($id);
+            ->find($id);
         
         if ($user == null) {
             $this->getResponse()->setStatusCode(404);
             return;
         }
                 
-        return new ViewModel([
+        return new ViewModel(
+            [
             'user' => $user
-        ]);
+            ]
+        );
     }
     
     /**
@@ -94,7 +100,7 @@ class UserController extends AbstractActionController
         }
         
         $user = $this->entityManager->getRepository(User::class)
-                ->find($id);
+            ->find($id);
         
         if ($user == null) {
             $this->getResponse()->setStatusCode(404);
@@ -106,7 +112,7 @@ class UserController extends AbstractActionController
         
         // Get the list of all available roles (sorted by name).
         $allRoles = $this->entityManager->getRepository(Role::class)
-                ->findBy([], ['name'=>'ASC']);
+            ->findBy([], ['name'=>'ASC']);
         $roleList = [];
         foreach ($allRoles as $role) {
             $roleList[$role->getId()] = $role->getName();
@@ -132,8 +138,10 @@ class UserController extends AbstractActionController
                 $this->userManager->updateUser($user, $data);
                 
                 // Redirect to "view" page
-                return $this->redirect()->toRoute('users', 
-                        ['action'=>'view', 'id'=>$user->getId()]);
+                return $this->redirect()->toRoute(
+                    'users', 
+                    ['action'=>'view', 'id'=>$user->getId()]
+                );
             }               
         } else {
             
@@ -142,17 +150,21 @@ class UserController extends AbstractActionController
                 $userRoleIds[] = $role->getId();
             }
             
-            $form->setData(array(
+            $form->setData(
+                array(
                     'status'=>$user->getStatus(), 
                     'roles' => $userRoleIds
-                ));
+                )
+            );
         }
         
-        return new ViewModel(array(
+        return new ViewModel(
+            array(
             'user' => $user,
             'form' => $form
-        ));
+            )
+        );
     }
- }
+}
 
 

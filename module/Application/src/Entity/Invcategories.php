@@ -8,9 +8,9 @@ use Doctrine\ORM\Mapping as ORM;
  * Invcategories
  *
  * @ORM\Table(name="invCategories", 
- *		indexes={
- *			@ORM\Index(name="ix_ic_catname", columns={"categoryName"})
- *		})
+ *        indexes={
+ * @ORM\Index(name="ix_ic_catname", columns={"categoryName"})
+ *        })
  * @ORM\Entity
  */
 class Invcategories
@@ -18,7 +18,7 @@ class Invcategories
     /**
      * @var integer
      *
-     * @ORM\Column(name="categoryID", type="integer", nullable=false)
+     * @ORM\Column(name="categoryID",       type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
      */

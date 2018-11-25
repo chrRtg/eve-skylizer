@@ -10,16 +10,18 @@ use User\Form\PermissionForm;
  * This controller is responsible for permission management (adding, editing, 
  * viewing, deleting).
  */
-class PermissionController extends AbstractActionController 
+class PermissionController extends AbstractActionController
 {
     /**
      * Entity manager.
+     *
      * @var Doctrine\ORM\EntityManager
      */
     private $entityManager;
     
     /**
      * Permission manager.
+     *
      * @var User\Service\PermissionManager 
      */
     private $permissionManager;
@@ -40,11 +42,13 @@ class PermissionController extends AbstractActionController
     public function indexAction() 
     {
         $permissions = $this->entityManager->getRepository(Permission::class)
-                ->findBy([], ['name'=>'ASC']);
+            ->findBy([], ['name'=>'ASC']);
         
-        return new ViewModel([
+        return new ViewModel(
+            [
             'permissions' => $permissions
-        ]);
+            ]
+        );
     } 
     
     /**
@@ -80,9 +84,11 @@ class PermissionController extends AbstractActionController
             }               
         } 
         
-        return new ViewModel([
+        return new ViewModel(
+            [
                 'form' => $form
-            ]);
+            ]
+        );
     }
     
     /**
@@ -98,16 +104,18 @@ class PermissionController extends AbstractActionController
         
         // Find a permission with such ID.
         $permission = $this->entityManager->getRepository(Permission::class)
-                ->find($id);
+            ->find($id);
         
         if ($permission == null) {
             $this->getResponse()->setStatusCode(404);
             return;
         }
                 
-        return new ViewModel([
+        return new ViewModel(
+            [
             'permission' => $permission
-        ]);
+            ]
+        );
     }
     
     /**
@@ -122,7 +130,7 @@ class PermissionController extends AbstractActionController
         }
         
         $permission = $this->entityManager->getRepository(Permission::class)
-                ->find($id);
+            ->find($id);
         
         if ($permission == null) {
             $this->getResponse()->setStatusCode(404);
@@ -156,16 +164,20 @@ class PermissionController extends AbstractActionController
                 return $this->redirect()->toRoute('permissions', ['action'=>'index']);                
             }               
         } else {
-            $form->setData(array(
+            $form->setData(
+                array(
                     'name'=>$permission->getName(),
                     'description'=>$permission->getDescription()     
-                ));
+                )
+            );
         }
         
-        return new ViewModel([
+        return new ViewModel(
+            [
                 'form' => $form,
                 'permission' => $permission
-            ]);
+            ]
+        );
     }
     
     /**
@@ -180,7 +192,7 @@ class PermissionController extends AbstractActionController
         }
         
         $permission = $this->entityManager->getRepository(Permission::class)
-                ->find($id);
+            ->find($id);
         
         if ($permission == null) {
             $this->getResponse()->setStatusCode(404);

@@ -13,13 +13,13 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 class User
 {
-	// User status constants.
+    // User status constants.
     const STATUS_ACTIVE       = 1; // Active user.
     const STATUS_RETIRED      = 2; // Retired user.
     /**
      * @var integer
      *
-     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Column(name="id",                   type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -53,7 +53,7 @@ class User
      */
     private $eveUsername = '';
 
-	/**
+    /**
      * @ORM\ManyToMany(targetEntity="User\Entity\Role")
      * @ORM\JoinTable(name="user_role",
      *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
@@ -61,13 +61,13 @@ class User
      *      )
      */
     private $roles;
-	
+    
     /**
      * @var \Application\Entity\EveCorporation
      *
      * @ORM\ManyToOne(targetEntity="Application\Entity\EveCorporation", fetch="EAGER")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="eve_corpid", referencedColumnName="corporation_id")
+     * @ORM\JoinColumn(name="eve_corpid",                               referencedColumnName="corporation_id")
      * })
      */
     private $eveCorpid;
@@ -78,7 +78,7 @@ class User
     public function __construct() 
     {
         $this->roles = new ArrayCollection();
-    }	
+    }    
 
     /**
      * Get id
@@ -113,8 +113,9 @@ class User
     {
         return $this->status;
     }
-   /**
+    /**
      * Returns possible statuses as array.
+     *
      * @return array
      */
     public static function getStatusList() 
@@ -124,16 +125,18 @@ class User
             self::STATUS_RETIRED => 'Retired'
         ];
     }    
-	
+    
     /**
      * Returns user status as string.
+     *
      * @return string
      */
     public function getStatusAsString()
     {
         $list = self::getStatusList();
-        if (isset($list[$this->status]))
+        if (isset($list[$this->status])) {
             return $list[$this->status];
+        }
         
         return 'Unknown';
     }
@@ -233,9 +236,10 @@ class User
     {
         return $this->eveCorpid;
     }
-	
+    
     /**
      * Returns the array of roles assigned to this user.
+     *
      * @return array
      */
     public function getRoles()
@@ -254,8 +258,9 @@ class User
         $i = 0;
         foreach ($this->roles as $role) {
             $roleList .= $role->getName();
-            if ($i<$count-1)
+            if ($i<$count-1) {
                 $roleList .= ', ';
+            }
             $i++;
         }
         
@@ -268,5 +273,5 @@ class User
     public function addRole($role)
     {
         $this->roles->add($role);
-    }	
+    }    
 }

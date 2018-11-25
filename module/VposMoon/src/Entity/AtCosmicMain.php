@@ -15,9 +15,9 @@ class AtCosmicMain
     /**
      * @var integer
      *
-     * @ORM\Column(name="cosmic_main_id", type="integer", length=11, nullable=false)
+     * @ORM\Column(name="cosmic_main_id",       type="integer", length=11, nullable=false)
      * @ORM\Id
-	 * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $cosmicMainId;
 
@@ -54,7 +54,7 @@ class AtCosmicMain
      *
      * @ORM\ManyToOne(targetEntity="Application\Entity\Invcategories")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="categoryID", referencedColumnName="categoryID")
+     * @ORM\JoinColumn(name="categoryID",                              referencedColumnName="categoryID")
      * })
      */
     private $categoryid;
@@ -64,7 +64,7 @@ class AtCosmicMain
      *
      * @ORM\ManyToOne(targetEntity="Application\Entity\Invgroups")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="groupID", referencedColumnName="groupID")
+     * @ORM\JoinColumn(name="groupID",                             referencedColumnName="groupID")
      * })
      */
     private $groupid;

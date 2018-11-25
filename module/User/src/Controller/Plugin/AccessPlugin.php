@@ -17,8 +17,9 @@ class AccessPlugin extends AbstractPlugin
     
     /**
      * Checks whether the currently logged in user has the given permission.
+     *
      * @param string $permission Permission name.
-     * @param array $params Optional params (used only if an assertion is associated with permission).
+     * @param array  $params     Optional params (used only if an assertion is associated with permission).
      */
     public function __invoke($permission, $params = [])
     {

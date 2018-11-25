@@ -13,20 +13,20 @@ use VposMoon\Controller\MoonController;
 
 class PriceUpdateCommand extends Command
 {
-	/**
-	 *
-	 * @var Zend\Servi
-	 */
-	private $moonController;
-	
+    /**
+     *
+     * @var Zend\Servi
+     */
+    private $moonController;
+    
     /**
      * Constructor
      */
     public function __construct($serviceManager)
     {
         parent::__construct();
-		$this->serviceManager = $serviceManager;
-		$this->moonController = $serviceManager->get('ControllerManager')->get(MoonController::class);
+        $this->serviceManager = $serviceManager;
+        $this->moonController = $serviceManager->get('ControllerManager')->get(MoonController::class);
     }
 
     /**
@@ -44,10 +44,10 @@ class PriceUpdateCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-		$output->writeln ("Running skylizer price-update application");
-		$output->writeln ("please wait, may take a while ...");
+        $output->writeln("Running skylizer price-update application");
+        $output->writeln("please wait, may take a while ...");
 
-		$cnt = $this->moonController->priceUpdateConsole();
-		$output->writeln ($cnt . " prices updated");
+        $cnt = $this->moonController->priceUpdateConsole();
+        $output->writeln($cnt . " prices updated");
     }
 }

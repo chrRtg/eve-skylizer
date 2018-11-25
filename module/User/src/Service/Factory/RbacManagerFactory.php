@@ -17,8 +17,8 @@ class RbacManagerFactory
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {        
         $entityManager = $container->get('doctrine.entitymanager.orm_default');
-		$authService = $container->get(\Zend\Authentication\AuthenticationService::class);
-		
+        $authService = $container->get(\Zend\Authentication\AuthenticationService::class);
+        
         $cache = $container->get('FilesystemCache');
         
         $assertionManagers = [];

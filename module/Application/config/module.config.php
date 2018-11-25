@@ -76,14 +76,14 @@ return [
             Controller\IndexController::class => Controller\Factory\IndexControllerFactory::class,
         ],
     ],
-//    'controller_plugins' => [
-//        'aliases' => [
-//            'logger' => Controller\Plugin\LoggerPlugin::class,
-//        ],
-//        'factories' => [
-//            Controller\Plugin\LoggerPlugin::class => Controller\Plugin\Factory\LoggerPluginFactory::class,
-//        ],
-//    ],    		
+    //    'controller_plugins' => [
+    //        'aliases' => [
+    //            'logger' => Controller\Plugin\LoggerPlugin::class,
+    //        ],
+    //        'factories' => [
+    //            Controller\Plugin\LoggerPlugin::class => Controller\Plugin\Factory\LoggerPluginFactory::class,
+    //        ],
+    //    ],            
     // The 'access_filter' key is used by the User module to restrict or permit
     // access to certain controller actions for unauthorized visitors.
     'access_filter' => [
@@ -104,8 +104,8 @@ return [
         'factories' => [
             Service\NavManager::class => Service\Factory\NavManagerFactory::class,
             Service\RbacAssertionManager::class => Service\Factory\RbacAssertionManagerFactory::class,
-			Service\EveDataManager::class => Service\Factory\EveDataManagerFactory::class,
-			Service\EveEsiManager::class => Service\Factory\EveEsiManagerFactory::class,
+    Service\EveDataManager::class => Service\Factory\EveDataManagerFactory::class,
+    Service\EveEsiManager::class => Service\Factory\EveEsiManagerFactory::class,
         ],
     ],
     'view_helpers' => [

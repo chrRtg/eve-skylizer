@@ -10,20 +10,23 @@ use VposMoon\Service\CosmicManager;
  *
  * @author chr
  */
-class CosmicManagerFactory {
+class CosmicManagerFactory
+{
 
-	/**
-	 * This method creates the UserManager service and returns its instance. 
-	 */
-	public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
-	{
-		$entityManager = $container->get('doctrine.entitymanager.orm_default');
-		$logger = $container->get('MyLogger');
+    /**
+     * This method creates the UserManager service and returns its instance. 
+     */
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    {
+        $entityManager = $container->get('doctrine.entitymanager.orm_default');
+        $logger = $container->get('MyLogger');
 
-		return new CosmicManager(
-			$entityManager, 
-			$container->get(\User\Service\EveSSOManager::class),
-			$logger);
-	}
+        return new CosmicManager(
+            $entityManager, 
+            $container->get(\User\Service\EveSSOManager::class),
+            $container->get(\Application\Service\EveDataManager::class),
+            $logger
+        );
+    }
 
 }

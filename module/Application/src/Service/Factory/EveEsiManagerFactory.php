@@ -13,22 +13,23 @@ use Application\Service\EveEsiManager;
  *
  * @author chr
  */
-class EveEsiManagerFactory {
+class EveEsiManagerFactory
+{
 
-	/**
-	 * This method creates the UserManager service and returns its instance. 
-	 */
-	public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
-	{
+    /**
+     * This method creates the UserManager service and returns its instance. 
+     */
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    {
         // use the same session container as User\Service\Factory\EveSSOManagerFactory to get access to 
-		// the eve-sso related information
-		$sessionManager = $container->get(SessionManager::class);
-		$sessionContainer = new Container('eve_sso', $sessionManager);
-		
-		return new EveEsiManager(
-			$sessionContainer,
-			$container->get('MyLogger')
-		);
-	}
+        // the eve-sso related information
+        $sessionManager = $container->get(SessionManager::class);
+        $sessionContainer = new Container('eve_sso', $sessionManager);
+        
+        return new EveEsiManager(
+            $sessionContainer,
+            $container->get('MyLogger')
+        );
+    }
 
 }

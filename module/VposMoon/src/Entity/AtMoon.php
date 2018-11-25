@@ -16,10 +16,10 @@ class AtMoon
     /**
      * @var integer
      *
-	 * @ORM\Column(name="moon_id", type="integer", nullable=false)
+     * @ORM\Column(name="moon_id",                              type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
-	 * @ORM\OneToMany(targetEntity="VposMoon\Entity\AtMoongoo", mappedBy="moon_id")
+     * @ORM\OneToMany(targetEntity="VposMoon\Entity\AtMoongoo", mappedBy="moon_id")
      */
     private $moonId;
 
@@ -70,7 +70,7 @@ class AtMoon
      *
      * @ORM\ManyToOne(targetEntity="Application\Entity\Mapdenormalize")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="eve_mapdenormalize_itemid", referencedColumnName="itemID")
+     * @ORM\JoinColumn(name="eve_mapdenormalize_itemid",                referencedColumnName="itemID")
      * })
      */
     private $eveMapdenormalizeItemid;
@@ -80,7 +80,7 @@ class AtMoon
      *
      * @ORM\ManyToOne(targetEntity="Application\Entity\Invtypes")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="eve_invtypes_typeid", referencedColumnName="typeID")
+     * @ORM\JoinColumn(name="eve_invtypes_typeid",                referencedColumnName="typeID")
      * })
      */
     private $eveInvtypesTypeid;

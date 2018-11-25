@@ -29,6 +29,7 @@ return [
     'Zend\Form',
     'Zend\Router',
     'Zend\Validator',
+	'CurrentRoute',
     'Application',
     'User',
 	'VposMoon'

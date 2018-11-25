@@ -13,9 +13,9 @@ $rootPath = realpath(dirname(__DIR__));
 $testsPath = "$rootPath/tests";
 
 if (is_readable($testsPath . '/TestConfiguration.php')) {
-    require_once $testsPath . '/TestConfiguration.php';
+    include_once $testsPath . '/TestConfiguration.php';
 } else {
-    require_once $testsPath . '/TestConfiguration.php.dist';
+    include_once $testsPath . '/TestConfiguration.php.dist';
 }
 
 $path = array(
@@ -33,7 +33,7 @@ use Zend\Loader\StandardAutoloader;
 // setup autoloader
 AutoloaderFactory::factory(
     array(
-    	'Zend\Loader\StandardAutoloader' => array(
+        'Zend\Loader\StandardAutoloader' => array(
             StandardAutoloader::AUTOREGISTER_ZF => true,
             StandardAutoloader::ACT_AS_FALLBACK => false,
             StandardAutoloader::LOAD_NS => $additionalNamespaces,

@@ -8,11 +8,11 @@ use Doctrine\ORM\Mapping as ORM;
  * Trntranslations
  *
  * @ORM\Table(name="trnTranslations", 
- *	indexes={
- *		@ORM\Index(name="ix_tl_tcid", columns={"tcID"}), 
- *		@ORM\Index(name="ix_tl_kid", columns={"keyID"}), 
- *		@ORM\Index(name="ix_tl_text", columns={"text"}), 
- *		@ORM\Index(name="ix_tl_lang", columns={"languageID"})})
+ *    indexes={
+ * @ORM\Index(name="ix_tl_tcid",      columns={"tcID"}), 
+ * @ORM\Index(name="ix_tl_kid",       columns={"keyID"}), 
+ * @ORM\Index(name="ix_tl_text",      columns={"text"}), 
+ * @ORM\Index(name="ix_tl_lang",      columns={"languageID"})})
  * @ORM\Entity
  */
 class Trntranslations
@@ -20,7 +20,7 @@ class Trntranslations
     /**
      * @var integer
      *
-     * @ORM\Column(name="tcID", type="integer", nullable=false)
+     * @ORM\Column(name="tcID",             type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
      */
@@ -29,7 +29,7 @@ class Trntranslations
     /**
      * @var integer
      *
-     * @ORM\Column(name="keyID", type="integer", nullable=false)
+     * @ORM\Column(name="keyID",            type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
      */
@@ -38,7 +38,7 @@ class Trntranslations
     /**
      * @var string
      *
-     * @ORM\Column(name="languageID", type="string", length=50, nullable=false)
+     * @ORM\Column(name="languageID",       type="string", length=50, nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
      */

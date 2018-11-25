@@ -8,16 +8,16 @@ use Doctrine\ORM\Mapping as ORM;
  * Mapdenormalize
  *
  * @ORM\Table(name="mapDenormalize", 
- *		indexes={
- *			@ORM\Index(name="ix_md_groupconstellation", columns={"groupID", "constellationID"}), 
- *			@ORM\Index(name="ix_md_groupregion", columns={"groupID", "regionID"}), 
- *			@ORM\Index(name="ix_md_typeid", columns={"typeID"}), 
- *			@ORM\Index(name="ix_md_regionid", columns={"regionID"}), 
- *			@ORM\Index(name="ix_md_solarSystemid", columns={"solarSystemID"}), 
- *			@ORM\Index(name="ix_md_constellationid", columns={"constellationID"}), 
- *			@ORM\Index(name="ix_md_orbitid", columns={"orbitID"}), 
- *			@ORM\Index(name="ix_md_groupsystem", columns={"groupID"})
- *	})
+ *        indexes={
+ * @ORM\Index(name="ix_md_groupconstellation", columns={"groupID", "constellationID"}), 
+ * @ORM\Index(name="ix_md_groupregion",        columns={"groupID", "regionID"}), 
+ * @ORM\Index(name="ix_md_typeid",             columns={"typeID"}), 
+ * @ORM\Index(name="ix_md_regionid",           columns={"regionID"}), 
+ * @ORM\Index(name="ix_md_solarSystemid",      columns={"solarSystemID"}), 
+ * @ORM\Index(name="ix_md_constellationid",    columns={"constellationID"}), 
+ * @ORM\Index(name="ix_md_orbitid",            columns={"orbitID"}), 
+ * @ORM\Index(name="ix_md_groupsystem",        columns={"groupID"})
+ *    })
  * @ORM\Entity
  */
 class Mapdenormalize
@@ -25,7 +25,7 @@ class Mapdenormalize
     /**
      * @var integer
      *
-     * @ORM\Column(name="itemID", type="integer", nullable=false)
+     * @ORM\Column(name="itemID",           type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
      */
@@ -127,7 +127,7 @@ class Mapdenormalize
      *
      * @ORM\ManyToOne(targetEntity="Application\Entity\Maplocationwormholeclasses")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="regionID", referencedColumnName="locationID")
+     * @ORM\JoinColumn(name="regionID",                                             referencedColumnName="locationID")
      * })
      */
     private $regionid;

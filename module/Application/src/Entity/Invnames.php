@@ -15,7 +15,7 @@ class Invnames
     /**
      * @var integer
      *
-     * @ORM\Column(name="itemID", type="bigint", nullable=false)
+     * @ORM\Column(name="itemID",           type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
      */

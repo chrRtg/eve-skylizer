@@ -14,16 +14,17 @@ class EveSSOManagerFactory implements FactoryInterface
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {        
         // Instantiate dependencies.
-		$sessionManager = $container->get(SessionManager::class);
-		$sessionContainer = new Container('eve_sso', $sessionManager);
-		
+        $sessionManager = $container->get(SessionManager::class);
+        $sessionContainer = new Container('eve_sso', $sessionManager);
+        
         return new EveSSOManager(
-			$container->get(\Zend\Authentication\AuthenticationService::class), 
-			$container->get(RbacManager::class), 
-			$sessionContainer, 
-			$container->get('Config'), 
-			$container->get(UserManager::class),
-			$container->get(\Application\Service\EveEsiManager::class),
-			$container->get('MyLogger'));
+            $container->get(\Zend\Authentication\AuthenticationService::class), 
+            $container->get(RbacManager::class), 
+            $sessionContainer, 
+            $container->get('Config'), 
+            $container->get(UserManager::class),
+            $container->get(\Application\Service\EveEsiManager::class),
+            $container->get('MyLogger')
+        );
     }
 }

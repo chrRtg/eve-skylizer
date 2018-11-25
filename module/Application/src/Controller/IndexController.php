@@ -9,10 +9,11 @@ use User\Entity\User;
  * This is the main controller class of the User Demo application. It contains
  * site-wide actions such as Home or About.
  */
-class IndexController extends AbstractActionController 
+class IndexController extends AbstractActionController
 {
     /**
      * Entity manager.
+     *
      * @var Doctrine\ORM\EntityManager
      */
     private $entityManager;
@@ -22,7 +23,7 @@ class IndexController extends AbstractActionController
      */
     public function __construct($entityManager) 
     {
-       $this->entityManager = $entityManager;
+        $this->entityManager = $entityManager;
     }
     
     /**
@@ -31,10 +32,10 @@ class IndexController extends AbstractActionController
      */
     public function indexAction() 
     {
-		if($this->currentUser() !== null) {
-			return $this->redirect()->toRoute('dashboard');
-		}
-		
+        if($this->currentUser() !== null) {
+            return $this->redirect()->toRoute('dashboard');
+        }
+        
         return new ViewModel();
     }
 
@@ -47,9 +48,9 @@ class IndexController extends AbstractActionController
     {
         return new ViewModel();
     }
-	
-	
-	/**
+    
+    
+    /**
      * This is the "about" action. It is used to display the "About" page.
      */
     public function aboutAction() 
@@ -57,12 +58,14 @@ class IndexController extends AbstractActionController
         $appName = 'Role Demo';
         $appDescription = 'This demo shows how to implement role-based access control with Zend Framework 3';
 
-		// Return variables to view script with the help of
+        // Return variables to view script with the help of
         // ViewObject variable container
-        return new ViewModel([
+        return new ViewModel(
+            [
             'appName' => $appName,
             'appDescription' => $appDescription
-        ]);
+            ]
+        );
     }  
     
     /**
@@ -74,7 +77,7 @@ class IndexController extends AbstractActionController
         
         if ($id!=null) {
             $user = $this->entityManager->getRepository(User::class)
-                    ->find($id);
+                ->find($id);
         } else {
             $user = $this->currentUser();
         }
@@ -83,17 +86,21 @@ class IndexController extends AbstractActionController
             $this->getResponse()->setStatusCode(404);
             return;
         }
-        if (!$this->access('profile.any.view') && 
-            !$this->access('profile.own.view', ['user'=>$user])) {
+        if (!$this->access('profile.any.view')  
+            && !$this->access('profile.own.view', ['user'=>$user])
+        ) {
             return $this->redirect()->toRoute('not-authorized');
         }
-        return new ViewModel([
+        return new ViewModel(
+            [
             'user' => $user
-        ]);
+            ]
+        );
     }
-	
-	public function testAction($param) {
-		echo ("nice! (--$param--) \n");
-	}
+    
+    public function testAction($param)
+    {
+        echo ("nice! (--$param--) \n");
+    }
 }
 

@@ -22,10 +22,10 @@ class NavManagerFactory
         
         $viewHelperManager = $container->get('ViewHelperManager');
         $urlHelper = $viewHelperManager->get('url');
-		
+        
         $rbacManager = $container->get(RbacManager::class);
-		
-		$sso_manager = $container->get(EveSSOManager::class);
+        
+        $sso_manager = $container->get(EveSSOManager::class);
         
         return new NavManager($authService, $urlHelper, $rbacManager, $sso_manager);
     }

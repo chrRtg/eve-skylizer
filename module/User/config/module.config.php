@@ -21,7 +21,7 @@ return [
                         'action'        => 'index',
                     ],
                 ],
-            ],			
+            ],            
             'users' => [
                 'type'    => Segment::class,
                 'options' => [
@@ -89,12 +89,12 @@ return [
     // access to certain controller actions for unauthorized visitors.
     'access_filter' => [
         'controllers' => [
-			Controller\AuthController::class => [
+    Controller\AuthController::class => [
                 // Give access to  "auth" actions
-				// to anyone.
+                // to anyone.
                 ['actions' => ['auth', 'index', 'notauthorized', 'logout'], 'allow' => '*']
             ],            
-			Controller\UserController::class => [
+    Controller\UserController::class => [
                 // Give access to  "message" and "setPassword" actions
                 // to anyone.
                 ['actions' => ['resetPassword', 'message', 'setPassword'], 'allow' => '*'],
@@ -119,7 +119,7 @@ return [
             Service\RbacManager::class => Service\Factory\RbacManagerFactory::class,
             Service\RoleManager::class => Service\Factory\RoleManagerFactory::class,
             Service\UserManager::class => Service\Factory\UserManagerFactory::class,
-			Service\EveSSOManager::class => Service\Factory\EveSSOManagerFactory::class,
+    Service\EveSSOManager::class => Service\Factory\EveSSOManagerFactory::class,
         ],
     ],
     'view_manager' => [
@@ -136,7 +136,7 @@ return [
         ],
         'aliases' => [
             'access' => View\Helper\Access::class,
-			'currentUser' => View\Helper\CurrentUser::class,
+        'currentUser' => View\Helper\CurrentUser::class,
         ],
     ],
     'doctrine' => [

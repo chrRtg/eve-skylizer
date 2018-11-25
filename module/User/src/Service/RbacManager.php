@@ -10,16 +10,18 @@ use User\Entity\Permission;
 /**
  * This service is responsible for initialzing RBAC (Role-Based Access Control).
  */
-class RbacManager 
+class RbacManager
 {
     /**
      * Doctrine entity manager.
+     *
      * @var Doctrine\ORM\EntityManager
      */
     private $entityManager; 
     
     /**
      * RBAC service.
+     *
      * @var Zend\Permissions\Rbac\Rbac
      */
     private $rbac;
@@ -27,12 +29,14 @@ class RbacManager
   
     /**
      * Filesystem cache.
+     *
      * @var Zend\Cache\Storage\StorageInterface
      */
     private $cache;
     
     /**
      * Assertion managers.
+     *
      * @var array
      */
     private $assertionManagers = [];
@@ -66,8 +70,7 @@ class RbacManager
         // Try to load Rbac container from cache.
         $result = false;
         $this->rbac = $this->cache->getItem('rbac_container', $result);
-        if (!$result)
-        {
+        if (!$result) {
             // Create Rbac container.
             $rbac = new Rbac();
             $this->rbac = $rbac;
@@ -77,7 +80,7 @@ class RbacManager
             $rbac->setCreateMissingRoles(true);
 
             $roles = $this->entityManager->getRepository(Role::class)
-                    ->findBy([], ['id'=>'ASC']);
+                ->findBy([], ['id'=>'ASC']);
             foreach ($roles as $role) {
 
                 $roleName = $role->getName();
@@ -101,8 +104,9 @@ class RbacManager
     
     /**
      * Checks whether the given user has permission.
-     * @param User|null $user
-     * @param string $permission
+     *
+     * @param User|null  $user
+     * @param string     $permission
      * @param array|null $params
      */
     public function isGranted($user, $permission, $params = null)
@@ -119,7 +123,7 @@ class RbacManager
             }
             
             $user = $this->entityManager->getRepository(User::class)
-                    ->findOneByEveUsername($identity);
+                ->findOneByEveUsername($identity);
             if ($user==null) {
                 // Oops.. the identity presents in session, but there is no such user in database.
                 // We throw an exception, because this is a possible security problem.
@@ -132,12 +136,14 @@ class RbacManager
         foreach ($roles as $role) {
             if ($this->rbac->isGranted($role->getName(), $permission)) {
                 
-                if ($params==null)
+                if ($params==null) {
                     return true;
+                }
                 
                 foreach ($this->assertionManagers as $assertionManager) {
-                    if ($assertionManager->assert($this->rbac, $permission, $params))
+                    if ($assertionManager->assert($this->rbac, $permission, $params)) {
                         return true;
+                    }
                 }
                 
                 return false;

@@ -8,9 +8,9 @@ use Doctrine\ORM\Mapping as ORM;
  * Invitems
  *
  * @ORM\Table(name="invItems", 
- *	indexes={
- *		@ORM\Index(name="ix_ii_locationid", columns={"locationID"}), 
- *		@ORM\Index(name="ix_ii_ownerid_locationid", columns={"ownerID", "locationID"})})
+ *    indexes={
+ * @ORM\Index(name="ix_ii_locationid",         columns={"locationID"}), 
+ * @ORM\Index(name="ix_ii_ownerid_locationid", columns={"ownerID", "locationID"})})
  * @ORM\Entity
  */
 class Invitems
@@ -18,7 +18,7 @@ class Invitems
     /**
      * @var integer
      *
-     * @ORM\Column(name="itemID", type="bigint", nullable=false)
+     * @ORM\Column(name="itemID",           type="bigint", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
      */

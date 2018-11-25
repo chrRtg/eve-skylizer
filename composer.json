@@ -34,7 +34,8 @@
         "beberlei/DoctrineExtensions": "^1.0",
         "evelabs/oauth2-eveonline": "^1.1",
         "eveseat/eseye": "^1.0.0",
-        "illchuk/zf3-symfony-console": "^0.1.1"
+        "illchuk/zf3-symfony-console": "^0.1.1",
+		"tasmaniski/zend-current-route": "^2.0"
     },
     "autoload": {
         "psr-4": {

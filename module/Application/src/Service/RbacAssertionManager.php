@@ -11,12 +11,14 @@ class RbacAssertionManager
 {
     /**
      * Entity manager.
+     *
      * @var Doctrine\ORM\EntityManager 
      */
     private $entityManager;
     
     /**
      * Auth service.
+     *
      * @var Zend\Authentication\AuthenticationService 
      */
     private $authService;
@@ -36,10 +38,11 @@ class RbacAssertionManager
     public function assert(Rbac $rbac, $permission, $params)
     {
         $currentUser = $this->entityManager->getRepository(User::class)
-                ->findOneByEveUsername($this->authService->getIdentity());
+            ->findOneByEveUsername($this->authService->getIdentity());
         
-        if ($permission=='profile.own.view' && $params['user']->getId()==$currentUser->getId())
+        if ($permission=='profile.own.view' && $params['user']->getId()==$currentUser->getId()) {
             return true;
+        }
         
         return false;
     }

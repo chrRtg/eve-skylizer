@@ -7,10 +7,11 @@ use User\Entity\Role;
  * This validator class is designed for checking if there is an existing role 
  * with such a name.
  */
-class RoleExistsValidator extends AbstractValidator 
+class RoleExistsValidator extends AbstractValidator
 {
     /**
      * Available validator options.
+     *
      * @var array
      */
     protected $options = array(
@@ -24,6 +25,7 @@ class RoleExistsValidator extends AbstractValidator
         
     /**
      * Validation failure messages.
+     *
      * @var array
      */
     protected $messageTemplates = array(
@@ -38,10 +40,12 @@ class RoleExistsValidator extends AbstractValidator
     {
         // Set filter options (if provided).
         if(is_array($options)) {            
-            if(isset($options['entityManager']))
+            if(isset($options['entityManager'])) {
                 $this->options['entityManager'] = $options['entityManager'];
-            if(isset($options['role']))
+            }
+            if(isset($options['role'])) {
                 $this->options['role'] = $options['role'];
+            }
         }
         
         // Call the parent class constructor
@@ -62,15 +66,16 @@ class RoleExistsValidator extends AbstractValidator
         $entityManager = $this->options['entityManager'];
         
         $role = $entityManager->getRepository(Role::class)
-                ->findOneByName($value);
+            ->findOneByName($value);
         
         if($this->options['role']==null) {
             $isValid = ($role==null);
         } else {
-            if($this->options['role']->getName()!=$value && $role!=null) 
+            if($this->options['role']->getName()!=$value && $role!=null) { 
                 $isValid = false;
-            else 
+            } else { 
                 $isValid = true;
+            }
         }
         
         // If there were an error, set error message.

@@ -11,10 +11,10 @@ class VposMoonHelperFactory implements FactoryInterface
 {
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-		$eveDataManager = $container->get(\Application\Service\EveDataManager::class);
-		$moonManager = $container->get(\VposMoon\Service\MoonManager::class);
-		
-        return new VposMoonHelper($eveDataManager, $moonManager);
+        $eveDataManager = $container->get(\Application\Service\EveDataManager::class);
+        $moonManager = $container->get(\VposMoon\Service\MoonManager::class);
+        
+        return new VposMoonHelper($eveDataManager, $moonManager, $container->get('Config'));
     }
 }
 

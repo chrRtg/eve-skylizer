@@ -13,20 +13,20 @@ use VposMoon\Controller\MoonController;
 
 class AllyCorpUpdateCommand extends Command
 {
-	/**
-	 *
-	 * @var Zend\Servi
-	 */
-	private $moonController;
-	
+    /**
+     *
+     * @var Zend\Servi
+     */
+    private $moonController;
+    
     /**
      * Constructor
      */
     public function __construct($serviceManager)
     {
         parent::__construct();
-		$this->serviceManager = $serviceManager;
-		$this->moonController = $serviceManager->get('ControllerManager')->get(MoonController::class);
+        $this->serviceManager = $serviceManager;
+        $this->moonController = $serviceManager->get('ControllerManager')->get(MoonController::class);
     }
 
     /**
@@ -37,19 +37,19 @@ class AllyCorpUpdateCommand extends Command
         $this
             ->setName('update:allycorp')
             ->setDescription('Update alliances and corporations from ESI')
-			->addOption(
+            ->addOption(
                 'ally',
                 null,
                 InputOption::VALUE_NONE,
                 'If set, only alliances get updated'
             )
-			->addOption(
+            ->addOption(
                 'corp',
                 null,
                 InputOption::VALUE_NONE,
                 'If set, only corporations get updated'
             )
-			->addOption(
+            ->addOption(
                 'all',
                 null,
                 InputOption::VALUE_NONE,
@@ -62,26 +62,26 @@ class AllyCorpUpdateCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-		$output->writeln ("Running skylizer update application");
-		$output->writeln ("please wait, may take a while ...");
+        $output->writeln("Running skylizer update application");
+        $output->writeln("please wait, may take a while ...");
 
-		$forcemode = false;
-		$res = '';
+        $forcemode = false;
+        $res = '';
 
         if ($input->getOption('all')) {
             $forcemode = true;
         }
-	
+    
         if ($input->getOption('ally') && $input->getOption('corp')) {
-			$res = $this->moonController->allyCorpUpdateConsole($forcemode, 'b');
+            $res = $this->moonController->allyCorpUpdateConsole($forcemode, 'b');
         } else if ($input->getOption('ally')) {
-			$res = $this->moonController->allyCorpUpdateConsole($forcemode, 'a');
+            $res = $this->moonController->allyCorpUpdateConsole($forcemode, 'a');
         } else if ($input->getOption('corp')) {
-			$res = $this->moonController->allyCorpUpdateConsole($forcemode, 'c');
+            $res = $this->moonController->allyCorpUpdateConsole($forcemode, 'c');
         } else {
-			$res = 'PROBLEM: you should choose at least one option of ally or corp in order to update anything';
-		}
+            $res = 'PROBLEM: you should choose at least one option of ally or corp in order to update anything';
+        }
 
-		$output->writeln ($res);
+        $output->writeln($res);
     }
 }

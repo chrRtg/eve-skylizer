@@ -6,16 +6,18 @@ use Zend\View\Helper\AbstractHelper;
 /**
  * This view helper class displays breadcrumbs.
  */
-class Breadcrumbs extends AbstractHelper 
+class Breadcrumbs extends AbstractHelper
 {
     /**
      * Array of items.
+     *
      * @var array 
      */
     private $items = [];
     
     /**
      * Constructor.
+     *
      * @param array $items Array of items (optional).
      */
     public function __construct($items=[]) 
@@ -25,6 +27,7 @@ class Breadcrumbs extends AbstractHelper
     
     /**
      * Sets the items.
+     *
      * @param array $items Items.
      */
     public function setItems($items) 
@@ -34,12 +37,14 @@ class Breadcrumbs extends AbstractHelper
     
     /**
      * Renders the breadcrumbs.
+     *
      * @return string HTML code of the breadcrumbs.
      */
     public function render() 
     {
-        if (count($this->items)==0)
+        if (count($this->items)==0) {
             return ''; // Do nothing if there are no items.
+        }
         
         // Resulting HTML code will be stored in this var
         $result = '<ol class="breadcrumb">';
@@ -70,9 +75,10 @@ class Breadcrumbs extends AbstractHelper
     
     /**
      * Renders an item.
-     * @param string $label
-     * @param string $link
-     * @param boolean $isActive
+     *
+     * @param  string  $label
+     * @param  string  $link
+     * @param  boolean $isActive
      * @return string HTML code of the item.
      */
     protected function renderItem($label, $link, $isActive) 
@@ -81,10 +87,11 @@ class Breadcrumbs extends AbstractHelper
         
         $result = $isActive?'<li class="active">':'<li>';
         
-        if (!$isActive)
+        if (!$isActive) {
             $result .= '<a href="'.$escapeHtml($link).'">'.$escapeHtml($label).'</a>';
-        else
+        } else {
             $result .= $escapeHtml($label);
+        }
                     
         $result .= '</li>';
     

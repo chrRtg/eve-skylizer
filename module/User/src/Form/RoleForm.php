@@ -41,7 +41,8 @@ class RoleForm extends Form
     protected function addElements() 
     {
         // Add "name" field
-        $this->add([           
+        $this->add(
+            [           
             'type'  => 'text',
             'name' => 'name',
             'attributes' => [
@@ -50,10 +51,12 @@ class RoleForm extends Form
             'options' => [
                 'label' => 'Role Name',
             ],
-        ]);
+            ]
+        );
         
         // Add "description" field
-        $this->add([            
+        $this->add(
+            [            
             'type'  => 'textarea',
             'name' => 'description',
             'attributes' => [
@@ -62,10 +65,12 @@ class RoleForm extends Form
             'options' => [
                 'label' => 'Description',
             ],
-        ]);
+            ]
+        );
         
         // Add "inherit_roles" field
-        $this->add([            
+        $this->add(
+            [            
             'type'  => 'select',
             'name' => 'inherit_roles',
             'attributes' => [
@@ -75,20 +80,24 @@ class RoleForm extends Form
             'options' => [
                 'label' => 'Optionally inherit permissions from these role(s)'
             ],
-        ]);
+            ]
+        );
                         
         // Add the Submit button
-        $this->add([
+        $this->add(
+            [
             'type'  => 'submit',
             'name' => 'submit',
             'attributes' => [                
                 'value' => 'Create',
                 'id' => 'submit',
             ],
-        ]);
+            ]
+        );
         
         // Add the CSRF field
-        $this->add([
+        $this->add(
+            [
             'type' => 'csrf',
             'name' => 'csrf',
             'options' => [
@@ -96,7 +105,8 @@ class RoleForm extends Form
                 'timeout' => 600
                 ]
             ],
-        ]);
+            ]
+        );
     }
     
     /**
@@ -109,7 +119,8 @@ class RoleForm extends Form
         $this->setInputFilter($inputFilter);
         
         // Add input for "name" field
-        $inputFilter->add([
+        $inputFilter->add(
+            [
                 'name'     => 'name',
                 'required' => true,
                 'filters'  => [
@@ -131,10 +142,12 @@ class RoleForm extends Form
                         ],
                     ],
                 ],
-            ]);                          
+            ]
+        );                          
         
         // Add input for "description" field
-        $inputFilter->add([
+        $inputFilter->add(
+            [
                 'name'     => 'description',
                 'required' => true,
                 'filters'  => [
@@ -149,10 +162,12 @@ class RoleForm extends Form
                         ],
                     ],
                 ],
-            ]);                  
+            ]
+        );                  
         
         // Add input for "inherit_roles" field
-        $inputFilter->add([
+        $inputFilter->add(
+            [
                 'name'     => 'inherit_roles',
                 'required' => false,
                 'filters'  => [
@@ -161,6 +176,7 @@ class RoleForm extends Form
                 'validators' => [
                     
                 ],
-            ]);                  
+            ]
+        );                  
     }           
 }

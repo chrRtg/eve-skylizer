@@ -8,11 +8,11 @@ use Doctrine\ORM\Mapping as ORM;
  * Invtypes
  *
  * @ORM\Table(name="invTypes", 
- *		indexes={
- *			@ORM\Index(name="ix_it_groupid", columns={"groupID"}), 
- *			@ORM\Index(name="ix_it_mgroup", columns={"marketGroupID"}),
- *			@ORM\Index(name="ix_it_name", columns={"typeName"})
- *	})
+ *        indexes={
+ * @ORM\Index(name="ix_it_groupid", columns={"groupID"}), 
+ * @ORM\Index(name="ix_it_mgroup",  columns={"marketGroupID"}),
+ * @ORM\Index(name="ix_it_name",    columns={"typeName"})
+ *    })
  * @ORM\Entity
  */
 class Invtypes
@@ -20,7 +20,7 @@ class Invtypes
     /**
      * @var integer
      *
-     * @ORM\Column(name="typeID", type="integer", nullable=false)
+     * @ORM\Column(name="typeID",           type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
      */
@@ -115,7 +115,7 @@ class Invtypes
      *
      * @ORM\ManyToOne(targetEntity="Application\Entity\Invgroups")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="groupID", referencedColumnName="groupID")
+     * @ORM\JoinColumn(name="groupID",                             referencedColumnName="groupID")
      * })
      */
     private $groupid;
@@ -125,7 +125,7 @@ class Invtypes
      *
      * @ORM\ManyToOne(targetEntity="Application\Entity\Invmarketgroups")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="marketGroupID", referencedColumnName="marketGroupID")
+     * @ORM\JoinColumn(name="marketGroupID",                             referencedColumnName="marketGroupID")
      * })
      */
     private $marketgroupid;

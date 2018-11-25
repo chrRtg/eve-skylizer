@@ -1,0 +1,282 @@
+<?php
+$this->headTitle('(D)Scan');
+
+$this->mainMenu()->setActiveItemId('vpos');
+
+$form->get('scan')->setAttributes([
+    'class' => 'form-control',
+    'rows' => '20',
+    'id' => 'scanarea',
+    'placeholder' => 'paste your scan from SCAN, DSCAN or survey scan HERE',
+    'required' => true,
+]);
+
+$current_route = $this->currentRoute()->getRoute();
+
+//ini_set('xdebug.var_display_max_depth', 3); var_dump($this->currentRoute()->getRoute());
+// ini_set('xdebug.var_display_max_depth', 3); var_dump($vpos_list);
+//ini_set('xdebug.var_display_max_depth', 3); var_dump($filters);
+//ini_set('xdebug.var_display_max_depth', 3); var_dump($message);
+
+if (empty($filters['info_system']['constellation'])) {
+    $location_string = $filters['info_system']['itemname'] . ' (Constellation in ' . $filters['info_system']['region'] . ')';
+} else {
+    $location_string = $filters['info_system']['itemname'] . ' (' . $filters['info_system']['region'] . ')';
+}
+?>
+<script>
+	var sl_messages = <?=json_encode($message['message']);?>;
+	var filters_json = <?=json_encode($filters_json);?>;
+	var current_route = <?=json_encode($current_route);?>;
+</script>
+
+<?=$this->flashMessenger()->render('error', ['alert', 'alert-warning']);?>
+<?=$this->flashMessenger()->render('success', ['alert', 'alert-success']);?>
+<?=$this->flashMessenger()->render('info', ['alert', 'alert-info']);?>
+
+<div class="row">
+	<div class="col-md-9 col-sm-10">
+		<div class="row">
+			<div class="col-md-8">
+				<!-- start system name -->
+				<div class="form-group form-group-lg addpaddingtop20">
+					<select class="form-control select2-typeahead-system" name="selectsystem" id="selectsystem">
+						<option value="<?=$this->escapeHtml($filters['info_system']['itemid']);?>" selected><?=$this->escapeHtml($location_string);?></option>
+					</select>
+				</div>
+				<div>
+					<?=$this->vpViewTool()->createNeighboursNavigation($filters['info_system'], $current_route);?>
+				</div>
+			</div>
+			<!-- start filter area -->
+			<div class="col-md-4" id="checkfilter">
+				<h4>Show what?  &nbsp;
+						<a href="/" id="vpos_showall" style="font-size:13px;">show-all</a> &nbsp;/&nbsp;
+						<a href="/" id="vpos_shownone" style="font-size:13px;">hide-all</a></h4>
+				<div class="col-md-6">
+					<div class="checkbox">
+						<input type="checkbox" id="vpos_filter_structures" <?=(!empty($filters['vpos_filter_structures']) && $filters['vpos_filter_structures'] == "1" ? 'checked' : '')?>>
+						<label for="vpos_filter_structures">Structures</label>
+					</div>
+					<div class="checkbox">
+						<input type="checkbox" id="vpos_filter_gasore" <?=(!empty($filters['vpos_filter_gasore']) && $filters['vpos_filter_gasore'] == "1" ? 'checked' : '')?>>
+						<label for="vpos_filter_gasore">Gas &amp; Ore</label>
+					</div>
+					<div class="checkbox">
+						<input type="checkbox" id="vpos_filter_wormhole" <?=(!empty($filters['vpos_filter_wormhole']) && $filters['vpos_filter_wormhole'] == "1" ? 'checked' : '')?>>
+						<label for="vpos_filter_wormhole">Wormhole</label>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="checkbox">
+						<input type="checkbox" id="vpos_filter_exploration" <?=(!empty($filters['vpos_filter_exploration']) && $filters['vpos_filter_exploration'] == "1" ? 'checked' : '')?>>
+						<label for="vpos_filter_exploration">Exploration</label>
+					</div>
+					<div class="checkbox">
+						<input type="checkbox" id="vpos_filter_combat" <?=(!empty($filters['vpos_filter_combat']) && $filters['vpos_filter_combat'] == "1" ? 'checked' : '')?>>
+						<label for="vpos_filter_combat">Combat</label>
+					</div>
+					<div class="checkbox">
+						<input type="checkbox" id="vpos_filter_faction" <?=(!empty($filters['vpos_filter_faction']) && $filters['vpos_filter_faction'] == "1" ? 'checked' : '')?>>
+						<label for="vpos_filter_faction">Faction</label>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-12">
+				<table id="moontable" class="table table-hover table-striped table-responsive" cellspacing="0" width="100%">
+					<thead>
+					<tr>
+						<th>Sig</th>
+						<th>Location</th>
+						<th>Type</th>
+						<th>Name</th>
+						<th>Specs</th>
+						<th>more</th>
+					</tr>
+					</thead>
+					<tbody>
+						<?php foreach ($vpos_list as $key => $struct): ?>
+						<?php $vptype = $this->vpViewTool()->determineVposType($struct); ?>
+							<tr class="<?=(isset($message['newscan'][$struct['at_signature']]) ? 'new' : '')?>">
+								<td>
+									<?=$this->escapeHtml($struct['at_signature'])?>
+									<?=(($struct['at_scanQuality'] && $struct['at_scanQuality'] > 0 && $struct['at_scanQuality'] < 100) ? '<span class="scanname">' . $this->escapeHtml($struct['at_scanQuality']) . '%</span>' : "")?>
+								</td>
+								<td>
+									<?php if (isset($struct['map_name'])): ?>
+										<a href="<?=$this->vpViewTool()->createExternalSystemURL($struct['map_name']);?>" title="open system information in new window" class="unobtrusive" target="_blank"><?=($struct['celest_name'] ? $struct['celest_name'] : $struct['map_name'])?></a>
+									<?php else: ?>
+										<?=$struct['celest_name']?>
+									<?php endif;?>
+								</td>
+								<td>
+									<span class="vpos-<?=$vptype['type'];?>">&nbsp;<?=$vptype['name'];?></span>
+									<?=($struct['acd_class'] ? '<br><span class="vpos-' . $vptype['type'] . '">&nbsp;' . $this->escapeHtml($struct['acd_class']) . '</span>' : '')?>
+								</td>
+								<td>
+								<?php if ($vptype['cat'] == 'structure'): ?>
+									<?=($struct['it_typename'] ? '<span class="scanname">' . $this->escapeHtml($struct['it_typename']) . '</span>' : "")?></br>
+									<?=(($struct['at_structureName'] && $struct['at_structureName'] != $struct['it_typename']) ? '<span class="secondarytext">' . $this->escapeHtml($struct['at_structureName']) . '</span>' : "")?>
+								<?php elseif ($vptype['cat'] == 'unknown'): ?>
+									<?=($struct['at_structureName'] ? $this->escapeHtml($struct['at_structureName']) : "unknown")?>
+								<?php else: ?>
+									<?=($struct['at_structureName'] ? '<span class="scanname">' . $this->escapeHtml($struct['at_structureName']) . '</span>' : "")?>
+									<?php if ($struct['acd_urlEn']): ?>
+										<a href="<?=$this->escapeHtml($struct['acd_urlEn']);?>" target="_blank" title="open description of signature in an external page" class="flag tdview"><span class="flag-icon flag-icon-en"></span></a>
+									<?php endif;?>
+									<?php if ($struct['acd_urlDe']): ?>
+										<a href="<?=$this->escapeHtml($struct['acd_urlDe']);?>" target="_blank" title="Öffne eine Beschreibung der Signatur ein einem neuen Fenster" class="flag tdview"><span class="flag-icon flag-icon-de"></span></a>
+									<?php endif;?>
+									<?=($struct['acd_comment'] ? '</br><mark>' . $this->escapeHtml($struct['acd_comment']) : "") . '</mark>'?>
+								<?php endif;?>
+								</td>
+								<td>
+									<?php if ($vptype['cat'] == 'structure'): ?>
+										<a href="#" class="structlink" data-toggle="modal"
+											data-structid="<?=$struct['at_id'];?>"
+											data-structtype="<?=$struct['at_typeId'];?>"
+											data-structgivename="<?=$struct['at_structureName'];?>"
+											data-scorpid="<?=$struct['own_corpticker'];?>"
+											data-scorpname="<?=$struct['own_corporationName'];?>"
+											data-scorpticker="<?=$struct['at_corporationId'];?>"
+											data-moonid="<?=$struct['at_celestialId'];?>"
+											data-target="#structureEditModal">
+										<?=($struct['own_corpticker'] ? $this->escapeHtml($struct['own_corpticker']) : '<i class="glyphicon glyphicon-plus passive"></i>');?></a>
+									<?php elseif ($vptype['type'] == 'wh'): ?>
+										<!-- WH management -->
+										<?php if ($struct['target_name']): ?>
+											<a href="<?= $this->url('vpos', [], array('query' => array('system' => $struct['at_targetSystemId']))); ?>" title="jump to system in skYlizer" class="unobtrusive"><i class="glyphicon glyphicon-new-window passive"></i></a>
+											<a href="<?=$this->vpViewTool()->createExternalSystemURL($struct['target_name']);?>" title="open system information in new window" class="unobtrusive" target="_blank"><?=$this->escapeHtml($struct['target_name']);?></a>
+											&nbsp;<span class="secondarytext"><?=$this->vpViewTool()->formatClassid($struct['target_classidH'], $struct['target_classidL']); ?></span>
+											<span class="tdview"><a href="<?= $this->url('vpos', ['action' => 'removeSystemConnection'], array('query' => array('structid' => $struct['at_id']))); ?>" class="btn btn-xs btn-danger"><i class="glyphicon glyphicon-remove tdview"></i></a></span>
+										<?php else: ?>
+											<input class="typeahead" data-action="settargetsystem" data-pk="<?=$struct['at_id'];?>" type="text" placeholder="WH goes to?">
+											&nbsp;<span class="secondarytext"><?=$this->vpViewTool()->formatClassid(false, abs($struct['at_targetSystemId'])); ?></span>
+										<?php endif; ?>
+									<?php endif;?>
+								</td>
+								<td>
+									<?=($struct['at_lastseenDate'] ? date_format($struct['at_lastseenDate'], 'Y-m-d H:i:s') : "")?>
+									<?=($struct['uchgd_lastUsername'] ? '<br><span class="secondarytext">' . $this->escapeHtml($struct['uchgd_lastUsername']) . '</span>' : "")?>
+									<span  class="tdview" style="float:right;">
+										<?php if ($struct['at_id']): ?>
+										<a class="btn btn-sm btn-danger" href="<?=$this->url('vpos', ['action' => 'delete', 'id' => $struct['at_id']]);?>"
+										   title="delete Signature"><span class="glyphicon glyphicon-remove"></span></a>
+										<?php endif;?>
+									</span></td>
+							</tr>
+						<?php endforeach;?>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	<!-- start scan area -->
+	<div class="col-md-3 col-sm-2">
+		<div class="row">
+			<button type="button" class="btn btn-info btn-sm pull-right" data-toggle="modal" data-target="#helpModal">
+				<span class="glyphicon glyphicons-question-sign"></span> Help
+			</button>
+		</div>
+		<div class="row">
+			<form class="form-signin" method="post">
+				<?=$this->formLabel($form->get('scan'));?>
+				<?=$this->formElement($form->get('scan'));?>
+				<?=$this->formElementErrors($form->get('scan'));?>
+				<button class="btn btn-sm btn-primary btn-block" type="submit">submit your scan</button>
+			</form>
+		</div>
+	</div>
+</div>
+
+<!-- Structure Edit Modal -->
+<div class="modal fade" id="structureEditModal"  style="overflow:hidden;" role="dialog" aria-labelledby="structeditLabel">
+    <div class="modal-dialog">
+		<div class="modal-content">
+			<form id="structureEditForm" role="form" action="/vposmoon/editStructureJson/0" method="POST">
+				<!-- Modal Header -->
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">
+						<span aria-hidden="true">&times;</span>
+						<span class="sr-only">Close</span>
+					</button>
+					<h4 class="modal-title" id="myModalLabel">Edit Structure</h4>
+				</div>
+
+				<!-- Modal Body -->
+				<div class="modal-body">
+					<input type="hidden" name="moonid" id="structureEditFormMoonId" value="0">
+					<input type="hidden" name="structureid" id="structureEditFormStructureId" value="0">
+					<div class="form-group">
+						<label for="structedittype">Type of Structure</label>
+						<select class="form-control" name="struct_item_id" id="structedittype">
+							<option value="0">please select a structure</option>
+							<?=$this->vpViewTool()->getEveTypesListAsOptions([365, 1404, 1406, 1657]);?>
+						</select>
+					</div>
+					<div class="form-group">
+						<label for="structeditcorp">Owning Corporation</label>
+						<select class="form-control" name="owning_corp" id="structeditcorp"></select>
+					</div>
+					<div class="form-group">
+						<label for="structeditname">Name of Structure</label>
+						<input type="text" name="struct_name" class="form-control" id="structeditname" placeholder="placeholder"/>
+					</div>
+				</div>
+
+				<!-- Modal Footer -->
+				<div class="modal-footer">
+					<button type="button" class="btn btn-link pull-left" id="structureDeleteFormSubmit">delete structure</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					<input type="submit" class="btn btn-primary" value="Save changes" id="structureEditFormSubmit">
+				</div>
+			</form>
+		</div>
+    </div>
+</div>
+
+
+
+<!-- Help Modal -->
+<div class="modal fade" id="helpModal" role="dialog" aria-labelledby="myModalLabel">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="myModalLabel">Scan What?</h4>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+					<div class="col-md-6">
+						<img src="img/eve_scan_window.jpg" alt=""/>
+					</div>
+					<div class="col-md-6">
+						<p>Open your &laquo;Probe Scanner&raquo; window. Please take care your view is <strong>not filtered</strong>.						</p>
+						<p>Click inside the Probe Scanne window, select all entries (CTRL-A) and copy them to the clipboard (CTRL-C).</p>
+						<p>Now navigate to <span class="skylizer">Syklizer - (D)Scan</span> and paste the result into the big area to the right.</p>
+						<p>Then press the button &laquo;submit your scan&raquo; below the area and hold a sec. The table to the left will get updated soon and show your
+							scan results.</p>
+						<p><strong>Please always copy all entries to ensure the best possible result!</strong></p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Nope Modal -->
+<div class="modal fade" id="nopeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="myModalLabel">Nope?!</h4>
+			</div>
+			<div class="modal-body">
+				Sorry folks, this function is not supported yet.
+			</div>
+		</div>
+	</div>
+</div>

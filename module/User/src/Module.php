@@ -32,8 +32,10 @@ class Module
         $eventManager = $event->getApplication()->getEventManager();
         $sharedEventManager = $eventManager->getSharedManager();
         // Register the event listener method. 
-        $sharedEventManager->attach(AbstractActionController::class, 
-                MvcEvent::EVENT_DISPATCH, [$this, 'onDispatch'], 100);
+        $sharedEventManager->attach(
+            AbstractActionController::class, 
+            MvcEvent::EVENT_DISPATCH, [$this, 'onDispatch'], 100
+        );
     }
     
     /**
@@ -58,8 +60,7 @@ class Module
         
         // Execute the access filter on every controller except AuthController
         // (to avoid infinite redirect).
-        if ($controllerName!=AuthController::class)
-        {
+        if ($controllerName!=AuthController::class) {
             $result = $authManager->filterAccess($controllerName, $actionName);
             
             if ($result==EveSSOManager::AUTH_REQUIRED) {

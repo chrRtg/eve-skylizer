@@ -16,18 +16,21 @@ class AuthAdapter implements AdapterInterface
 {
     /**
      * User eve_id.
+     *
      * @var string 
      */
     private $eve_id;
     
     /**
      * Password
+     *
      * @var string 
      */
     private $eve_name;
     
     /**
      * Entity manager.
+     *
      * @var Doctrine\ORM\EntityManager 
      */
     private $entityManager;
@@ -63,14 +66,15 @@ class AuthAdapter implements AdapterInterface
     {                
         // Check the database if there is a user with such eve_id.
         $user = $this->entityManager->getRepository(User::class)
-                ->findOneByEveUserid($this->eve_id);
+            ->findOneByEveUserid($this->eve_id);
         
         // If there is no such user, return 'Identity Not Found' status.
         if ($user == null) {
             return new Result(
                 Result::FAILURE_IDENTITY_NOT_FOUND, 
                 null, 
-                ['Invalid credentials.']);        
+                ['Invalid credentials.']
+            );        
         }   
         
         // If the user with such eve_id exists, we need to check if it is active or retired.
@@ -79,13 +83,15 @@ class AuthAdapter implements AdapterInterface
             return new Result(
                 Result::FAILURE, 
                 null, 
-                ['User is retired.']);        
+                ['User is retired.']
+            );        
         }
         
-		return new Result(
-			Result::SUCCESS, 
-			$this->eve_name, 
-			['Authenticated successfully.']);        
+        return new Result(
+            Result::SUCCESS, 
+            $this->eve_name, 
+            ['Authenticated successfully.']
+        );        
     }
 }
 

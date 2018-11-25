@@ -15,18 +15,21 @@ class UserForm extends Form
 {
     /**
      * Scenario ('create' or 'update').
+     *
      * @var string 
      */
     private $scenario;
     
     /**
      * Entity manager.
+     *
      * @var Doctrine\ORM\EntityManager 
      */
     private $entityManager = null;
     
     /**
      * Current user.
+     *
      * @var User\Entity\User 
      */
     private $user = null;
@@ -57,7 +60,8 @@ class UserForm extends Form
     protected function addElements() 
     {
         // Add "status" field
-        $this->add([            
+        $this->add(
+            [            
             'type'  => 'select',
             'name' => 'status',
             'options' => [
@@ -67,10 +71,12 @@ class UserForm extends Form
                     2 => 'Retired',                    
                 ]
             ],
-        ]);
+            ]
+        );
         
         // Add "roles" field
-        $this->add([            
+        $this->add(
+            [            
             'type'  => 'select',
             'name' => 'roles',
             'attributes' => [
@@ -79,16 +85,19 @@ class UserForm extends Form
             'options' => [
                 'label' => 'Role(s)',
             ],
-        ]);
+            ]
+        );
         
         // Add the Submit button
-        $this->add([
+        $this->add(
+            [
             'type'  => 'submit',
             'name' => 'submit',
             'attributes' => [                
                 'value' => 'Create'
             ],
-        ]);
+            ]
+        );
     }
     
     /**
@@ -101,7 +110,8 @@ class UserForm extends Form
         $this->setInputFilter($inputFilter);
                 
         // Add input for "status" field
-        $inputFilter->add([
+        $inputFilter->add(
+            [
                 'name'     => 'status',
                 'required' => true,
                 'filters'  => [                    
@@ -110,10 +120,12 @@ class UserForm extends Form
                 'validators' => [
                     ['name'=>'InArray', 'options'=>['haystack'=>[1, 2]]]
                 ],
-            ]); 
+            ]
+        ); 
         
         // Add input for "roles" field
-        $inputFilter->add([
+        $inputFilter->add(
+            [
                 'class'    => ArrayInput::class,
                 'name'     => 'roles',
                 'required' => true,
@@ -123,6 +135,7 @@ class UserForm extends Form
                 'validators' => [
                     ['name'=>'GreaterThan', 'options'=>['min'=>0]]
                 ],
-            ]); 
+            ]
+        ); 
     }           
 }

@@ -11,12 +11,14 @@ class RoleManager
 {
     /**
      * Doctrine entity manager.
+     *
      * @var Doctrine\ORM\EntityManager
      */
     private $entityManager;  
     
     /**
      * RBAC manager.
+     *
      * @var User\Service\RbacManager
      */
     private $rbacManager;
@@ -32,12 +34,13 @@ class RoleManager
     
     /**
      * Adds a new role.
+     *
      * @param array $data
      */
     public function addRole($data)
     {
         $existingRole = $this->entityManager->getRepository(Role::class)
-                ->findOneByName($data['name']);
+            ->findOneByName($data['name']);
         if ($existingRole!=null) {
             throw new \Exception('Role with such name already exists');
         }
@@ -75,13 +78,14 @@ class RoleManager
     
     /**
      * Updates an existing role.
-     * @param Role $role
+     *
+     * @param Role  $role
      * @param array $data
      */
     public function updateRole($role, $data)
     {
         $existingRole = $this->entityManager->getRepository(Role::class)
-                ->findOneByName($data['name']);
+            ->findOneByName($data['name']);
         if ($existingRole!=null && $existingRole!=$role) {
             throw new \Exception('Another role with such name already exists');
         }
@@ -134,9 +138,10 @@ class RoleManager
     public function createDefaultRolesIfNotExist()
     {
         $role = $this->entityManager->getRepository(Role::class)
-                ->findOneBy([]);
-        if ($role!=null)
+            ->findOneBy([]);
+        if ($role!=null) {
             return; // Some roles already exist; do nothing.
+        }
         
         $defaultRoles = [
             'Administrator' => [
@@ -169,7 +174,7 @@ class RoleManager
             // Assign parent role
             if ($info['parent']!=null) {
                 $parentRole = $this->entityManager->getRepository(Role::class)
-                        ->findOneByName($info['parent']);
+                    ->findOneByName($info['parent']);
                 if ($parentRole==null) {
                     throw new \Exception('Parent role ' . $info['parent'] . ' doesn\'t exist');
                 }
@@ -181,7 +186,7 @@ class RoleManager
             
             // Assign permissions to role
             $permissions = $this->entityManager->getRepository(Permission::class)
-                    ->findByName($info['permissions']);
+                ->findByName($info['permissions']);
             foreach ($permissions as $permission) {
                 $role->getPermissions()->add($permission);
             }
@@ -196,6 +201,7 @@ class RoleManager
     
     /**
      * Retrieves all permissions from the given role and its child roles.
+     *
      * @param Role $role
      */
     public function getEffectivePermissions($role)
@@ -230,8 +236,9 @@ class RoleManager
         
         // Assign new permissions to role
         foreach ($data['permissions'] as $name=>$isChecked) {
-            if (!$isChecked)
+            if (!$isChecked) {
                 continue;
+            }
             
             $permission = $this->entityManager->getRepository(Permission::class)
                 ->findOneByName($name);

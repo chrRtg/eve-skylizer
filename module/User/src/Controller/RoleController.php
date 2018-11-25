@@ -12,16 +12,18 @@ use User\Form\RolePermissionsForm;
  * This controller is responsible for role management (adding, editing, 
  * viewing, deleting).
  */
-class RoleController extends AbstractActionController 
+class RoleController extends AbstractActionController
 {
     /**
      * Entity manager.
+     *
      * @var Doctrine\ORM\EntityManager
      */
     private $entityManager;
     
     /**
      * Role manager.
+     *
      * @var User\Service\RoleManager 
      */
     private $roleManager;
@@ -42,11 +44,13 @@ class RoleController extends AbstractActionController
     public function indexAction() 
     {
         $roles = $this->entityManager->getRepository(Role::class)
-                ->findBy([], ['id'=>'ASC']);
+            ->findBy([], ['id'=>'ASC']);
         
-        return new ViewModel([
+        return new ViewModel(
+            [
             'roles' => $roles
-        ]);
+            ]
+        );
     } 
     
     /**
@@ -59,7 +63,7 @@ class RoleController extends AbstractActionController
         
         $roleList = [];
         $roles = $this->entityManager->getRepository(Role::class)
-                ->findBy([], ['name'=>'ASC']);
+            ->findBy([], ['name'=>'ASC']);
         foreach ($roles as $role) {
             $roleList[$role->getId()] = $role->getName();
         }
@@ -90,9 +94,11 @@ class RoleController extends AbstractActionController
             }               
         } 
         
-        return new ViewModel([
+        return new ViewModel(
+            [
                 'form' => $form
-            ]);
+            ]
+        );
     }
     
     /**
@@ -108,7 +114,7 @@ class RoleController extends AbstractActionController
         
         // Find a role with such ID.
         $role = $this->entityManager->getRepository(Role::class)
-                ->find($id);
+            ->find($id);
         
         if ($role == null) {
             $this->getResponse()->setStatusCode(404);
@@ -116,15 +122,17 @@ class RoleController extends AbstractActionController
         }
         
         $allPermissions = $this->entityManager->getRepository(Permission::class)
-                ->findBy([], ['name'=>'ASC']);
+            ->findBy([], ['name'=>'ASC']);
         
         $effectivePermissions = $this->roleManager->getEffectivePermissions($role);
                 
-        return new ViewModel([
+        return new ViewModel(
+            [
             'role' => $role,
             'allPermissions' => $allPermissions,
             'effectivePermissions' => $effectivePermissions
-        ]);
+            ]
+        );
     }
     
     /**
@@ -139,7 +147,7 @@ class RoleController extends AbstractActionController
         }
         
         $role = $this->entityManager->getRepository(Role::class)
-                ->find($id);
+            ->find($id);
         
         if ($role == null) {
             $this->getResponse()->setStatusCode(404);
@@ -152,16 +160,18 @@ class RoleController extends AbstractActionController
         $roleList = [];
         $selectedRoles = [];
         $roles = $this->entityManager->getRepository(Role::class)
-                ->findBy([], ['name'=>'ASC']);
+            ->findBy([], ['name'=>'ASC']);
         foreach ($roles as $role2) {
             
-            if ($role2->getId()==$role->getId())
+            if ($role2->getId()==$role->getId()) {
                 continue; // Do not inherit from ourselves
+            }
             
             $roleList[$role2->getId()] = $role2->getName();
             
-            if ($role->hasParent($role2))
+            if ($role->hasParent($role2)) {
                 $selectedRoles[] = $role2->getId();
+            }
         }
         $form->get('inherit_roles')->setValueOptions($roleList);
         
@@ -191,16 +201,20 @@ class RoleController extends AbstractActionController
                 return $this->redirect()->toRoute('roles', ['action'=>'index']);                
             }               
         } else {
-            $form->setData(array(
+            $form->setData(
+                array(
                     'name'=>$role->getName(),
                     'description'=>$role->getDescription()     
-                ));
+                )
+            );
         }
         
-        return new ViewModel([
+        return new ViewModel(
+            [
                 'form' => $form,
                 'role' => $role
-            ]);
+            ]
+        );
     }
     
     /**
@@ -215,7 +229,7 @@ class RoleController extends AbstractActionController
         }
         
         $role = $this->entityManager->getRepository(Role::class)
-                ->find($id);
+            ->find($id);
         
         if ($role == null) {
             $this->getResponse()->setStatusCode(404);
@@ -223,7 +237,7 @@ class RoleController extends AbstractActionController
         }
             
         $allPermissions = $this->entityManager->getRepository(Permission::class)
-                ->findBy([], ['name'=>'ASC']);
+            ->findBy([], ['name'=>'ASC']);
         
         $effectivePermissions = $this->roleManager->getEffectivePermissions($role);
             
@@ -274,12 +288,14 @@ class RoleController extends AbstractActionController
         
         $errors = $form->getMessages();
         
-        return new ViewModel([
+        return new ViewModel(
+            [
                 'form' => $form,
                 'role' => $role,
                 'allPermissions' => $allPermissions,
                 'effectivePermissions' => $effectivePermissions
-            ]);
+            ]
+        );
     }
 
     /**
@@ -294,7 +310,7 @@ class RoleController extends AbstractActionController
         }
         
         $role = $this->entityManager->getRepository(Role::class)
-                ->find($id);
+            ->find($id);
         
         if ($role == null) {
             $this->getResponse()->setStatusCode(404);

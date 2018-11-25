@@ -8,10 +8,10 @@ use Doctrine\ORM\Mapping as ORM;
  * Invgroups
  *
  * @ORM\Table(name="invGroups", 
- *		indexes={
- *			@ORM\Index(name="ix_ig_cid", columns={"categoryID"}),
- *			@ORM\Index(name="ix_ig_categoryid", columns={"categoryID"})
- *	})
+ *        indexes={
+ * @ORM\Index(name="ix_ig_cid",        columns={"categoryID"}),
+ * @ORM\Index(name="ix_ig_categoryid", columns={"categoryID"})
+ *    })
  * @ORM\Entity
  */
 class Invgroups
@@ -19,7 +19,7 @@ class Invgroups
     /**
      * @var integer
      *
-     * @ORM\Column(name="groupID", type="integer", nullable=false)
+     * @ORM\Column(name="groupID",          type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
      */
@@ -79,7 +79,7 @@ class Invgroups
      *
      * @ORM\ManyToOne(targetEntity="Application\Entity\Invcategories")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="categoryID", referencedColumnName="categoryID")
+     * @ORM\JoinColumn(name="categoryID",                              referencedColumnName="categoryID")
      * })
      */
     private $categoryid;
