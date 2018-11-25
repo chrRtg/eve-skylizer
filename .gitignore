@@ -9,7 +9,12 @@ nbproject
 .project
 .nbproject
 .settings
+.todo.txt
 composer.lock
+phpcs.xml
+.vscode/
+/data/fuzzwork_last.txt
+/public/i.php
 /vendor/
 /eve-skylizer.wiki/
 /ressource/db_model.mwb.bak
