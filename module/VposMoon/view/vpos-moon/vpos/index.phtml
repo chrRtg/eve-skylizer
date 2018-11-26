@@ -14,7 +14,7 @@ $form->get('scan')->setAttributes([
 $current_route = $this->currentRoute()->getRoute();
 
 //ini_set('xdebug.var_display_max_depth', 3); var_dump($this->currentRoute()->getRoute());
-// ini_set('xdebug.var_display_max_depth', 3); var_dump($vpos_list);
+//ini_set('xdebug.var_display_max_depth', 3); var_dump($vpos_list);
 //ini_set('xdebug.var_display_max_depth', 3); var_dump($filters);
 //ini_set('xdebug.var_display_max_depth', 3); var_dump($message);
 
@@ -79,6 +79,10 @@ if (empty($filters['info_system']['constellation'])) {
 					<div class="checkbox">
 						<input type="checkbox" id="vpos_filter_faction" <?=(!empty($filters['vpos_filter_faction']) && $filters['vpos_filter_faction'] == "1" ? 'checked' : '')?>>
 						<label for="vpos_filter_faction">Faction</label>
+					</div>
+					<div class="checkbox">
+						<input type="checkbox" id="vpos_filter_unscanned" <?=(!empty($filters['vpos_filter_unscanned']) && $filters['vpos_filter_unscanned'] == "1" ? 'checked' : '')?>>
+						<label for="vpos_filter_unscanned">unscanned</label>
 					</div>
 				</div>
 			</div>
@@ -181,7 +185,7 @@ if (empty($filters['info_system']['constellation'])) {
 			</button>
 		</div>
 		<div class="row">
-			<form class="form-signin" method="post">
+			<form class="form-signin" method="post" id="scanform">
 				<?=$this->formLabel($form->get('scan'));?>
 				<?=$this->formElement($form->get('scan'));?>
 				<?=$this->formElementErrors($form->get('scan'));?>

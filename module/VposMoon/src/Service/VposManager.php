@@ -125,6 +125,9 @@ class VposManager
             $filter_gid[] = 1404;
             $filter_gid[] = 1657;
         }
+        if (!empty($filters['vpos_filter_unscanned']) && $filters['vpos_filter_unscanned'] == "1") {
+            $filter_gid[] = 502;
+        }
         if (!empty($filters['vpos_filter_wormhole']) && $filters['vpos_filter_wormhole'] == "1") {
             $filter_gid[] = 988;
         }
@@ -209,6 +212,9 @@ class VposManager
         if (!empty($get_parameters['vpos_filter_wormhole'])) {
             $filters['vpos_filter_wormhole'] = $get_parameters['vpos_filter_wormhole'];
         }
+        if (!empty($get_parameters['vpos_filter_unscanned'])) {
+            $filters['vpos_filter_unscanned'] = $get_parameters['vpos_filter_unscanned'];
+        }
 
 
         // If filters not exist at this point, prefill them with their default
@@ -230,6 +236,9 @@ class VposManager
         }
         if (empty($filters['vpos_filter_wormhole'])) {
             $filters['vpos_filter_wormhole'] = "1";
+        }
+        if (empty($filters['vpos_filter_unscanned'])) {
+            $filters['vpos_filter_unscanned'] = "1";
         }
 
 

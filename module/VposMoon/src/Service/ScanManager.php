@@ -93,10 +93,11 @@ class ScanManager
             $this->moonManager->processScan();
         }
         if ($res_counter['dscan'] || $res_counter['scan']) {
-            $this->cosmicManager->processScan();
+            $structure_plusminus = $this->cosmicManager->processScan();
+            $this->logger->debug('### Structure plusminus: '.print_r($structure_plusminus, true));
         }
 
-        return (array('message' => $message, 'counter' => $res_counter));
+        return (array('message' => $message, 'counter' => $res_counter, 'newscan' => ($structure_plusminus['new'] ?  $structure_plusminus['new'] : [])));
     }
 
     /*******************************************************************************
