@@ -3,6 +3,32 @@ $(document).ready(function () {
         current_route = 'vposmoon';
     }
 
+    // form autosubmit on paste data
+    $("#scanarea").on("paste", function (evt) {
+
+        // encapsulate with timeout to get the value
+        setTimeout(function() {
+            var formval =  $("#scanarea").val();
+
+            if(formval.length <= 15) {
+                return;
+            }
+
+            var check_scan = formval.match(/^([A-Z]{3}-[0-9]{3})\t(.*)\t(.*)\t(.*)\t([0-9\,]+.?\%)\t(.*)/);
+            var check_dscan = formval.match(/^(\S*)\t([\S ]*)\t([\S ]*)\t(-|[0-9\.\,]+ [AEUkm]+)/);
+            
+            if(check_scan || check_dscan) {
+                setTimeout(function() {
+                    $.blockUI({
+                        message: "<h1 class=\"block-overlay\">autosubmit your scan - processing...</h1>"
+                    });
+                     $('#scanform').trigger('submit')
+                });
+            }
+        });
+    });
+
+
     // structure tooltip (http://iamceege.github.io/tooltipster/)
     $('a.structlink').tooltipster({
         content: '',
@@ -187,6 +213,19 @@ $(document).ready(function () {
             });
         }
     });
+    $("#vpos_filter_unscanned").change(function () {
+        if (this.checked) {
+            buildFilterQuery({
+                type: "vpos_filter_unscanned",
+                id: "1"
+            });
+        } else {
+            buildFilterQuery({
+                type: "vpos_filter_unscanned",
+                id: "-1"
+            });
+        }
+    });
 
     // auto-submit links
     $('a.sytemswitch').click(function () {
@@ -205,6 +244,7 @@ $(document).ready(function () {
         return false;
     });
 
+    // Checkbox all    
     $('#vpos_showall').click(function () {
         buildFilterQuery([{
             type: "vpos_filter_structures",
@@ -229,11 +269,16 @@ $(document).ready(function () {
         {
             type: "vpos_filter_combat",
             id: "1"
+        },
+        {
+            type: "vpos_filter_unscanned",
+            id: "1"
         }
         ]);
         return false;
     });
 
+    // checkbox none
     $('#vpos_shownone').click(function () {
         buildFilterQuery([{
             type: "vpos_filter_structures",
@@ -257,6 +302,10 @@ $(document).ready(function () {
         },
         {
             type: "vpos_filter_combat",
+            id: "-1"
+        },
+        {
+            type: "vpos_filter_unscanned",
             id: "-1"
         }
         ]);
