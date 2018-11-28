@@ -162,14 +162,14 @@ if (empty($filters['info_system']['constellation'])) {
 									<?php endif;?>
 								</td>
 								<td>
-									<?=($struct['at_lastseenDate'] ? date_format($struct['at_lastseenDate'], 'Y-m-d H:i:s') : "")?>
-									<?=($struct['uchgd_lastUsername'] ? '<br><span class="secondarytext">' . $this->escapeHtml($struct['uchgd_lastUsername']) . '</span>' : "")?>
 									<span  class="tdview" style="float:right;">
 										<?php if ($struct['at_id']): ?>
 										<a class="btn btn-sm btn-danger" href="<?=$this->url('vpos', ['action' => 'delete', 'id' => $struct['at_id']]);?>"
 										   title="delete Signature"><span class="glyphicon glyphicon-remove"></span></a>
 										<?php endif;?>
-									</span></td>
+									</span>
+									<?=($struct['at_lastseenDate'] ? date_format($struct['at_lastseenDate'], 'Y-m-d H:i:s') : "")?>
+									<?=($struct['uchgd_lastUsername'] ? '<br><span class="secondarytext">' . $this->escapeHtml($struct['uchgd_lastUsername']) . '</span>' : "")?></td>
 							</tr>
 						<?php endforeach;?>
 					</tbody>
