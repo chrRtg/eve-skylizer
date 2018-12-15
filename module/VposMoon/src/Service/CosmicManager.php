@@ -85,7 +85,7 @@ class CosmicManager
      */
     private $eveSSOManager;
     // pattern to analyze and break various inputs
-    private $cosmic_scan_regexp = '/^([A-Z]{3}-[0-9]{3})\t(.*)\t(.*)\t(.*)\t([0-9\,]+.?\%)\t(.*)/';
+    private $cosmic_scan_regexp = '/^([A-Z]{3}-[0-9]{3})\t(.*)\t(.*)\t(.*)\t([0-9\,\.]+.?\%)\t(.*)/';
     private $cosmic_dscan_regexp = '/^(\S*)\t([\S ]*)\t([\S ]*)\t(-|[0-9\.\,]+ [AEUkm]+)/';
 
     /**

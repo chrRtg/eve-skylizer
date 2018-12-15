@@ -14,7 +14,7 @@ $(document).ready(function () {
                 return;
             }
 
-            var check_scan = formval.match(/^([A-Z]{3}-[0-9]{3})\t(.*)\t(.*)\t(.*)\t([0-9\,]+.?\%)\t(.*)/);
+            var check_scan = formval.match(/^([A-Z]{3}-[0-9]{3})\t(.*)\t(.*)\t(.*)\t([0-9\,\.]+.?\%)\t(.*)/);
             var check_dscan = formval.match(/^(\S*)\t([\S ]*)\t([\S ]*)\t(-|[0-9\.\,]+ [AEUkm]+)/);
             
             if(check_scan || check_dscan) {
