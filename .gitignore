@@ -21,3 +21,7 @@ phpcs.xml
 /ressource/private/
 /bin/example.php
 /snippets/
+sonar-project-local.properties
+sonar-project.properties
+ci/
+.scannerwork/

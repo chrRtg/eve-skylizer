@@ -1,6 +1,6 @@
 $(document).ready(function () {
     if (typeof current_route === 'undefined') {
-        current_route = 'vposmoon';
+        var current_route = 'vposmoon';
     }
 
     // form autosubmit on paste data
@@ -376,7 +376,7 @@ $(document).ready(function () {
     /*
      * Typeahead fetcher for System selector
     */
-   systemtypedata = [
+   var systemtypedata = [
     { id: "-7", itemid: "-7", itemname: "High", constellation: "", constellationid: "", region: "", regionid: "", classidH: null, classidL: "7" },
     { id: "-8", itemid: "-8", itemname: "Low", constellation: "", constellationid: "", region: "", regionid: "", classidH: null, classidL: "8" },
     { id: "-9", itemid: "-9", itemname: "Null", constellation: "", constellationid: "", region: "", regionid: "", classidH: null, classidL: "9" },
@@ -554,7 +554,7 @@ $(document).ready(function () {
      */
     $('#structureDeleteFormSubmit').click(function () {
 
-        delid = $('#structureEditFormStructureId').val();
+        var delid = $('#structureEditFormStructureId').val();
 
         if (!delid) {
             return;
