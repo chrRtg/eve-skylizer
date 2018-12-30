@@ -499,12 +499,10 @@ class EveSSOManager
 
         if (!$this->hasIdentity()) {
             return self::AUTH_REQUIRED;
-        } else {
-            return self::ACCESS_DENIED;
         }
 
-        // Permit access to this page.
-        return self::ACCESS_GRANTED;
+        // finally, no access
+        return self::ACCESS_DENIED;
     }
 
     /**

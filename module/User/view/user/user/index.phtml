@@ -14,40 +14,39 @@ $this->mainMenu()->setActiveItemId('admin');
 			<th>ID</th>
 			<th>EVE Name</th>
 			<th>Corporation</th>
-			<th>Role(s)</th>        
+			<th>Role(s)</th>
 			<th>Date Created</th>
-			<th>Status</th>        
-			<th>Actions</th>        
+			<th>Status</th>
+			<th>Actions</th>
 		</tr>
 	</thead>
 
 	<tbody>
 		<?php foreach ($users as $user): ?>
 			<tr>
-				<td><?= $this->escapeHtml($user->getId()); ?></td>
+				<td><?=$this->escapeHtml($user->getId());?></td>
 				<td>
-					<img src="https://imageserver.eveonline.com/Character/<?= $user->getEveUserid(); ?>_32.jpg">&nbsp;
-					<?= $this->escapeHtml($user->getEveUsername()); ?>
+					<img src="https://imageserver.eveonline.com/Character/<?=$user->getEveUserid();?>_32.jpg" alt="user face">&nbsp;
+					<?=$this->escapeHtml($user->getEveUsername());?>
 				</td>
 				<td>
-				<?php if ($user->getEveCorpid()): ?>	
-					<img src="https://imageserver.eveonline.com/Corporation/<?= $user->getEveCorpid()->getCorporationId(); ?>_32.png">&nbsp;
-					<?= $this->escapeHtml($user->getEveCorpid()->getCorporationName()); ?>
-				<?php endif; ?>
+				<?php if ($user->getEveCorpid()): ?>
+					<img src="https://imageserver.eveonline.com/Corporation/<?=$user->getEveCorpid()->getCorporationId();? alt="corp logo">_32.png">&nbsp;
+					<?=$this->escapeHtml($user->getEveCorpid()->getCorporationName());?>
+				<?php endif;?>
 				</td>
 				<td>
-					<?= $this->escapeHtml($user->getRolesAsString()); ?></a> 
+					<?=$this->escapeHtml($user->getRolesAsString());?></a>
 				</td>
-				<td><nobr><?= $this->escapeHtml($user->getDateCreated()->format('d.m.Y H:i:s')); ?></nobr></td>        
-	<td><?= $this->escapeHtml($user->getStatusAsString()); ?></td>
+				<td><?=$this->escapeHtml($user->getDateCreated()->format('d.m.Y H:i:s'));?></td>
+	<td><?=$this->escapeHtml($user->getStatusAsString());?></td>
 	<td>
-		<a class="btn btn-info btn-sm" href="<?= $this->url('users', ['action' => 'edit', 'id' => $user->getId()]);
-				?>">
+		<a class="btn btn-info btn-sm" href="<?=$this->url('users', ['action' => 'edit', 'id' => $user->getId()]); ?>">
 			<span class="glyphicon glyphicon-pencil" ></span> Edit
 		</a>
-	</td>    
+	</td>
 	</tr>
-<?php endforeach; ?>   
+<?php endforeach;?>
 </tbody>
 </table>
 
