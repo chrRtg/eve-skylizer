@@ -31,25 +31,8 @@ class VposMoonHelper extends AbstractHelper
     public function determineVposType($vpos_elem)
     {
         $type = ['cat' => 'unknown', 'type' => 'unscanned', 'name' => 'unscanned'];
-        /*
-        .vpos-pos
-        .vpos-refinery
-        .vpos-engineering
-        .vpos-citadel
-        .vpos-wh
-        .vpos-relic
-        .vpos-data
-        .vpos-anomaly
-        .vpos-unrated
-        .vpos-plex
-        .vpos-gas
-        .vpos-ore
-        .vpos-faction
-        .vpos-ghost
-        .vpos-unscanned
-         */
-        // echo('<pre>' . $vpos_elem['at_groupId'] . ' :: ' . $vpos_elem['grp_name'] . ' :: ' . $vpos_elem['it_typename'] . ' :: ' . $vpos_elem['acd_type'] . '</pre>');
-        switch ($vpos_elem['at_groupId']) {
+
+         switch ($vpos_elem['at_groupId']) {
             case '365':
                 $type = ['cat' => 'structure', 'type' => 'pos', 'name' => 'Pos'];
                 break;
@@ -88,6 +71,8 @@ class VposMoonHelper extends AbstractHelper
                 } elseif ($vpos_elem['acd_type'] == 'plex') {
                     $type = ['cat' => 'signature', 'type' => 'plex', 'name' => 'Plex :' . $vpos_elem['acd_class']];
                 }
+                break;
+            default:
                 break;
         }
         return $type;

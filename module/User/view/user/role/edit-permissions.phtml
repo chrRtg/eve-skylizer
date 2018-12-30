@@ -34,8 +34,8 @@ $form->prepare();
                     <div class="checkbox">
                         <label><input type="checkbox" name="<?= $this->escapeHtmlAttr($element->getName()) ?>" 
                                       value="<?= $this->escapeHtmlAttr($element->getCheckedValue()) ?>"
-                                      <?php if ($element->isChecked()) echo 'checked'?>
-                                      <?php if ($element->getAttribute('disabled')) echo 'disabled'?>>
+                                      <?php if ($element->isChecked()) {echo 'checked';} ?>
+                                      <?php if ($element->getAttribute('disabled')) {echo 'disabled';} ?>>
                             <?= $this->escapeHtml($element->getLabel()) ?>
                         </label>
                         <?= $this->formElementErrors($element); ?>                  

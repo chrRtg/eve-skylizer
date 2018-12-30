@@ -390,7 +390,7 @@ class EveDataManager
                 $alliance_entity = new EveAlly;
             } elseif ($alliance_entity->getAllianceName() && !$force_update) {
                 // if alliance has a name and it's not Force-Mode skip this alliance (presuming it's already up to date)
-                echo('S');
+                echo'S';
                 continue;
             }
 

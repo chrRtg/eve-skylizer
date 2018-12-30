@@ -84,7 +84,7 @@ class EveEsiManager
                 }
 
                 $try_cnt++;
-                sleep(1);
+                usleep(1000000);
                 continue;
             }
             // if not caught return the result

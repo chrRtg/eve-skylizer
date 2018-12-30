@@ -434,26 +434,6 @@ class MoonController extends AbstractActionController
         return $this->redirect()->toRoute('vposmoon', ['action' => 'index']);
     }
 
-    public function ping($msg, $what = null)
-    {
-        echo 'PING MoonController with msg: ' . $msg . PHP_EOL;
-
-        switch ($what) {
-            case 'EveDataManager':
-                echo 'PING MoonController ping to: EveDataManager' . PHP_EOL;
-                return ($this->eveDataManager->ping($msg));
-                break;
-            case 'MoonManager':
-                echo 'PING MoonController ping to: MoonManager' . PHP_EOL;
-                return ($this->moonManager->ping($msg));
-                break;
-            case 'CosmicManager':
-                echo 'PING MoonController ping to: CosmicManager' . PHP_EOL;
-                return ($this->cosmicManager->ping($msg));
-                break;
-        }
-        return (false);
-    }
 
     /**
      * No functional code but helps me to write better code then below
