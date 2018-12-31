@@ -79,11 +79,18 @@ $(document).ready(function () {
         return markup;
     }
 
+    //datatable for admin views
+    var admin_table = $('#admintable').DataTable({
+        fixedHeader: true,
+        "lengthMenu": [ [25, 50, 100, -1], [25, 50, 100, "All"] ]
+    });
+    admin_table.fixedHeader.headerOffset($('#skylizer_navbar').height());
 
     //datatable for moonTable
     var moon_table = $('#moontable').DataTable({
         fixedHeader: true,
-        responsive: true
+        responsive: true,
+        "lengthMenu": [ [25, 50, 100, -1], [25, 50, 100, "All"] ]
     });
     moon_table.fixedHeader.headerOffset($('#skylizer_navbar').height());
 
