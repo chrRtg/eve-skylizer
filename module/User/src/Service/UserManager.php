@@ -72,7 +72,7 @@ class UserManager
 
 
         // Assign roles to user.
-        if ($force_admin == true) {
+        if ($force_admin === true) {
             $this->assignRoles($user, ['1']); // Admin Role
         } else {
             $this->assignRoles($user, ['4']); // 4 == Standard User

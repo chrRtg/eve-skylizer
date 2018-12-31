@@ -433,48 +433,4 @@ class MoonController extends AbstractActionController
 
         return $this->redirect()->toRoute('vposmoon', ['action' => 'index']);
     }
-
-
-    /**
-     * No functional code but helps me to write better code then below
-     */
-    private function codeCollection()
-    {
-        ;
-        //        $this->moonManager->addMoonGoo();
-        //        $res = $this->cosmicManager->test(16);
-        //        var_dump( \Doctrine\Common\Util\Debug::export($res, 4));
-        //        $this->logger->notice($res->getCosmicMain()->getGroupNameDe());
-        //$this->logger->notice(var_export($res, true));
-        //echo('<pre>');
-        //        \Doctrine\Common\Util\Debug::dump($res);
-        //        \Doctrine\Common\Util\Debug::dump($res->getCosmicMain()->getType());
-        //        \Doctrine\Common\Util\Debug::dump($res->getCosmicMain()->getGroupid()->getGroupname());
-        //        \Doctrine\Common\Util\Debug::dump($res->getCosmicMain()->getGroupid());
-        //        \Doctrine\Common\Util\Debug::dump($res,5);
-        //        $res = $this->cosmicManager->test2(197);
-        //echo('<pre>');
-        //        \Doctrine\Common\Util\Debug::dump($res);
-        //        $res = $this->cosmicManager->test3(2);
-        //
-        ////\Doctrine\Common\Util\Debug::dump($moon_entity);
-        //$this->entityManager->getRepository(\Application\Entity\Invtypes::class)->findOneByTypename('Pyroxeres')
-        //        $res = $this->cosmicManager->test(16);
-        //        var_dump( \Doctrine\Common\Util\Debug::export($res, 4));
-        //        $this->logger->notice($res->getCosmicMain()->getGroupNameDe());
-        //$this->logger->notice(var_export($res, true));
-        //echo('<pre>');
-        //        \Doctrine\Common\Util\Debug::dump($res);
-        //        \Doctrine\Common\Util\Debug::dump($res->getCosmicMain()->getType());
-        //        \Doctrine\Common\Util\Debug::dump($res);
-        //        $this->logger->notice($res);
-        //        $this->logger->emerg('EMERG');
-        //        $this->logger->alert('ALERT');
-        //        $this->logger->crit('CRIT');
-        //        $this->logger->err('ERR');
-        //        $this->logger->warn('WARN');
-        //        $this->logger->notice('NOTICE');
-        //        $this->logger->info('INFO');
-        //        $this->logger->debug('DEBUG');
-    }
 }

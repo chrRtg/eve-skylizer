@@ -43,9 +43,8 @@ $this->pageBreadcrumbs()->setItems([
         </td>
         <td><?= $this->escapeHtml($permission->getDescription()); ?></a> 
         </td>
-        <td><nobr><?= $this->escapeHtml($permission->getDateCreated()->format('d.m.Y H:i:s')); ?></nobr></td>        
+        <td><?= $this->escapeHtml($permission->getDateCreated()->format('d.m.Y H:i:s')); ?></td>
         <td>
-            <nobr>
             <a class="btn btn-info" href="<?= $this->url('permissions', 
                     ['action'=>'edit', 'id'=>$permission->getId()]); ?>">
                 <span class="glyphicon glyphicon-pencil" ></span> Edit
@@ -54,7 +53,6 @@ $this->pageBreadcrumbs()->setItems([
                     ['action'=>'delete', 'id'=>$permission->getId()]); ?>">
                 <span class="glyphicon glyphicon-remove"></span> Delete
             </a>
-            </nobr>
         </td>    
     </tr>
         

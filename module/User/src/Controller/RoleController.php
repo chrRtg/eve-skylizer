@@ -286,8 +286,6 @@ class RoleController extends AbstractActionController
             $form->setData($data);
         }
         
-        $errors = $form->getMessages();
-        
         return new ViewModel(
             [
                 'form' => $form,

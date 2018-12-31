@@ -161,7 +161,7 @@ class LoggerPlugin extends AbstractPlugin
             $logfile = './data/log/logfile';
         }
         
-        if(isset($this->config['logdate']) && $this->config['logdate'] == true) {
+        if(isset($this->config['logdate']) && $this->config['logdate'] === true) {
             $logfile .= '_' - date('ymd');
         } 
         
@@ -197,10 +197,10 @@ class LoggerPlugin extends AbstractPlugin
      */
     private function getConfig()
     {
-        $config = $this->container->get('config');
+        $configfile = $this->container->get('config');
         
-        if (isset($config['log'])) {
-            $this->config = $config['log'];
+        if (isset($configfile['log'])) {
+            $this->config = $configfile['log'];
         } else {
             $this->config = false;
         }

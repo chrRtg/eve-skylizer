@@ -127,7 +127,7 @@ class CosmicManager
             foreach ($this->structure_collector as $key => $value) {
                 // @todo at the moment we support only SCAN cause we can detect a previous scan easyly by his signature
                 if ($value['scantype'] == 'SCAN') {
-                    $res = $this->writeStructure($value);
+                    $this->writeStructure($value);
                 }
             }
         }
