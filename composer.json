@@ -1,6 +1,6 @@
 {
-    "name": "skŸlizer",
-    "description": "The Eve-Online Scan Analyzer",
+    "name": "skylizer",
+    "description": "The Eve-Online Moon Scan Analyzer",
     "type": "project",
     "license": "BSD-3-Clause",
     "keywords": [
@@ -8,7 +8,7 @@
         "mvc",
         "zf2"
     ],
-    "homepage": "http://foo.bar",
+    "homepage": "https://github.com/chrRtg/eve-skylizer",
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {
