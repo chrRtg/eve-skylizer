@@ -94,7 +94,7 @@ class ScanManager
         }
         if ($res_counter['dscan'] || $res_counter['scan']) {
             $structure_plusminus = $this->cosmicManager->processScan();
-            $this->logger->debug('### Structure plusminus: '.print_r($structure_plusminus, true));
+            // $this->logger->debug('### Structure plusminus: '.print_r($structure_plusminus, true));
         }
 
         return (array('message' => $message, 'counter' => $res_counter, 'newscan' => ($structure_plusminus['new'] ?  $structure_plusminus['new'] : [])));
@@ -104,7 +104,7 @@ class ScanManager
      * Helpers
      *******************************************************************************/
 
-    public function getEveDistanceKM($dist)
+    public static function getEveDistanceKM($dist)
     {
 
         $multiplier = 1;

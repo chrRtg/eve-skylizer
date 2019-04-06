@@ -157,13 +157,20 @@ class CosmicManager
         }
 
         $res = array();
+        $res['new'] = false; 
 
         $siglist = $this->getlocalSignatures($current_solarsystem);
         //$this->logger->debug('### structureCleanup -  list of signatures: '.print_r($siglist, true));
+
         // iterate through the new scan.
         foreach ($this->structure_collector as $key => $value) {
+            $this->structure_collector[$key]['persist'] = true;
             $sigmatch = array_search($value['signature'], array_column($siglist, 'signature'));
             if ($sigmatch !== false) {
+                // already existing in DB and should be kept
+                if( (!(int) $value['quality']) || $siglist[$sigmatch]['scanQuality']  > (int) $value['quality']) {
+                    $this->structure_collector[$key]['persist'] = false;
+                }
                 // match in Siglist, mark entry as "remain"
                 $siglist[$sigmatch]['remain'] = true;
             } else {
@@ -219,38 +226,29 @@ class CosmicManager
             return false;
         }
 
-        foreach ($this->data_collector as $key => $value) {
-            //$this->logger->debug('CosmiccManager->parseScan() :: Prepare Scan, entry data: '.print_r($value, true));
-
+        foreach ($this->data_collector as $key => $scan_elem) {
+            //$this->logger->debug('CosmiccManager->parseScan() :: Prepare Scan, entry data: '.print_r($scan_elem, true));
             $this->data_collector[$key]['solarsystem_id'] = $current_solarsystem;
 
             // if signature, check if signature in this solar system is already existing.
             // in this case determine if existing or new scan has the better quality.
-            if ($value['signature']) {
-                $atstructure_entity = $this->entityManager->getRepository(AtStructure::class)->findOneBy(array('solarSystemId' => $current_solarsystem, 'signature' => $value['signature']));
+            if ($scan_elem['signature']) {
+                $atstructure_entity = $this->entityManager->getRepository(AtStructure::class)->findOneBy(array('solarSystemId' => $current_solarsystem, 'signature' => $scan_elem['signature']));
                 if ($atstructure_entity) {
-                    // if quality of existing scan is higher than the current scan, than skip the scan.
-                    // if value is identical take the current scan because he may contain some new data
-                    if ($atstructure_entity->getScanQuality()
-                        && (int) $value['quality']
-                        && (int) $value['quality'] < $atstructure_entity->getScanQuality()
-                    ) {
-                        return false;
-                    }
-
                     $this->data_collector[$key]['atstructure_id'] = $atstructure_entity->getId();
                 }
             }
 
+
             // check typename it it's a cosmic_detail (scannable anomaly)
-            if ($value['eve_typename']) {
-                $cosmicdetail = $this->getCosmicDetailByName($value['eve_typename']);
+            if ($scan_elem['eve_typename']) {
+                $cosmicdetail = $this->getCosmicDetailByName($scan_elem['eve_typename']);
                 if ($cosmicdetail) {
                     $this->data_collector[$key]['at_cosmic_detail_id'] = $cosmicdetail->getCosmicDetailId();
                     $this->data_collector[$key]['eve_groupid'] = $cosmicdetail->getCosmicMain()->getGroupid()->getGroupid();
                 } else {
                     // no cosmic, then look for an eve itemname
-                    $invtype_entity = $this->entityManager->getRepository(\Application\Entity\Invtypes::class)->findOneByTypename($value['eve_typename']);
+                    $invtype_entity = $this->entityManager->getRepository(\Application\Entity\Invtypes::class)->findOneByTypename($scan_elem['eve_typename']);
                     if ($invtype_entity) {
                         $this->data_collector[$key]['eve_typeid'] = $invtype_entity->getTypeid();
                         $this->data_collector[$key]['eve_groupid'] = $invtype_entity->getGroupid()->getGroupid();
@@ -268,11 +266,11 @@ class CosmicManager
             }
 
             // give the "structure_name" the best human readable name possible
-            if (!$value['structure_name']) {
-                if ($value['eve_typename']) {
-                    $this->data_collector[$key]['structure_name'] = $value['eve_typename'];
-                } elseif ($value['eve_groupname']) {
-                    $this->data_collector[$key]['structure_name'] = $value['eve_groupname'];
+            if (!$scan_elem['structure_name']) {
+                if ($scan_elem['eve_typename']) {
+                    $this->data_collector[$key]['structure_name'] = $scan_elem['eve_typename'];
+                } elseif ($scan_elem['eve_groupname']) {
+                    $this->data_collector[$key]['structure_name'] = $scan_elem['eve_groupname'];
                 }
             }
 
@@ -306,7 +304,12 @@ class CosmicManager
      */
     public function writeStructure($structure_data)
     {
-        //$this->logger->debug('### writeStructure :: ' . print_r($structure_data, true));
+        //$this->logger->debug('### writeStructure :: write:' . print_r($structure_data, true));
+
+        // if structure does not got a "persist = true" do not write (e.g. Scan has lesser quality then value in DB)
+        if(!$structure_data['persist'] || $structure_data['persist'] == false) {
+            return;
+        }
 
         $structure_entity = null;
         if ($structure_data['atstructure_id']) {
@@ -478,7 +481,7 @@ class CosmicManager
         $parameter['scantype'] = 'SCAN';
         $queryBuilder->setParameters($parameter);
 
-        $queryBuilder->select('at.id, at.signature, at.scanType, at.groupId')
+        $queryBuilder->select('at.id, at.signature, at.scanType, at.groupId, at.scanQuality')
             ->from(\VposMoon\Entity\AtStructure::class, 'at')
             ->andWhere('at.solarSystemId = :solarid AND at.scanType = :scantype');
 
