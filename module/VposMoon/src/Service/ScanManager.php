@@ -97,7 +97,12 @@ class ScanManager
             // $this->logger->debug('### Structure plusminus: '.print_r($structure_plusminus, true));
         }
 
-        return (array('message' => $message, 'counter' => $res_counter, 'newscan' => ($structure_plusminus['new'] ?  $structure_plusminus['new'] : [])));
+        return (array(
+            'message' => $message, 
+            'counter' => $res_counter, 
+            'newscan' => (isset($structure_plusminus) && $structure_plusminus['new'] ?  $structure_plusminus['new'] : [])
+            )
+        );
     }
 
     /*******************************************************************************

@@ -85,8 +85,8 @@ class CosmicManager
      */
     private $eveSSOManager;
     // pattern to analyze and break various inputs
-    private $cosmic_scan_regexp = '/^([A-Z]{3}-[0-9]{3})\t(.*)\t(.*)\t(.*)\t([0-9\,\.]+.?\%)\t(.*)/';
-    private $cosmic_dscan_regexp = '/^(\S*)\t([\S ]*)\t([\S ]*)\t(-|[0-9\.\,]+ [AEUkm]+)/';
+    private const COSMIC_SCAN_REGEXP = '/^([A-Z]{3}-[0-9]{3})\t(.*)\t(.*)\t(.*)\t([0-9\,\.]+.?\%)\t(.*)/';
+    private const COSMIC_DSCAN_REGEXP = '/^(\S*)\t([\S ]*)\t([\S ]*)\t(-|[0-9\.\,]+ [AEUkm]+)/';
 
     /**
      * Constructs the service.
@@ -126,7 +126,8 @@ class CosmicManager
         if ($this->structure_collector && count($this->structure_collector)) {
             foreach ($this->structure_collector as $key => $value) {
                 // @todo at the moment we support only SCAN cause we can detect a previous scan easyly by his signature
-                if ($value['scantype'] == 'SCAN') {
+                // persist = true set by preparePlusMinusList(), check if quality in scan is better than the existing data
+                if ($value['scantype'] == 'SCAN' && $value['persist'] == true) {
                     $this->writeStructure($value);
                 }
             }
@@ -157,7 +158,7 @@ class CosmicManager
         }
 
         $res = array();
-        $res['new'] = false; 
+        $res['new'] = false;
 
         $siglist = $this->getlocalSignatures($current_solarsystem);
         //$this->logger->debug('### structureCleanup -  list of signatures: '.print_r($siglist, true));
@@ -168,7 +169,7 @@ class CosmicManager
             $sigmatch = array_search($value['signature'], array_column($siglist, 'signature'));
             if ($sigmatch !== false) {
                 // already existing in DB and should be kept
-                if( (!(int) $value['quality']) || $siglist[$sigmatch]['scanQuality']  > (int) $value['quality']) {
+                if (!isset($value['quality']) || (!(int) $value['quality']) || $siglist[$sigmatch]['scanQuality']  > (int) $value['quality']) {
                     $this->structure_collector[$key]['persist'] = false;
                 }
                 // match in Siglist, mark entry as "remain"
@@ -305,11 +306,6 @@ class CosmicManager
     public function writeStructure($structure_data)
     {
         //$this->logger->debug('### writeStructure :: write:' . print_r($structure_data, true));
-
-        // if structure does not got a "persist = true" do not write (e.g. Scan has lesser quality then value in DB)
-        if(!$structure_data['persist'] || $structure_data['persist'] == false) {
-            return;
-        }
 
         $structure_entity = null;
         if ($structure_data['atstructure_id']) {
@@ -525,7 +521,7 @@ class CosmicManager
      */
     public function isScan($line)
     {
-        if (preg_match($this->cosmic_scan_regexp, $line, $match)) {
+        if (preg_match(CosmicManager::COSMIC_SCAN_REGEXP, $line, $match)) {
             $structure_data = $this->getStructureArray();
 
             $structure_data['scantype'] = 'SCAN';
@@ -552,7 +548,7 @@ class CosmicManager
      */
     public function isDscan($line)
     {
-        if (preg_match($this->cosmic_dscan_regexp, $line, $match)) {
+        if (preg_match(CosmicManager::COSMIC_DSCAN_REGEXP, $line, $match)) {
             $structure_data = $this->getStructureArray();
 
             $structure_data['scantype'] = 'DSCAN';

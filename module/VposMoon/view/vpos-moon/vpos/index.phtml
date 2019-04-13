@@ -168,8 +168,9 @@ if (empty($filters['info_system']['constellation'])) {
 										   title="delete Signature"><span class="glyphicon glyphicon-remove"></span></a>
 										<?php endif;?>
 									</span>
-									<?=($struct['at_lastseenDate'] ? date_format($struct['at_lastseenDate'], 'Y-m-d H:i:s') : "")?>
-									<?=($struct['uchgd_lastUsername'] ? '<br><span class="secondarytext">' . $this->escapeHtml($struct['uchgd_lastUsername']) . '</span>' : "")?></td>
+									<small>
+									<?=($struct['at_lastseenDate'] ? date_format($struct['at_lastseenDate'], 'Y-m-d H:i') : "")?>
+									<?=($struct['uchgd_lastUsername'] ? '<br><span class="secondarytext">' . $this->escapeHtml($struct['uchgd_lastUsername']) . '</span>' : "")?></small></td>
 							</tr>
 						<?php endforeach;?>
 					</tbody>

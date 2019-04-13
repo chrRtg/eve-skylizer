@@ -49,21 +49,21 @@ class MoonManager
      *
      * @var string
      */
-    private $moon_scan_headline_regexp = '/^\s?+(Moon|Mond|Луна|Lune)/';
+    private const MOON_SCAN_HEADLINE_REGEXP = '/^\s?+(Moon|Mond|Луна|Lune)/';
 
     /**
      * Regular Expression to identify a Moon/Survey line with the Moon name
      *
      * @var string
      */
-    private $moon_scan_moonline_regexp = '/^[a-zA-Z0-9\-]+\b\s+[IVX]{1,4}\s-\s(Moon|Mond|Луна|Lune)\b\s[1-9]{1,2}(\*)?/';
+    private const MOON_SCAN_MOONLINE_REGEXP = '/^[a-zA-Z0-9\-]+\b\s+[IVX]{1,4}\s-\s(Moon|Mond|Луна|Lune)\b\s[1-9]{1,2}(\*)?/';
 
     /**
      * Regular Expression to identify a Moon/Survey data-line (that's what we're looking for)
      *
      * @var string
      */
-    private $moon_scan_gooline_regexp = '/^\s+[A-Za-z \*]+\s+(0\.[0-9]+)\s+([0-9]+)\s+([0-9]+)\s+([0-9]+)\s+([0-9]+)/';
+    private const MOON_SCAN_GOOLINE_REGEXP = '/^\s+[A-Za-z \*]+\s+(0\.[0-9]+)\s+([0-9]+)\s+([0-9]+)\s+([0-9]+)\s+([0-9]+)/';
 
     /**
      * To collect moon goo data
@@ -114,11 +114,11 @@ class MoonManager
         // $this->logger->debug('Check Line __' . $clean_line . '__');
 
 
-        if (count($line_arr) == 7 && preg_match($this->moon_scan_headline_regexp, $clean_line)) {
+        if (count($line_arr) == 7 && preg_match(MoonManager::MOON_SCAN_HEADLINE_REGEXP, $clean_line)) {
             return (true);
-        } elseif (preg_match($this->moon_scan_moonline_regexp, $clean_line)) {
+        } elseif (preg_match(MoonManager::MOON_SCAN_MOONLINE_REGEXP, $clean_line)) {
             return (true);
-        } elseif (preg_match($this->moon_scan_gooline_regexp, $clean_line, $matches)) {
+        } elseif (preg_match(MoonManager::MOON_SCAN_GOOLINE_REGEXP, $clean_line, $matches)) {
             $this->collectGoo($matches['1'], $matches['2'], $matches['5']);
             return (true);
         }

@@ -67,6 +67,7 @@ Please have a look into the wiki to understand how to install and maintain skŸl
 
 skŸlizer is also a robust foundation to build any kind of EVE related tools on it.
 
+* Code quality and security check: https://sonarcloud.io/dashboard?id=chrRtg_eve-skylizer
 * EVE ESI (swagger) API interface
 * Login is available only via EVE-SSO as a identity provider.
 * Allow login by EVE-Online player names, corporations or public access
