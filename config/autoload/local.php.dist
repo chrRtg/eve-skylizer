@@ -30,9 +30,10 @@ return [
 			// @ Change to reflect your needs
 			'allow_all' => 'no', // set to 'YeS' (mind the upper and lower case!) to allow to any Eve-User to get access as a regular user
 			'admin' => ["your player name"],
+			'ally_allow' => ["your alliance", "another alliance"],
 			'corp_allow' => ["your corporation", "another corporation"],
 			'user_allow' => ["some player not in the corportions above", "another player name"],
-			'user_deny' => ["some spy in your corporation", "another spy in your corporation", "your CEO's name (joke...)"],
+			'user_deny' => ["some spy in your corporation", "another spy in your alliance", "your CEO's name (joke...)"],
 		],
 	),		
     'doctrine' => [

@@ -232,11 +232,20 @@ class EveSSOManager
             ]
         );
 
+        $alliance = null;
+        if(isset($character->alliance_id) && $character->alliance_id > 0) {
+            // get his corporation details from ESI
+            $alliance = $this->eveESIManager->publicRequest(
+                'get', '/alliances/{alliance_id}', [
+                'alliance_id' => $character->alliance_id,
+                ]
+            );
+        }
 
-        $this->logger->debug('EveSSO, checkCredentials for user: __' . $sso_user->getCharacterName() . '__  belongs to: __' . ($corporation->name ? $corporation->name : 'ERR:not-resolved') . '__');
+        $this->logger->debug('EveSSO, checkCredentials for user: __' . $sso_user->getCharacterName() . '__  belongs to: __' . ($corporation->name ? $corporation->name : 'ERR:corp not-resolved') . '__ [__' . ($alliance ? $alliance->name : 'no alliance') . '__]');
 
         // check if user is allowed to log in (by player name or because of his corporation
-        if (isset($corporation->name) && !$this->checkEveCredentials($sso_user->getCharacterName(), $corporation->name)) {
+        if (isset($corporation->name) && !$this->checkEveCredentials($sso_user->getCharacterName(), $corporation->name, ($alliance ? $alliance->name : false))) {
             
             $this->responseMessage = 'This user is not allowed to use this tool.';
             return(false);
@@ -256,6 +265,7 @@ class EveSSOManager
         $this->sessionContainer->eveauth['app']['appusr_id'] = $appuser->getId();
         $this->sessionContainer->eveauth['app']['character'] = $character;
         $this->sessionContainer->eveauth['app']['corporation'] = $corporation;
+        $this->sessionContainer->eveauth['app']['alliance'] = $alliance;
 
 
         // connect to Zend/Authenfication
@@ -279,7 +289,7 @@ class EveSSOManager
      * @param  string $corporation
      * @return boolean    true if user is allowed to authenticate
      */
-    private function checkEveCredentials($user, $corporation)
+    private function checkEveCredentials($user, $corporation, $alliance = null)
     {
 
         if ($this->evesso_config['auth']) {
@@ -299,7 +309,10 @@ class EveSSOManager
         }
 
         // first check if user is authenticated by corp or username
-        if (isset($auth['corp_allow']) && in_array($corporation, $auth['corp_allow'])) {
+        if (isset($auth['ally_allow']) && $alliance && in_array($alliance, $auth['ally_allow'])) {
+            $this->logger->debug("auth true by ally_allow");
+            $authenticated = true;
+        } else if (isset($auth['corp_allow']) && in_array($corporation, $auth['corp_allow'])) {
             $this->logger->debug("auth true by corp_allow");
             $authenticated = true;
         } else if (isset($auth['user_allow']) && in_array($user, $auth['user_allow'])) {
