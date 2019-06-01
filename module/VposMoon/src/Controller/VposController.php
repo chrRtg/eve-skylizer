@@ -77,6 +77,9 @@ class VposController extends AbstractActionController
         $message = null;
         $goto_currentsystem = false;
 
+        // Delete all anomalies older than 3 days, in the future @todo move to shell script
+        $this->cosmicManager->removeOutdatedAnomalies();
+
         // Create scan input form
         $form = new MoonForm();
 

@@ -7,15 +7,15 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Mapdenormalize
  *
- * @ORM\Table(name="mapDenormalize", 
+ * @ORM\Table(name="mapDenormalize",
  *        indexes={
- * @ORM\Index(name="ix_md_groupconstellation", columns={"groupID", "constellationID"}), 
- * @ORM\Index(name="ix_md_groupregion",        columns={"groupID", "regionID"}), 
- * @ORM\Index(name="ix_md_typeid",             columns={"typeID"}), 
- * @ORM\Index(name="ix_md_regionid",           columns={"regionID"}), 
- * @ORM\Index(name="ix_md_solarSystemid",      columns={"solarSystemID"}), 
- * @ORM\Index(name="ix_md_constellationid",    columns={"constellationID"}), 
- * @ORM\Index(name="ix_md_orbitid",            columns={"orbitID"}), 
+ * @ORM\Index(name="ix_md_groupconstellation", columns={"groupID", "constellationID"}),
+ * @ORM\Index(name="ix_md_groupregion",        columns={"groupID", "regionID"}),
+ * @ORM\Index(name="ix_md_typeid",             columns={"typeID"}),
+ * @ORM\Index(name="ix_md_regionid",           columns={"regionID"}),
+ * @ORM\Index(name="ix_md_solarSystemid",      columns={"solarSystemID"}),
+ * @ORM\Index(name="ix_md_constellationid",    columns={"constellationID"}),
+ * @ORM\Index(name="ix_md_orbitid",            columns={"orbitID"}),
  * @ORM\Index(name="ix_md_groupsystem",        columns={"groupID"})
  *    })
  * @ORM\Entity

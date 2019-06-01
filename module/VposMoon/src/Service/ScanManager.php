@@ -81,34 +81,94 @@ class ScanManager
                     $this->logger->notice('#Scan: no match for line:  __' . $line . '__');
                 }
             }
-        } else {
-            $message[] = array('info' => 'Emtpy input field, nothing to do');
         }
-        $message[] = array('info' => 'thanks, scanned a lot');
-
-        // $this->logger->debug($res_counter);
 
         // if results were idendified & collected, now the final step, preperatate & persist
         if ($res_counter['goo']) {
             $this->moonManager->processScan();
         }
         if ($res_counter['dscan'] || $res_counter['scan']) {
-            $structure_plusminus = $this->cosmicManager->processScan();
-            // $this->logger->debug('### Structure plusminus: '.print_r($structure_plusminus, true));
+            $scan_res = $this->cosmicManager->processScan();
+            //$this->logger->debug('### scan_res: '.print_r($scan_res, true));
         }
 
         return (array(
-            'message' => $message, 
-            'counter' => $res_counter, 
-            'newscan' => (isset($structure_plusminus) && $structure_plusminus['new'] ?  $structure_plusminus['new'] : [])
+            'message' => $this->prepareResultMessage($res_counter, $scan_res),
+            'counter' => $res_counter,
+            'scanres' => (isset($scan_res) && $scan_res['scan_anom'] ?  $scan_res['scan_anom'] : [])
             )
         );
+    }
+
+    /**
+     * Create a array of message with information about what has been processed
+     *
+     * @param array of counters
+     * @param array result array from cosmicManager->processScan()
+     * @return void
+     */
+    private function prepareResultMessage($res_counter, $scanres) {
+        $msg = null;
+
+        if (!$res_counter['goo'] && !$res_counter['dscan'] && !$res_counter['scan']) {
+            $msg[] = array('info' => 'Emtpy input field, nothing to do');
+            return $msg;
+        }
+
+        if ($res_counter['goo']) {
+            $msg[] = array('info' => $res_counter['goo'] . ' Moons scanned');
+        }
+        if ($res_counter['dscan']) {
+            $msg[] = array('info' => $res_counter['dscan'] . ' results in dscan');
+        }
+        if ($res_counter['scan']) {
+            $msg[] = array('info' => $res_counter['scan'] . ' results in scan');
+            if (isset($scanres['del_anom']) && $scanres['del_anom'] > 1) {
+                $msg[] = array('info' => $scanres['del_anom'] . ' old entries removed from storage');
+            }
+            if (isset($scanres['scan_anom']) && count($scanres['scan_anom']) > 0) {
+                $counts = $this->countArrayValues($scanres['scan_anom']);
+                if (isset($counts['n']) && $counts['n']) {
+                    $msg[] = array('info' => $counts['n'] . ' new entries added');
+                }
+                if (isset($counts['u']) && $counts['u']) {
+                    $msg[] = array('info' => $counts['u'] . ' entries updated');
+                }
+            }
+        }
+
+        return ($msg);
+    }
+
+    /**
+     * Helper function to count values in a result array
+     *
+     * @param array $arr
+     * @return array result array
+     */
+    private function countArrayValues($arr)
+    {
+        $res = array('n' => 0, 'u'=> 0);
+
+        if (isset($arr) && is_array($arr) &&  count($arr)) {
+            foreach ($arr as $val) {
+                $res[$val] ++;
+            }
+        }
+        return ($res);
     }
 
     /*******************************************************************************
      * Helpers
      *******************************************************************************/
 
+
+    /**
+     * Takes a EVE distance in m, km or au/ae and calculates the distance in kilomenters
+     *
+     * @param string Eve distance
+     * @return int  distance INT
+     */ 
     public static function getEveDistanceKM($dist)
     {
 

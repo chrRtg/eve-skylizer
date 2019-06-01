@@ -257,6 +257,19 @@ class EveDataManager
     }
 
 
+    public function getCelestialByName($eve_itemname, $solarsystem_id = 0)
+    {
+        // @todo, not supported yet are translated names
+
+        if ($solarsystem_id) {
+            $mapdenom_entity = $this->entityManager->getRepository(Mapdenormalize::class)->findOneBy(array('solarsystemid' => $solarsystem_id, 'itemname' => $eve_itemname));
+        } else {
+            $mapdenom_entity = $this->entityManager->getRepository(Mapdenormalize::class)->findOneBy(array('itemname' => $eve_itemname));
+        }
+        if ($mapdenom_entity) {
+            return($mapdenom_entity);
+        }
+    }
 
 
     /**

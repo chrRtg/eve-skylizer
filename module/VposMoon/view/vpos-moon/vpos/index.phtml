@@ -13,10 +13,14 @@ $form->get('scan')->setAttributes([
 
 $current_route = $this->currentRoute()->getRoute();
 
+//echo '<pre>';
 //ini_set('xdebug.var_display_max_depth', 3); var_dump($this->currentRoute()->getRoute());
-//ini_set('xdebug.var_display_max_depth', 3); var_dump($vpos_list);
+//ini_set('xdebug.var_display_max_depth', 3); var_dump($this->url());
+//ini_set('xdebug.var_display_max_depth', 3); print_r($vpos_list);
 //ini_set('xdebug.var_display_max_depth', 3); var_dump($filters);
 //ini_set('xdebug.var_display_max_depth', 3); var_dump($message);
+//ini_set('xdebug.var_display_max_depth', 3); var_dump($message['scanres']);
+//echo '</pre>';
 
 if (empty($filters['info_system']['constellation'])) {
     $location_string = $filters['info_system']['itemname'] . ' (Constellation in ' . $filters['info_system']['region'] . ')';
@@ -93,27 +97,20 @@ if (empty($filters['info_system']['constellation'])) {
 					<thead>
 					<tr>
 						<th>Sig</th>
-						<th>Location</th>
 						<th>Type</th>
 						<th>Name</th>
-						<th>Specs</th>
-						<th>more</th>
+						<th>Detail</th>
+						<th>Location / nearby</th>
+						<th>Date last seen</th>
 					</tr>
 					</thead>
 					<tbody>
 						<?php foreach ($vpos_list as $key => $struct): ?>
 						<?php $vptype = $this->vpViewTool()->determineVposType($struct); ?>
-							<tr class="<?=(isset($message['newscan'][$struct['at_signature']]) ? 'new' : '')?>">
+							<tr class="<?=(isset($message['scanres'][$struct['at_id']])  ? $message['scanres'][$struct['at_id']] : '')?>">
 								<td>
 									<?=$this->escapeHtml($struct['at_signature'])?>
 									<?=(($struct['at_scanQuality'] && $struct['at_scanQuality'] > 0 && $struct['at_scanQuality'] < 100) ? '<span class="scanname">' . $this->escapeHtml($struct['at_scanQuality']) . '%</span>' : "")?>
-								</td>
-								<td>
-									<?php if (isset($struct['map_name'])): ?>
-										<a href="<?=$this->vpViewTool()->createExternalSystemURL($struct['map_name']);?>" title="open system information in new window" class="unobtrusive" target="_blank"><?=($struct['celest_name'] ? $struct['celest_name'] : $struct['map_name'])?></a>
-									<?php else: ?>
-										<?=$struct['celest_name']?>
-									<?php endif;?>
 								</td>
 								<td>
 									<span class="vpos-<?=$vptype['type'];?>">&nbsp;<?=$vptype['name'];?></span>
@@ -160,6 +157,19 @@ if (empty($filters['info_system']['constellation'])) {
 											&nbsp;<span class="secondarytext"><?=$this->vpViewTool()->formatClassid(false, abs($struct['at_targetSystemId'])); ?></span>
 										<?php endif; ?>
 									<?php endif;?>
+								</td>
+								<td>
+									<?php if (isset($struct['target_name'])): ?>
+										<?=$this->escapeHtml($struct['target_name']);?> - Gate
+									<?php elseif (isset($struct['map_name'])): ?>
+										<a href="<?=$this->vpViewTool()->createExternalSystemURL($struct['map_name']);?>" title="open system information in new window" class="unobtrusive" target="_blank">
+											<?=($struct['celest_name'] ? $struct['celest_name'] : $struct['map_name'])?></a>
+									<?php else: ?>
+										<?=$this->escapeHtml($struct['celest_name']);?>
+									<?php endif;?>
+									<?php if (isset($struct['at_celestialDistance'])): ?>
+										<br><span class="secondarytext"><?=$this->escapeHtml(number_format($struct['at_celestialDistance'], 0, ',', '.'));?> KM</span>
+										<?php endif;?>
 								</td>
 								<td>
 									<span  class="tdview" style="float:right;">
@@ -250,23 +260,43 @@ if (empty($filters['info_system']['constellation'])) {
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-				<h4 class="modal-title" id="myModalLabel">Scan What?</h4>
+				<ul class="nav nav-tabs" id="tabContent">
+					<li class="active"><a href="#help_scan" data-toggle="tab">Probe Scanner</a></li>
+					<li><a href="#help_dscan" data-toggle="tab">Directional Scanner</a></li>
+			</ul>
 			</div>
-			<div class="modal-body">
-				<div class="row">
-					<div class="col-md-6">
-						<img src="img/eve_scan_window.jpg" alt=""/>
-					</div>
-					<div class="col-md-6">
-						<p>Open your &laquo;Probe Scanner&raquo; window. Please take care your view is <strong>not filtered</strong>.						</p>
-						<p>Click inside the Probe Scanne window, select all entries (CTRL-A) and copy them to the clipboard (CTRL-C).</p>
-						<p>Now navigate to <span class="skylizer">Syklizer - (D)Scan</span> and paste the result into the big area to the right.</p>
-						<p>Then press the button &laquo;submit your scan&raquo; below the area and hold a sec. The table to the left will get updated soon and show your
-							scan results.</p>
-						<p><strong>Please always copy all entries to ensure the best possible result!</strong></p>
+			<div class="tab-content">
+				<div class="tab-pane active modal-body" id="help_scan">
+					<div class="row">
+						<div class="col-md-6">
+							<img src="img/eve_scan_window.jpg" alt=""/>
+						</div>
+						<div class="col-md-6">
+							<p>Open your &laquo;Probe Scanner&raquo; window. Please take care your view is <strong>not filtered</strong>.						</p>
+							<p>Click inside the Probe Scanne window, select all entries (CTRL-A) and copy them to the clipboard (CTRL-C).</p>
+							<p>Now navigate to <span class="skylizer">Syklizer - (D)Scan</span> and paste the result into the big area to the right.</p>
+							<p>Then press the button &laquo;submit your scan&raquo; below the area and hold a sec. The table to the left will get updated soon and show your
+								scan results.</p>
+							<p><strong>Please always copy all entries to ensure the best possible result!</strong></p>
+						</div>
 					</div>
 				</div>
-			</div>
+				<div class="tab-pane modal-body" id="help_dscan">
+					<div class="row">
+						<div class="col-md-6">
+							<img src="img/eve_dscan_window.png" alt=""/>
+						</div>
+						<div class="col-md-6">
+							<p>Open your &laquo;Directional Scanner&raquo; window. Please take care your view is <strong>not filtered</strong> and you had set the Range and Angle sliders to their max value.</p>
+							<p>Click inside the Probe Scanne window, select all entries (CTRL-A) and copy them to the clipboard (CTRL-C).</p>
+							<p>Now navigate to <span class="skylizer">Syklizer - (D)Scan</span> and paste the result into the big area to the right.</p>
+							<p>Then press the button &laquo;submit your scan&raquo; below the area and hold a sec. The table to the left will get updated soon and show your
+								scan results.</p>
+							<p class="skylizer">Please always copy all entries and disable all filters to ensure the best possible result!</p>
+						</div>
+					</div>
+				</div> 
+			</div> 
 		</div>
 	</div>
 </div>

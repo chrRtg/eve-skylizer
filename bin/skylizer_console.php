@@ -23,7 +23,7 @@ if (file_exists(__DIR__ . '/../config/development.config.php')) {
 $zendApplication = ZendApplication::init($appConfig);
 $serviceManager = $zendApplication->getServiceManager();
 
-$application = new Application('skylizer', '1.0.0');
+$application = new Application('skylizer', '2.0.0');
 $application->add(new PriceUpdateCommand($serviceManager));
 $application->add(new AllyCorpUpdateCommand($serviceManager));
 

@@ -612,7 +612,8 @@ $(document).ready(function () {
                 });
             },
             complete: function (e) {
-                location.reload(); // no complex auto update page yet
+                //location.reload(); // no complex auto update page yet
+                location.href = location.href; // reload without re-posting
                 //$('#structureEditModal').modal('hide');
                 //$("#structureEditModal").unblock();
             },
@@ -647,7 +648,7 @@ $(document).ready(function () {
                         text: Object.values(val).toString(),
                         heading: '',
                         icon: 'info',
-                        hideAfter: 1500,
+                        hideAfter: 5000,
                         position: 'top-right',
                         loader: true,
                         loaderBg: '#4e433c'
@@ -658,7 +659,7 @@ $(document).ready(function () {
                         text: Object.values(val).toString(),
                         heading: '',
                         icon: 'success',
-                        hideAfter: 1500,
+                        hideAfter: 5000,
                         position: 'top-right',
                         loader: true,
                         loaderBg: '#4e433c'
@@ -669,7 +670,7 @@ $(document).ready(function () {
                         text: Object.values(val).toString(),
                         heading: '',
                         icon: 'warning',
-                        hideAfter: 2500,
+                        hideAfter: 5000,
                         position: 'top-right',
                         loader: true,
                         loaderBg: '#4e433c'
@@ -680,7 +681,7 @@ $(document).ready(function () {
                         text: Object.values(val).toString(),
                         heading: 'ERROR',
                         icon: 'error',
-                        hideAfter: 5000,
+                        hideAfter: 15000,
                         position: 'top-right',
                         loader: true,
                         loaderBg: '#4e433c'
