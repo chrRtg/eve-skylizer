@@ -2,7 +2,7 @@
 
 skŸlizer is a tool for Eve Online to handle any kind of scans and to gather as much as possible data from the scan.
 
-At the moment scanning moons and scanning anomalies are supported.
+At the moment scanning moons, anomalies and citadels is supported.
 
 ## Features
 
@@ -30,12 +30,23 @@ At the moment scanning moons and scanning anomalies are supported.
 
 ![skylizer-moon](https://raw.githubusercontent.com/wiki/chrRtg/eve-skylizer/img/skylizer_moon.png)
 
-### Anomaly Scans
+### Structures Scans (Directional Scanner)
+
+* just cut'n paste your scan
+* get a list with all citadels, engineering complex, refineries and towers
+* Refineries are connected whith the moon scans immediately
+* also get the postions next to a planet, moon, station or stargate with their distance
+* player given names are detected and stored
+* edit details like ownership and name
+* automatic replacement of refineries if type or name has changed
+
+### Anomaly Scans (Probe Scanner)
 
 * just cut'n paste your scan
 * get a overview by anomaly type
-* links to English and German description of anomaly
-* add wormhole target by systems name or flat (high, low, 0.0, WH)
+* automatic removal and improvement on each scan you enter
+* links to description of anomaly in English and German
+* add wormhole targets by systems name or flat (high, low, 0.0, WH)
 * filter by type of anomaly (gas & ore, exploration, combat, faction, wormhole and structures)
 
 ![skylizer-scan](https://raw.githubusercontent.com/wiki/chrRtg/eve-skylizer/img/skylizer_scan.png)
