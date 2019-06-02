@@ -201,30 +201,20 @@ class CosmicManager
 
 
             // do we already have this structure in DB?
-            // first check, if refinery is bound to a moon
-            if ($this->isRefinery($struct['eve_groupid']) && $celestial_id) {
-                $atstructure_entity = $this->entityManager->getRepository(AtStructure::class)->findOneBy(array(
-                    'solarSystemId' => $struct['solarsystem_id'],
-                    'groupId' => $struct['eve_groupid'],
-                    'celestialId' => $celestial_id));
-                if ($atstructure_entity) {
+            $atstructure_entity = $this->entityManager->getRepository(AtStructure::class)->findOneBy(array(
+                'solarSystemId' => $struct['solarsystem_id'],
+                'typeId' => $struct['eve_typeid'],
+                'structureName' => $struct['structure_name']));
+
+            if ($atstructure_entity) {
+                // We have to determine if the new scan or the one in DB has better quality
+                // we assume the less the distance between a structure and his celestial is, the better is the data
+                $db_celestial_distance = $atstructure_entity->getCelestialDistance();
+                if (isset($db_celestial_distance) && $db_celestial_distance < $celestial_distance) {
+                    // we got a celestial distance from the structure in DB and her distance is less then the current scanned structure
+                    $this->structure_collector[$key]['ignore'] = 1;
+                } else {
                     $this->structure_collector[$key]['atstructure_id'] = $atstructure_entity->getId();
-                }
-            } else {
-                $atstructure_entity = $this->entityManager->getRepository(AtStructure::class)->findOneBy(array(
-                    'solarSystemId' => $struct['solarsystem_id'],
-                    'typeId' => $struct['eve_typeid'],
-                    'structureName' => $struct['structure_name']));
-                if ($atstructure_entity) {
-                    // if net refinery which is bound to a moon we have to determine if the new scan or the one in DB has better quality
-                    // we assume the less the distance between a structure and his celestial is, the better is the data
-                    $db_celestial_distance = $atstructure_entity->getCelestialDistance();
-                    if (isset($db_celestial_distance) && $db_celestial_distance < $celestial_distance) {
-                        // we got a celestial distance from the structure in DB and her distance is less then the current scanned structure
-                        $this->structure_collector[$key]['ignore'] = 1;
-                    } else {
-                        $this->structure_collector[$key]['atstructure_id'] = $atstructure_entity->getId();
-                    }
                 }
             }
         }
