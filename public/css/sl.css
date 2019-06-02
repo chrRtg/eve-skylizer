@@ -25,7 +25,7 @@ body {
 }
 
 footer {
-    margin: 1em 0;
+  margin: 1em 0;
 	background-color: #292929;
 	padding: 0.5em;
 	font-size: 10pt;
@@ -87,8 +87,9 @@ a.unobtrusive:hover {
 .form-control[disabled], 
 .form-control[readonly] {
 	padding: 2px 4px;
-	font-family: "Lucida Console", Monaco, monospace;
+	font-family: "Roboto Mono", Monaco, monospace;
 	height: auto;
+	font-size: 11px;
 }
 
 .form-control[disabled], 
