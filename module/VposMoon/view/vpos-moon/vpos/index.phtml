@@ -167,7 +167,7 @@ if (empty($filters['info_system']['constellation'])) {
 									<?php else: ?>
 										<?=$this->escapeHtml($struct['celest_name']);?>
 									<?php endif;?>
-									<?php if (isset($struct['at_celestialDistance'])): ?>
+									<?php if (isset($struct['at_celestialDistance']) && isset($struct['at_celestialId'])): ?>
 										<br><span class="secondarytext"><?=$this->escapeHtml(number_format($struct['at_celestialDistance'], 0, ',', '.'));?> KM</span>
 										<?php endif;?>
 								</td>

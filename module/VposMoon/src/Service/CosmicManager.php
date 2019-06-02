@@ -275,6 +275,9 @@ class CosmicManager
                     $this->structure_collector[$sigmatch]['ignore'] = 1;
                 }
             }
+
+            // set distance for all anomalies to NULL while the next-celestial detection is not active
+            $this->structure_collector[$sigmatch]['celestial_distance'] = null;
         }
 
         return ($del_cnt);
