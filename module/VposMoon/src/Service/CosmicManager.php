@@ -162,8 +162,9 @@ class CosmicManager
                 continue;
             }
 
-            // $this->logger->debug('### evaluateStructureScan: '.print_r($struct, true));
+            //$this->logger->debug('### evaluateStructureScan: '.print_r($struct, true));
 
+            $next_celestial = null;
             // get next celestial, moon for refineries, any for all others
             if ($this->isRefinery($struct['eve_groupid'])) {
                 $next_celestial = $this->getNextCelestial($struct['distance'], true);
@@ -200,6 +201,7 @@ class CosmicManager
 
 
             // do we already have this structure in DB?
+            // first check, if refinery is bound to a moon
             if ($this->isRefinery($struct['eve_groupid']) && $celestial_id) {
                 $atstructure_entity = $this->entityManager->getRepository(AtStructure::class)->findOneBy(array(
                     'solarSystemId' => $struct['solarsystem_id'],
@@ -667,15 +669,11 @@ class CosmicManager
         $res = array('match' => false, 'dist' => null);
         $celstial_dist_collector = array();
 
-        if (!isset($this->celestial_collector)) {
+        if (!isset($this->celestial_collector) || !isset($dist) || $dist===null || $dist===false) {
             return ($res);
         }
 
         foreach ($this->celestial_collector as $ckey => $celestial) {
-            // skip if only-moon mode and celestial is not a moon
-            if ($only_moon && $celestial['eve_groupid'] != self::EVE_GROUP_MOON) {
-                continue;
-            }
     
             $celstial_dist_collector[$ckey] = abs($celestial['distance'] - $dist);
         }
@@ -701,12 +699,6 @@ class CosmicManager
 
         // first == second && dist > MAX_SUPPORTED_DISTANCE ? Then we have duplicate distances as AU values and can not determine a relation
         if ($celstial_dist_collector[$first] == $celstial_dist_collector[$second] && $dist > self::MAX_SUPPORTED_DISTANCE) {
-            return ($res);
-        }
-
-        // Refinery
-        // too far away from the moon? Then skip
-        if ($only_moon && $celstial_dist_collector[$first] > self::MAX_POSSIBLE_MOONDISTANCE) {
             return ($res);
         }
 

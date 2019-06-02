@@ -182,7 +182,7 @@ class ScanManager
             $multiplier = 149597870.7;
         } else {
             // no match
-            return false;
+            return null;
         }
 
         return (((int) preg_replace('/[^0-9]+/', '', $dist)) * $multiplier);

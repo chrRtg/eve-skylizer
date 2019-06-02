@@ -209,7 +209,7 @@ thead div.sub {
 }
 
 .table-striped > tbody > tr.u {
-	filter: brightness(1.1) drop-shadow(0px 0px 2px #a6a82a);
+	filter: brightness(1.0) drop-shadow(0px 0px 2px #a6a82a);
 }
 
 td > mark {
