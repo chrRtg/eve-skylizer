@@ -87,6 +87,8 @@ class ScanManager
         if ($res_counter['goo']) {
             $this->moonManager->processScan();
         }
+
+        $scan_res = null;
         if ($res_counter['dscan'] || $res_counter['scan']) {
             $scan_res = $this->cosmicManager->processScan();
             //$this->logger->debug('### scan_res: '.print_r($scan_res, true));
