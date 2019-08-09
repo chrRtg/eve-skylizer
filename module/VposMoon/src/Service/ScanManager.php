@@ -83,21 +83,20 @@ class ScanManager
             }
         }
 
+        $scan_res = null;
         // if results were idendified & collected, now the final step, preperatate & persist
         if ($res_counter['goo']) {
-            $this->moonManager->processScan();
+            $scan_res = $this->moonManager->processScan();
         }
 
-        $scan_res = null;
         if ($res_counter['dscan'] || $res_counter['scan']) {
             $scan_res = $this->cosmicManager->processScan();
-            //$this->logger->debug('### scan_res: '.print_r($scan_res, true));
         }
 
         return (array(
             'message' => $this->prepareResultMessage($res_counter, $scan_res),
             'counter' => $res_counter,
-            'scanres' => (isset($scan_res) && $scan_res['scan_anom'] ?  $scan_res['scan_anom'] : [])
+            'scanres' => (isset($scan_res) && isset($scan_res['scan_anom']) && $scan_res['scan_anom'] ?  $scan_res['scan_anom'] : [])
             )
         );
     }
@@ -109,8 +108,10 @@ class ScanManager
      * @param array result array from cosmicManager->processScan()
      * @return void
      */
-    private function prepareResultMessage($res_counter, $scanres) {
+    private function prepareResultMessage($res_counter, $scan_res) {
         $msg = null;
+
+        //$this->logger->debug('### scan_res: '.print_r($scan_res, true));
 
         if (!$res_counter['goo'] && !$res_counter['dscan'] && !$res_counter['scan']) {
             $msg[] = array('info' => 'Emtpy input field, nothing to do');
@@ -118,18 +119,22 @@ class ScanManager
         }
 
         if ($res_counter['goo']) {
-            $msg[] = array('info' => $res_counter['goo'] . ' Moons scanned');
+            $msg[] = array('info' => $res_counter['goo'] . ' rows scanned');
+            if (isset($scan_res['moons']) && isset($scan_res['goo'])) {
+                $msg[] = array('info' => $scan_res['moons'] . ' moons in your scan');
+                $msg[] = array('info' => $scan_res['goo'] . ' different goo found');
+            }
         }
         if ($res_counter['dscan']) {
             $msg[] = array('info' => $res_counter['dscan'] . ' results in dscan');
         }
         if ($res_counter['scan']) {
             $msg[] = array('info' => $res_counter['scan'] . ' results in scan');
-            if (isset($scanres['del_anom']) && $scanres['del_anom'] > 1) {
-                $msg[] = array('info' => $scanres['del_anom'] . ' old entries removed from storage');
+            if (isset($scan_res['del_anom']) && $scan_res['del_anom'] > 1) {
+                $msg[] = array('info' => $scan_res['del_anom'] . ' old entries removed from storage');
             }
-            if (isset($scanres['scan_anom']) && count($scanres['scan_anom']) > 0) {
-                $counts = $this->countArrayValues($scanres['scan_anom']);
+            if (isset($scan_res['scan_anom']) && count($scan_res['scan_anom']) > 0) {
+                $counts = $this->countArrayValues($scan_res['scan_anom']);
                 if (isset($counts['n']) && $counts['n']) {
                     $msg[] = array('info' => $counts['n'] . ' new entries added');
                 }
