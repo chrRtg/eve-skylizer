@@ -109,12 +109,7 @@ class MoonManager
         // strip all XML Tags (<localized hint="F-8Y13 II - Moon 1">
         $clean_line = strip_tags($line);
 
-        $line_arr = explode("\t", $clean_line);
-
-        // $this->logger->debug('Check Line __' . $clean_line . '__');
-
-
-        if (count($line_arr) == 7 && preg_match(MoonManager::MOON_SCAN_HEADLINE_REGEXP, $clean_line)) {
+        if (preg_match(MoonManager::MOON_SCAN_HEADLINE_REGEXP, $clean_line)) {
             return (true);
         } elseif (preg_match(MoonManager::MOON_SCAN_MOONLINE_REGEXP, $clean_line)) {
             return (true);
@@ -127,16 +122,29 @@ class MoonManager
 
     /**
      * Process the data collected - stores Moon Goo data
+     *
+     * @return array 'moons' for moons scanned, 'goo' for types of goo found
      */
     public function processScan()
     {
+        $moon_cnt = array();
+        $goo_cnt = array();
+
         if (!empty($this->data_collector)) {
             foreach ($this->data_collector as $moon => $goo) {
                 // assure the AtMoon entry exist to add goo to him
                 $moon_id = $this->writeMoon($moon);
                 $this->persistMoonGoo($moon_id, $moon, $goo);
+
+                $moon_cnt[] = $moon_id;
+                $goo_cnt = $goo_cnt + $goo;
             }
+            $res_arr = array(
+                'moons' => count($moon_cnt),
+                'goo' => count($goo_cnt)
+            );
         }
+        return($res_arr);
     }
 
     /**
