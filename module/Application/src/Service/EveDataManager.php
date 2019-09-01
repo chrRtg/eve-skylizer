@@ -279,7 +279,7 @@ class EveDataManager
      *
      * @return int updated prices count
      */
-    public function updatePrices()
+    public function updatePricesFromEveAPI()
     {
         $this->logger->debug('updatePrices');
         $price_arr = [];
@@ -290,14 +290,73 @@ class EveDataManager
         $this->logger->debug('updatePrices :: prices cnt: ' . count($prices));
         // better than get_object_vars() cause working in all cases;
         $prices_data = (array) $prices;
-        // $this->logger->debug('prices_data cnt: ' . count($prices_data));
+
         // transform prices into a associative array with the typeID as key
         foreach ($prices_data as $price) {
             $price_arr[$price->type_id] = (!empty($price->average_price) ? $price->average_price : (!empty($price->adjusted_price) ? $price->adjusted_price : 0.0));
         }
-        // $this->logger->debug('price_arr cnt: ' . count($price_arr));
+
+        $upd_cnt = $this->writeEveItemPrices($price_arr);
+
+        $this->logger->info($upd_cnt . ' Prices were updated via ESI');
+
+        return($upd_cnt);
+    }
+
+    /**
+     * Fetch specific prices from Evepraisal.
+     *
+     * Update the Invtypes.baseprice with the prices we got from EVE.
+     * Current Praisal is https://evepraisal.com/a/n9guq
+     *
+     * @return int updated prices count
+     */
+    public function updatePricesFromEvepraisal()
+    {
+        // Create a client with a base URI
+        $client = new \GuzzleHttp\Client(['base_uri' => 'https://evepraisal.com/', 'verify' => false]);
+        try {
+            $response = $client->request('GET', 'a/n9guq.json');
+        } catch (\GuzzleHttp\Exception\ClientException | \GuzzleHttp\Exception\ServerException $e) {
+            $this->logger->debug('ERROR: GuzzleHTTP Exception on request: ' . print_r($e->getRequest(), true));
+            if ($e->hasResponse()) {
+                $this->logger->debug('ERROR: GuzzleHTTP Exception on request with response: ' . print_r($e->getResponse(), true));
+            }
+            return false;
+        }
+
+        $result = json_decode($response->getBody(), true);
+
+        if(empty($result) || empty($result['items'])) {
+            return false;
+        }
+
+        $price_arr = [];
+        foreach ($result['items'] as $k => $v) {
+            $price_arr[$v['typeID']] = $v['prices']['buy']['median'];
+        }
+
+        $upd_cnt = $this->writeEveItemPrices($price_arr);
+
+        $this->logger->info($upd_cnt . ' Prices were updated via EvePraisal');
+
+        return($upd_cnt);
+    }
+
+
+    /**
+     * Write prices into Invtypes table
+     *
+     * Takes a assocative array with the itemname as the key and the price as teh value.
+     * Updates Invtypes.baseprice in a batch write
+     *
+     * @param array $price_arr
+     * @return int  count of prices updated
+     */
+    private function writeEveItemPrices($price_arr) {
+
         // no prices, no need to persist
-        if (!count($price_arr)) {
+        if (!$price_arr || !is_array($price_arr) || !count($price_arr)) {
             return 0;
         }
 
@@ -327,11 +386,8 @@ class EveDataManager
         }
         $this->entityManager->flush();
 
-        $this->logger->info($j . ' Prices were updated via ESI');
-
         return($j);
     }
-
 
     /**
      * Fetch Alliance and Corporation Information from ESI.

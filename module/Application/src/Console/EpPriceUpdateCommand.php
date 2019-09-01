@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * update prices via evepraisal
+ */
+
 namespace Application\Console;
 
 use Symfony\Component\Console\Command\Command;
@@ -11,7 +15,7 @@ use Zend\ServiceManager\AbstractFactory\ConfigAbstractFactory;
 use VposMoon\Controller\MoonController;
 
 
-class PriceUpdateCommand extends Command
+class EpPriceUpdateCommand extends Command
 {
     /**
      *
@@ -35,8 +39,8 @@ class PriceUpdateCommand extends Command
     protected function configure()
     {
         $this
-            ->setName('update:prices-all')
-            ->setDescription('Update all prices from ESI');
+            ->setName('update:prices')
+            ->setDescription('Update local prices for moon material from evepraisal');
     }
 
     /**
@@ -47,7 +51,7 @@ class PriceUpdateCommand extends Command
         $output->writeln("Running skylizer price-update application");
         $output->writeln("please wait, may take a while ...");
 
-        $cnt = $this->moonController->priceUpdateConsole();
+        $cnt = $this->moonController->priceEpUpdateConsole();
         $output->writeln($cnt . " prices updated");
     }
 }

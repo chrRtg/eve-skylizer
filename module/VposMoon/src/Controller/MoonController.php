@@ -146,7 +146,7 @@ class MoonController extends AbstractActionController
      */
     public function priceUpdateConsole()
     {
-        return $this->eveDataManager->updatePrices();
+        return $this->eveDataManager->updatePricesFromEveAPI();
     }
     
     /**
@@ -158,7 +158,7 @@ class MoonController extends AbstractActionController
      */
     public function priceEpUpdateConsole()
     {
-        return $this->eveDataManager->updatePricesEp();
+        return $this->eveDataManager->updatePricesFromEvepraisal();
     }
 
     /**
