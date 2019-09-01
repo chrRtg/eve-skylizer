@@ -25,3 +25,4 @@ sonar-project-local.properties
 sonar-project.properties
 ci/
 .scannerwork/
+composer.phar
