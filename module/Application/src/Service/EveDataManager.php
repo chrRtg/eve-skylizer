@@ -40,13 +40,16 @@ class EveDataManager
      */
     private $logger;
 
+    private $config;
+
     /**
      * Constructor.
      */
-    public function __construct($entityManager, $eveESIManager, $logger)
+    public function __construct($entityManager, $eveESIManager, $config, $logger)
     {
         $this->entityManager = $entityManager;
         $this->eveESIManager = $eveESIManager;
+        $this->config = $config;
         $this->logger = $logger;
     }
 
@@ -313,10 +316,16 @@ class EveDataManager
      */
     public function updatePricesFromEvepraisal()
     {
+        if (isset($this->config['settings']['evepraisal'])) {
+            $praisal = $this->config['settings']['evepraisal'] . '.json';
+        } else {
+            $praisal = 'a/n9guq.json';
+        }
+
         // Create a client with a base URI
         $client = new \GuzzleHttp\Client(['base_uri' => 'https://evepraisal.com/', 'verify' => false]);
         try {
-            $response = $client->request('GET', 'a/n9guq.json');
+            $response = $client->request('GET', $praisal);
         } catch (\GuzzleHttp\Exception\ClientException | \GuzzleHttp\Exception\ServerException $e) {
             $this->logger->debug('ERROR: GuzzleHTTP Exception on request: ' . print_r($e->getRequest(), true));
             if ($e->hasResponse()) {
