@@ -138,7 +138,7 @@ class MoonController extends AbstractActionController
     }
 
     /**
-     * Initiate a Price Update from Console     Application
+     * Initiate a Price Update from Console Application
      *
      * @see \Application\Service\EveDataManager::updatePrices()
      *
@@ -147,6 +147,18 @@ class MoonController extends AbstractActionController
     public function priceUpdateConsole()
     {
         return $this->eveDataManager->updatePrices();
+    }
+    
+    /**
+     * Initiate a Price Update via Evepraisal from Console Application
+     *
+     * @see \Application\Service\EveDataManager::updatePrices()
+     *
+     * @return ViewModel
+     */
+    public function priceEpUpdateConsole()
+    {
+        return $this->eveDataManager->updatePricesEp();
     }
 
     /**
@@ -427,9 +439,10 @@ class MoonController extends AbstractActionController
      */
     public function deleteAction()
     {
-        $id = (int) $this->params()->fromRoute('id', 0);
+        $moonid = (int) $this->params()->fromRoute('id', 0);
+        $this->logger->debug('someeone removed the goo from moon (' . $moonid . ')');
 
-        $this->logger->debug('someeone tries to delete a moon (' . $id . ')');
+        $this->moonManager->deleteGoo($moonid);
 
         return $this->redirect()->toRoute('vposmoon', ['action' => 'index']);
     }

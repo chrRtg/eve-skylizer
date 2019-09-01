@@ -131,10 +131,10 @@ if (empty($filters['info_system']['constellation'])) {
 									not scanned
 								<?php endif; ?>
 									<span  class="tdview">
-										<?php if($moon['atmoonid']): ?>
-										<a class="btn btn-xs btn-danger"  data-toggle="modal" data-target="#nopeModal"
+										<?php if($moon['atmoonid'] && $this->access('moon.manage')): ?>
+										<a class="btn btn-xs btn-danger"
 										   href="<?= $this->url('vposmoon', ['action' => 'delete', 'id' => $moon[0]->getMoonId()]); ?>" 
-										   title="delete Moon"><span class="glyphicon glyphicon-remove"></span></a>
+										   title="delete Goo from the moon"><span class="glyphicon glyphicon-remove"></span></a>
 										<?php endif; ?>
 									</span>									
 								</td>

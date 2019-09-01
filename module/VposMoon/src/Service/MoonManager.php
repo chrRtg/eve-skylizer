@@ -455,6 +455,26 @@ class MoonManager
         return ($res);
     }
 
+    /**
+     * Delete all moongoo for the given moon.
+     *
+     * @param integer $moonid
+     * @return bool true on success
+     */
+    public function deleteGoo($moonid = 0) {
+
+        if(!$moonid || !is_int($moonid) || $moonid == 0) {
+            return false;
+        }
+
+        $queryBuilder = $this->entityManager->createQueryBuilder();
+        $queryBuilder->delete(\VposMoon\Entity\AtMoongoo::class, 'mg')
+            ->where('mg.moon = :moonid')
+            ->setParameter('moonid', $moonid);
+        $queryBuilder->getQuery()->execute();
+
+        return true;
+    }
 
     public function ping($param = '')
     {

@@ -78,7 +78,7 @@ class AtMoongoo
      *
      * @ORM\ManyToOne(targetEntity="VposMoon\Entity\AtMoon", inversedBy="moon_id")
      * @ORM\JoinColumns({
-     * @ORM\JoinColumn(name="moon_id",                       referencedColumnName="moon_id")
+     * @ORM\JoinColumn(name="moon_id", referencedColumnName="moon_id")
      * })
      */
     private $moon;
