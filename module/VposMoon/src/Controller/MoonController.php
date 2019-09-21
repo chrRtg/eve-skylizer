@@ -150,7 +150,7 @@ class MoonController extends AbstractActionController
     }
     
     /**
-     * Initiate a Price Update via Evepraisal from Console Application
+     * Initiate a Price Update via Fuzzwork from Console Application
      *
      * @see \Application\Service\EveDataManager::updatePrices()
      *
@@ -158,7 +158,7 @@ class MoonController extends AbstractActionController
      */
     public function priceEpUpdateConsole()
     {
-        return $this->eveDataManager->updatePricesFromEvepraisal();
+        return $this->eveDataManager->updatePricesFromFuzzwork();
     }
 
     /**

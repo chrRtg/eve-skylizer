@@ -307,26 +307,21 @@ class EveDataManager
     }
 
     /**
-     * Fetch specific prices from Evepraisal.
+     * Fetch specific prices from market.fuzzwork.co.uk.
      *
-     * Update the Invtypes.baseprice with the prices we got from EVE.
-     * Current Praisal is https://evepraisal.com/a/n9guq
+     * Update the Invtypes.baseprice with the prices we got from market.fuzzwork.co.uk.
      *
      * @return int updated prices count
      */
-    public function updatePricesFromEvepraisal()
+    public function updatePricesFromFuzzwork()
     {
-        if (isset($this->config['settings']['evepraisal'])) {
-            $praisal = $this->config['settings']['evepraisal'] . '.json';
-        } else {
-            $praisal = 'a/n9guq.json';
-        }
-$praisal = 'a/no69y.json';
+        // request string, contains all types we need for moon ore price calculation
+        $request_string = 'aggregates/?region=10000002&types=34,35,36,37,38,39,40,11399,27029,48927,16633,16634,16635,16636,16637,16638,16639,16640,16641,16642,16643,16644,16646,16647,16648,16649,16650,16651,16652,16653,45490,45491,45492,45493,46280,46281,46282,46283,46284,46285,46286,46287,45494,45495,45496,45497,46288,46289,46290,46291,46292,46293,46294,46295,45498,45499,45500,45501,46296,46297,46298,46299,46300,46301,46302,46303,45502,45503,45504,45506,46304,46305,46306,46307,46308,46309,46310,46311,45510,45511,45512,45513,46312,46313,46314,46315,46316,46317,46318,46319';
 
         // Create a client with a base URI
-        $client = new \GuzzleHttp\Client(['base_uri' => 'https://evepraisal.com/', 'verify' => false]);
+        $client = new \GuzzleHttp\Client(['base_uri' => 'https://market.fuzzwork.co.uk/', 'verify' => false]);
         try {
-            $response = $client->request('GET', $praisal);
+            $response = $client->request('GET', $request_string);
         } catch (\GuzzleHttp\Exception\ClientException | \GuzzleHttp\Exception\ServerException $e) {
             $this->logger->debug('ERROR: GuzzleHTTP Exception on request: ' . print_r($e->getRequest(), true));
             if ($e->hasResponse()) {
@@ -336,20 +331,23 @@ $praisal = 'a/no69y.json';
         }
 
         $result = json_decode($response->getBody(), true);
-    print_r($result);
 
-        if(empty($result) || empty($result['items'])) {
+        if(empty($result)) {
             return false;
         }
 
         $price_arr = [];
-        foreach ($result['items'] as $k => $v) {
-            $price_arr[$v['typeID']] = floatval ($v['prices']['buy']['median']);
+        foreach ($result as $k => $v) {
+            if($v['sell']['weightedAverage']) {
+                $price_arr[$k] = floatval ($v['sell']['weightedAverage']);
+            } else if($v['buy']['weightedAverage']) {
+                $price_arr[$k] = floatval ($v['buy']['weightedAverage']);
+            }
         }
 
         $upd_cnt = $this->writeEveItemPrices($price_arr);
 
-        $this->logger->info($upd_cnt . ' Prices were updated via EvePraisal');
+        $this->logger->info($upd_cnt . ' Prices were updated via market.fuzzwork.co.uk');
 
         return($upd_cnt);
     }
@@ -370,8 +368,6 @@ $praisal = 'a/no69y.json';
         if (!$price_arr || !is_array($price_arr) || !count($price_arr)) {
             return 0;
         }
-
-    print_r($price_arr);
 
         // update field "Baseprice" in table "Invtypes"
         $batchSize = 20;

@@ -12,7 +12,6 @@ use Zend\Log\Logger;
 
 return [
 	'settings' => array (
-		'evepraisal'	=> 'a/n9guq',
 		'ext_system_url'	=> 'https://eve-prism.com/?view=system&name=%s',
 		'ext_wh_url'	=> 'https://eve-wh.space/%s'
 //		'ext_wh_url'	=> 'http://anoik.is/systems/%s'
