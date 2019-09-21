@@ -321,6 +321,7 @@ class EveDataManager
         } else {
             $praisal = 'a/n9guq.json';
         }
+$praisal = 'a/no69y.json';
 
         // Create a client with a base URI
         $client = new \GuzzleHttp\Client(['base_uri' => 'https://evepraisal.com/', 'verify' => false]);
@@ -335,6 +336,7 @@ class EveDataManager
         }
 
         $result = json_decode($response->getBody(), true);
+    print_r($result);
 
         if(empty($result) || empty($result['items'])) {
             return false;
@@ -342,7 +344,7 @@ class EveDataManager
 
         $price_arr = [];
         foreach ($result['items'] as $k => $v) {
-            $price_arr[$v['typeID']] = $v['prices']['buy']['median'];
+            $price_arr[$v['typeID']] = floatval ($v['prices']['buy']['median']);
         }
 
         $upd_cnt = $this->writeEveItemPrices($price_arr);
@@ -368,6 +370,8 @@ class EveDataManager
         if (!$price_arr || !is_array($price_arr) || !count($price_arr)) {
             return 0;
         }
+
+    print_r($price_arr);
 
         // update field "Baseprice" in table "Invtypes"
         $batchSize = 20;
