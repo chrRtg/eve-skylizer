@@ -26,6 +26,12 @@ return [
 			'publicData',
 			'esi-location.read_location.v1'
 		],
+        'scope_mining' => [
+            'publicData',
+            'esi-location.read_location.v1',
+            'esi-corporations.read_structures.v1',
+            'esi-industry.read_corporation_mining.v1'
+        ],
 		'auth' => [
 			// @ Change to reflect your needs
 			'allow_all' => 'no', // set to 'YeS' (mind the upper and lower case!) to allow to any Eve-User to get access as a regular user

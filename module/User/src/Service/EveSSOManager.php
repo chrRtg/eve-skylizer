@@ -5,14 +5,13 @@ namespace User\Service;
 use Zend\Authentication\Result;
 use Evelabs\OAuth2\Client\Provider\EveOnline;
 
-
 /**
- * The EveSSOManager is to support an EVE-SSO login. 
+ * The EveSSOManager is to support an EVE-SSO login.
  *
  * @see https://support.eveonline.com/hc/en-us/articles/205381192-Single-Sign-On-SSO-
- * 
+ *
  * After a successfull confirmation of your identity by EVE-SSO as the "identity provider"
- * this class also checks against some configured rules like your player name or his 
+ * this class also checks against some configured rules like your player name or his
  * coporation name if the EVE-user is allowed to access this application.
  * @see config/autoload/local.php - Section "eve_sso"
  */
@@ -72,7 +71,7 @@ class EveSSOManager
     private $evesso_provider;
     
     /**
-     * 
+     *
      * @var bool
      */
     private $isAdmin = false;
@@ -84,13 +83,13 @@ class EveSSOManager
     private $responseMessage = '';
 
     /**
-     * 
+     *
      * @var array 
      */
     private $config;
 
     /**
-     * 
+     *
      * @var array 
      */
     private $evesso_config;
@@ -138,6 +137,8 @@ class EveSSOManager
      */
     public function eveSsoLogin($url_param)
     {
+        $this->logger->debug("eveSsoLogin: " . print_r($url_param->fromQuery('logintype'), true));
+
         if (!$url_param->fromQuery('code')) {
 
             if ($this->sessionContainer->token) {
@@ -148,12 +149,23 @@ class EveSSOManager
                 return('viewuser');
             }
 
+            // $this->logger->debug("loginscope: " . print_r($url_param->fromRoute(), true));
+
             // here we can set requested scopes but it is optional
             // make sure you have them enabled on your app page at
             // https://developers.eveonline.com/applications/
-            $options = [
-            'scope' => $this->evesso_config['scope'] // only ask for what we really need
-            ];
+            $this->sessionContainer->evescope = null;
+            $reqscope = $url_param->fromQuery('logintype');
+            if(isset($reqscope) && $reqscope == 'mining' && isset($this->evesso_config['scope_mining'])) {
+                $options = [
+                    'scope' => $this->evesso_config['scope_mining'] // only ask for what we really need
+                ];
+            } else {
+                $options = [
+                    'scope' => $this->evesso_config['scope'] // only ask for what we really need
+                ];
+            }
+            $this->sessionContainer->evescope = $options['scope'];
 
             // If we don't have an authorization code then get one
             $authUrl = $this->evesso_provider->getAuthorizationUrl($options);
@@ -185,7 +197,7 @@ class EveSSOManager
             $this->sessionContainer->eveauth = array();
             $this->sessionContainer->eveauth['eve_app']['client_id'] = $this->evesso_config['clientId'];
             $this->sessionContainer->eveauth['eve_app']['client_secret'] = $this->evesso_config['clientSecret'];
-            $this->sessionContainer->eveauth['eve_app']['client_scope'] = $this->evesso_config['scope'];
+            $this->sessionContainer->eveauth['eve_app']['client_scope'] = $this->sessionContainer->evescope;
             $this->sessionContainer->eveauth['eve_user']['token'] = $this->sessionContainer->token->getToken();
             $this->sessionContainer->eveauth['eve_user']['refresh_token'] = $this->sessionContainer->token->getRefreshToken();
             $this->sessionContainer->eveauth['eve_user']['token_expires'] = $this->sessionContainer->token->getExpires();
@@ -424,6 +436,45 @@ class EveSSOManager
         }
 
         return($char['corporation']->name);
+    }
+
+    /**
+     * Check if one or many ESI scopes were requested when authenticating
+     *
+     * @param array List of scopes ans an array or one scope as a string
+     * @return bool true if all input match
+     */
+    public function checkScopes($scope) {
+
+        if (is_array($scope)) {
+            foreach($scope as $v) {
+                $this->logger->debug('check __'.$v.'__');
+                if($this->checkScope($v) === false) {
+                    $this->logger->debug('check # NONmatch');
+                    return (false);
+                }
+            }
+            return (true);
+        } else {
+            return($this->checkScope($scope));
+        }
+
+        return(false);
+    }
+
+    /**
+     * Check if one ESI scopes has been requested when authenticating
+     *
+     * @param string scope to check
+     * @return bool true if match
+     */
+    public function checkScope($scope) {
+
+        if ($this->hasIdentity() && !empty($this->sessionContainer->eveauth['eve_app']) && !empty($this->sessionContainer->eveauth['eve_app']['client_scope'])) {
+            return(in_array($scope, $this->sessionContainer->eveauth['eve_app']['client_scope']));
+        }
+
+        return (false);
     }
 
     /**
