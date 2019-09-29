@@ -263,11 +263,9 @@ class MoonManager
             ->addSelect("GROUP_CONCAT(DISTINCT atstruct.corporationId) as structcorpid, GROUP_CONCAT(DISTINCT ec.corporationName) as structcorpname, GROUP_CONCAT(DISTINCT ec.ticker) as structcorpticker")
             ->addSelect("mds.itemname as map_name")
             ->from(\Application\Entity\Mapdenormalize::class, 'md')
-        //->from(\VposMoon\Entity\AtMoon::class, 'm')
             ->leftJoin(\VposMoon\Entity\AtMoon::class, 'm', 'WITH', 'md.itemid = m.eveMapdenormalizeItemid')
             ->leftJoin(\VposMoon\Entity\AtMoongoo::class, 'mg', 'WITH', 'm.moonId = mg.moon')
             ->leftJoin(\Application\Entity\Invtypes::class, 'it', 'WITH', 'it.typeid = mg.eveInvtypesTypeid')
-        //->leftJoin(\Application\Entity\Mapdenormalize::class, 'md', 'WITH', 'md.itemid = m.eveMapdenormalizeItemid')
             ->leftJoin(\Application\Entity\Invtypematerials::class, 'itm', 'WITH', 'itm.typeid = mg.eveInvtypesTypeid')
             ->leftJoin(\Application\Entity\Invtypes::class, 'itmt', 'WITH', 'itmt.typeid = itm.materialtypeid')
             ->leftJoin(\User\Entity\User::class, 'uchgd', 'WITH', 'm.lastseenBy = uchgd.eveUserid')
@@ -312,6 +310,8 @@ class MoonManager
         if (!empty($filters['filter_gooonly']) && $filters['filter_gooonly'] == -1) {
             $queryBuilder->having('goo is not null');
         }
+
+        //$queryBuilder->having('structid is not null');
 
         $res = $queryBuilder->getQuery()->getResult();
         return ($res);
