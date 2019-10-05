@@ -311,7 +311,9 @@ class MoonManager
             $queryBuilder->having('goo is not null');
         }
 
-        //$queryBuilder->having('structid is not null');
+        if (!empty($filters['filter_citaonly']) && $filters['filter_citaonly'] == -1) {
+            $queryBuilder->having('structid is not null');
+        }
 
         $res = $queryBuilder->getQuery()->getResult();
         return ($res);
@@ -347,6 +349,9 @@ class MoonManager
         if (!empty($get_parameters['filter_gooonly'])) {
             $filters['filter_gooonly'] = $get_parameters['filter_gooonly'];
         }
+        if (!empty($get_parameters['filter_citaonly'])) {
+            $filters['filter_citaonly'] = $get_parameters['filter_citaonly'];
+        }
 
         // If filters are not existing, prefill them with their default
         if (empty($filters['detail_filter_composition'])) {
@@ -357,6 +362,9 @@ class MoonManager
         }
         if (empty($filters['filter_gooonly'])) {
             $filters['filter_gooonly'] = "-1";
+        }
+        if (empty($filters['filter_citaonly'])) {
+            $filters['filter_citaonly'] = "-1";
         }
 
 

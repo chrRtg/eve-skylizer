@@ -94,6 +94,13 @@ $(document).ready(function () {
     });
     moon_table.fixedHeader.headerOffset($('#skylizer_navbar').height());
 
+
+    /***********************************************************
+     *
+     * Filters
+     *
+     *********************************************************** */
+
     // auto-submit checkboxes
     $("#detail_filter_composition").change(function () {
         if (this.checked) {
@@ -127,12 +134,25 @@ $(document).ready(function () {
         if (this.checked) {
             buildFilterQuery({
                 type: "filter_gooonly",
-                id: "1"
+                id: "-1"
             });
         } else {
             buildFilterQuery({
                 type: "filter_gooonly",
+                id: "1"
+            });
+        }
+    });
+    $("#filter_citaonly").change(function () {
+        if (this.checked) {
+            buildFilterQuery({
+                type: "filter_citaonly",
                 id: "-1"
+            });
+        } else {
+            buildFilterQuery({
+                type: "filter_citaonly",
+                id: "1"
             });
         }
     });
