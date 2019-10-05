@@ -500,7 +500,7 @@ class CosmicManager
         $date->modify('-3 day');
         $removedate = $date->format('Y-m-d H:i:s');
 
-        $this->logger->debug('### removedate: '. $removedate);
+        // $this->logger->debug('### removedate: '. $removedate);
 
         $parameter['cmpdate'] = $removedate;
         $parameter['anogrouplist'] = array('885', '502', '988', '26272');
@@ -512,7 +512,7 @@ class CosmicManager
             ->andWhere($qb->expr()->in('at.groupId', ':anogrouplist'));
 
         $numDeleted = $qb->getQuery()->execute();
-        $this->logger->debug('### removeOutdatedAnomalies : deleted: ' . $numDeleted);
+        // $this->logger->debug('### removeOutdatedAnomalies : deleted: ' . $numDeleted);
     }
 
     /**
