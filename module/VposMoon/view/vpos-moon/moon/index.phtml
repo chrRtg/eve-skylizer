@@ -34,7 +34,7 @@ if (empty($filters['info_system']['constellation'])) {
 <div class="row">
 	<div class="col-md-9 col-sm-10">
 		<div class="row">
-			<div class="col-md-6">
+			<div class="col-md-5">
 				<!-- start system name -->
 				<div class="form-group form-group-lg addpaddingtop20">
 					<select class="form-control select2-typeahead-system" name="selectsystem" id="selectsystem">
@@ -46,10 +46,15 @@ if (empty($filters['info_system']['constellation'])) {
 				</div>
 			</div>
 			<!-- start filter area -->
-			<div class="col-md-2">
+			<div class="col-md-3">
+			<h4>Show Moons:</h4>
 				<div class="form-group form-group-sm checkbox">
-					<input type="checkbox" id="filter_gooonly" <?= (!empty($filters['filter_gooonly']) && $filters['filter_gooonly'] == "1" ? 'checked' : '' ) ?>>
-					<label for="filter_gooonly">show all moons</label>
+					<input type="checkbox" id="filter_gooonly" <?= (!empty($filters['filter_gooonly']) && $filters['filter_gooonly'] == "-1" ? 'checked' : '' ) ?>>
+					<label for="filter_gooonly">scanned &amp; analyzed</label>
+				</div>
+				<div class="form-group form-group-sm checkbox">
+					<input type="checkbox" id="filter_citaonly" <?= (!empty($filters['filter_citaonly']) && $filters['filter_citaonly'] == "-1" ? 'checked' : '' ) ?>>
+					<label for="filter_citaonly">with drilling platform</label>
 				</div>
 			</div>
 			<div class="col-md-4">
@@ -57,7 +62,7 @@ if (empty($filters['info_system']['constellation'])) {
 				<div class="form-group form-group-sm checkbox">
 					<input type="checkbox" id="detail_filter_composition" <?= (!empty($filters['detail_filter_composition']) && $filters['detail_filter_composition'] == "1" ? 'checked' : '' ) ?>>
 					<label for="detail_filter_composition">
-						Composition - Filter <?= (!empty($filters['composition']) ? '&nbsp; <a href="/" class="resetswitch" data-id="selectcomposition">reset</a>' : ''); ?></label>
+						Composition - Filter</label>
 					<select class="form-control" name="selectcomposition" id="selectcomposition">
 						<option value="0">please select to filter by Composition</option>
 						<?= $this->vpViewTool()->getCompositionListAsOptions($filters['info_system']['id'], (!empty($filters['composition']) ? $filters['composition'] : 0)); ?>
@@ -66,7 +71,7 @@ if (empty($filters['info_system']['constellation'])) {
 				<!-- facette filter Ore -->
 				<div class="form-group form-group-sm checkbox">
 					<input type="checkbox" id="detail_filter_ore" <?= (!empty($filters['detail_filter_ore']) && $filters['detail_filter_ore'] == "1" ? 'checked' : '' ) ?>>
-					<label for="detail_filter_ore">Ore - Filter <?= (!empty($filters['ore']) ? '&nbsp; <a href="/" class="resetswitch" data-id="selectore">reset</a>' : ''); ?></label>
+					<label for="detail_filter_ore">Ore - Filter</label>
 					<select class="form-control" name="selectore" id="selectore">
 						<option value="0">please select to filter by Ore</option>
 						<?= $this->vpViewTool()->getOreListAsOptions($filters['info_system']['id'], (!empty($filters['ore']) ? $filters['ore'] : 0)); ?>
