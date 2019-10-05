@@ -3,6 +3,7 @@
 namespace User\Service;
 
 use User\Entity\User;
+use User\Entity\UserCli;
 use User\Entity\Role;
 use Application\Entity\EveCorporation;
 
@@ -159,4 +160,42 @@ class UserManager
         }
     }
 
+    /**
+     * Create or update entry in table user_cli
+     * The table is meant to provide data required for detached processes to fetch bigger ammounts of data from ESI
+     *
+     * @param int $eve_char_id
+     * @param int $eve_corporation
+     * @param string $token
+     * @param string $scope
+     * @param string $expire
+     *
+     * @return object User_cli entry created or updated
+     */
+    public function setCliUser($eve_char_id, $eve_corporation, $token, $scope, $expire)
+    {
+        $usercli = $this->entityManager->getRepository(UserCli::class)->findOneByEveUserid($eve_char_id);
+        if (!$usercli) {
+            // Create new User entity.
+            $usercli = new UserCli();
+        }
+        
+        $date_expire = new \DateTime();
+        $date_expire->setTimestamp($expire);
+
+        $usercli->setEveCorpid($eve_corporation);
+        $usercli->setEveUserid($eve_char_id);
+        $usercli->setEveToken($token);
+        $usercli->setEveScope($scope);
+        $usercli->setEveTokenlifetime($date_expire);
+
+
+        // Add the entity to the entity manager.
+        $this->entityManager->persist($usercli);
+
+        // Apply changes to database.
+        $this->entityManager->flush();
+
+        return $usercli;
+    }
 }

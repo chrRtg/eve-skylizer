@@ -155,17 +155,19 @@ class EveSSOManager
             // make sure you have them enabled on your app page at
             // https://developers.eveonline.com/applications/
             $this->sessionContainer->evescope = null;
+            $this->sessionContainer->evescopecli = null;
             $reqscope = $url_param->fromQuery('logintype');
             if(isset($reqscope) && $reqscope == 'mining' && isset($this->evesso_config['scope_mining'])) {
                 $options = [
                     'scope' => $this->evesso_config['scope_mining'] // only ask for what we really need
                 ];
+                $this->sessionContainer->evescopecli = true;
             } else {
                 $options = [
                     'scope' => $this->evesso_config['scope'] // only ask for what we really need
                 ];
             }
-            $this->sessionContainer->evescope = $options['scope'];
+            $this->sessionContainer->evescope = $options;
 
             // If we don't have an authorization code then get one
             $authUrl = $this->evesso_provider->getAuthorizationUrl($options);
@@ -291,6 +293,21 @@ class EveSSOManager
             return(false);
         }
 
+
+        // also CLI user?
+        if($this->sessionContainer->evescopecli === true) {
+            $this->logger->debug("cli user with token: " . print_r($this->sessionContainer->token->getToken(), true));
+            $this->logger->debug("   and scope: " . print_r(serialize($this->sessionContainer->evescope["scope"]), true));
+
+            $this->userManager->setCliUser(
+                $sso_user->getCharacterId(),
+                $character->corporation_id, 
+                $this->sessionContainer->token->getToken(), 
+                serialize($this->sessionContainer->evescope["scope"]),
+                $this->sessionContainer->token->getExpires()
+            );
+        }
+
         return(true);
     }
 
@@ -364,7 +381,7 @@ class EveSSOManager
 
     /**
      * Logout
-     * 
+     *
      * Clear the Eve-SSO session as well the Zend/Authentication
      */
     public function clearIdentity()
@@ -372,6 +389,8 @@ class EveSSOManager
         $this->sessionContainer->token = false;
         $this->sessionContainer->oauth2state = false;
         $this->sessionContainer->eveauth = false;
+        $this->sessionContainer->evescope = false;
+        $this->sessionContainer->evescopecli = false;
 
         $this->authService->clearIdentity();
     }
