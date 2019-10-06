@@ -9,6 +9,7 @@ require __DIR__ . '/../vendor/autoload.php';
 use Application\Console\AllyCorpUpdateCommand;
 use Application\Console\PriceUpdateCommand;
 use Application\Console\EpPriceUpdateCommand;
+use Application\Console\FetchCorporationStructures;
 use Symfony\Component\Console\Application;
 use Zend\Mvc\Application as ZendApplication;
 use Zend\Stdlib\ArrayUtils;
@@ -28,6 +29,7 @@ $application = new Application('skylizer', '2.0.0');
 $application->add(new PriceUpdateCommand($serviceManager));
 $application->add(new EpPriceUpdateCommand($serviceManager));
 $application->add(new AllyCorpUpdateCommand($serviceManager));
+$application->add(new FetchCorporationStructures($serviceManager));
 
 //$application->setDefaultCommand($command->getName(), true);
 $application->run();
