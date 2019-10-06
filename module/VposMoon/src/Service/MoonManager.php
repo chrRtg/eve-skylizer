@@ -4,8 +4,7 @@ namespace VposMoon\Service;
 
 use VposMoon\Entity\AtMoon;
 use VposMoon\Entity\AtMoongoo;
-
-use Seat\Eseye\Eseye;
+//use Seat\Eseye\Eseye;
 
 /**
  * The MoonManager manages all list/read/write/delete operations about Moons and Moon Goo

@@ -25,6 +25,7 @@ class CosmicManagerFactory
             $entityManager, 
             $container->get(\User\Service\EveSSOManager::class),
             $container->get(\Application\Service\EveDataManager::class),
+            $container->get(\VposMoon\Service\StructureManager::class),
             $logger
         );
     }

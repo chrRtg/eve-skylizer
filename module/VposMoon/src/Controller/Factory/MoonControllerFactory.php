@@ -18,7 +18,7 @@ class MoonControllerFactory implements FactoryInterface
         return new MoonController(
             $container->get('doctrine.entitymanager.orm_default'),
             $container->get(\VposMoon\Service\MoonManager::class),
-            $container->get(\VposMoon\Service\CosmicManager::class),
+            $container->get(\VposMoon\Service\StructureManager::class),
             $container->get(\VposMoon\Service\ScanManager::class),
             $container->get(\Application\Service\EveDataManager::class),
             $container->get('MyLogger')

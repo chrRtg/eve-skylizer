@@ -2,13 +2,11 @@
 
 namespace VposMoon\Service;
 
-use VposMoon\Entity\AtMoon;
-use VposMoon\Entity\AtMoongoo;
-
-use Seat\Eseye\Eseye;
+use VposMoon\Entity\AtStructure;
+//use Seat\Eseye\Eseye;
 
 /**
- * The VposManager manages all list/read/write/delete operations about Scans of anomalies and such
+ * The VposManager manages all list and filter operations about Scans of anomalies, structures and such
  */
 class VposManager
 {
@@ -64,7 +62,7 @@ class VposManager
     }
     
     /**
-     * create list of moons according to filter settings
+     * create list of structures and anomalies according to filter settings
      *
      * @param  array $filters
      * @return array
@@ -263,11 +261,5 @@ class VposManager
         // persist filter into user session
         $this->sessionContainer->filter = $filters;
         return($filters);
-    }
-
-
-    public function ping($param = '')
-    {
-        return('VposManager-ping ' . $param);
     }
 }

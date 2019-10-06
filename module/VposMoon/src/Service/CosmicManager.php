@@ -14,30 +14,6 @@ use VposMoon\Entity\AtStructure;
  */
 class CosmicManager
 {
-    /*
-     * EVE constants
-     */
-
-    const EVE_CATEGORY_STRUCTURE = 23;
-    const EVE_CATEGORY_SHIP = 6;
-    // fixed position elements we may use as a reference point
-    const EVE_GROUP_SUN = 6;
-    const EVE_GROUP_PLANET = 7;
-    const EVE_GROUP_MOON = 8;
-    const EVE_GROUP_ASTEROIDBELT = 9;
-    const EVE_GROUP_STARGATE = 10;
-    const EVE_GROUP_STATION = 15;
-    // structures we may store individual
-    const EVE_GROUP_CONTROLTOWER = 365;
-    const EVE_GROUP_CITADEL = 1657;
-    const EVE_GROUP_ENGINEERING_COMPLEX = 1404;
-    const EVE_GROUP_REFINERY = 1406;
-    const EVE_GROUP_COSMICANOMALY = 885;
-    const EVE_GROUP_COSMICSIGNATURE = 502;
-    const EVE_GROUP_FORCEFIELD = 411;
-    const EVE_GROUP_WORMHOLE = 988;
-    const EVE_TYPE_UWORMHOLE = 26272;
-
     // up to which distance we create a relation between a structure and a celestial without comparing first and next possible celestial ?
     const MAX_SUPPORTED_DISTANCE = 9900000;
     // up to which distance we accept a relation between a refinery and a moon?
@@ -56,6 +32,12 @@ class CosmicManager
      * @var \Application\Service\EveDataManager
      */
     private $eveDataManager;
+
+    /**
+     *
+     * @var \VposMoon\Service\StructureManager
+     */
+    private $structureManager;
 
     /**
      * To collect raw scan/dscan data
@@ -90,18 +72,16 @@ class CosmicManager
      * @var \User\Service\EveSSOManager
      */
     private $eveSSOManager;
-    // pattern to analyze and break various inputs
-    private const COSMIC_SCAN_REGEXP = '/^([A-Z]{3}-[0-9]{3})\t(.*)\t(.*)\t(.*)\t([0-9\,\.]+.?\%)\t(.*)/';
-    private const COSMIC_DSCAN_REGEXP = '/^(\S*)\t([\S ]*)\t([\S ]*)\t(-|[0-9\.\,]+ [AEUkm]+)/';
 
     /**
      * Constructs the service.
      */
-    public function __construct($entityManager, $eveSSOManager, $eveDataManager, $logger)
+    public function __construct($entityManager, $eveSSOManager, $eveDataManager, $structureManager, $logger)
     {
         $this->entityManager = $entityManager;
         $this->eveSSOManager = $eveSSOManager;
         $this->eveDataManager = $eveDataManager;
+        $this->structureManager = $structureManager;
         $this->logger = $logger;
     }
 
@@ -114,6 +94,8 @@ class CosmicManager
      */
     public function processScan()
     {
+        $this->structureManager->ping();
+
         $res_arr = array(
             'del_anom' => 0,
             'scan_anom' => array()
@@ -135,7 +117,7 @@ class CosmicManager
         if ($this->structure_collector && count($this->structure_collector)) {
             foreach ($this->structure_collector as $key => $value) {
                 if(!(isset($value['ignore']) && $value['ignore'] == 1 )) {
-                    $writeres = $this->writeStructure($value);
+                    $writeres = $this->structureManager->writeStructure($value);
                     $res_arr['scan_anom'][$writeres['id']] = $writeres['mod'];
                 }
             }
@@ -166,7 +148,7 @@ class CosmicManager
 
             $next_celestial = null;
             // get next celestial, moon for refineries, any for all others
-            if ($this->isRefinery($struct['eve_groupid'])) {
+            if (\VposMoon\Service\ScanManager::isRefinery($struct['eve_groupid'])) {
                 $next_celestial = $this->getNextCelestial($struct['distance'], true);
             } else {
                 $next_celestial = $this->getNextCelestial($struct['distance'], false);
@@ -179,7 +161,7 @@ class CosmicManager
             // add relation to next celestial as well their distance to each other
             if ($next_celestial['match']) {
                 $celestial_id = (int) $next_celestial['match']['celestial_id'];
-                if ($next_celestial['match']['eve_groupid'] == self::EVE_GROUP_STARGATE) {
+                if ($next_celestial['match']['eve_groupid'] == \VposMoon\Service\ScanManager::EVE_GROUP_STARGATE) {
                     $this->structure_collector[$key]['target_system_id'] =  $celestial_id;
                 } else {
                     $this->structure_collector[$key]['celestial_id'] =  $celestial_id;
@@ -191,7 +173,7 @@ class CosmicManager
                 // we don't use a distance of less than 1.000, i
                 if ((int) $struct['distance'] > 14959787) {
                     $celestial_distance = 500000;
-                } elseif ($this->isRefinery($struct['eve_groupid']) && $celestial_distance < 5000) {
+                } elseif (\VposMoon\Service\ScanManager::isRefinery($struct['eve_groupid']) && $celestial_distance < 5000) {
                     $celestial_distance = 5000;
                 } elseif ($celestial_distance < 1000) {
                     $celestial_distance = 1000;
@@ -258,7 +240,7 @@ class CosmicManager
             $sigmatch = array_search($value['signature'], array_column($this->structure_collector, 'signature'));
             if ($sigmatch === false) {
                 // structure in DB but not in scan
-                $this->removeStructure($value['id']);
+                $this->structureManager->removeStructure($value['id']);
                 $del_cnt++;
             } else {
                 $sigqual = (int) $this->structure_collector[$sigmatch]['quality'];
@@ -279,7 +261,7 @@ class CosmicManager
     /**
      * Parse a SCAN or DSCAN
      *
-     * Split the scanned data into celestials, anomalies, structures, and 
+     * Split the scanned data into celestials, anomalies, structures, and
      * structure-elements (attachted to a tower).
      *
      * @return
@@ -362,20 +344,20 @@ class CosmicManager
             // distribute the items into the proper data collectors
             if ($this->data_collector[$key]['at_cosmic_detail_id']) {
                 $this->structure_collector[] = $this->data_collector[$key];
-            } elseif ($this->isAnomaly($this->data_collector[$key]['eve_groupid'], $this->data_collector[$key]['eve_typeid'])) {
+            } elseif (\VposMoon\Service\ScanManager::isAnomaly($this->data_collector[$key]['eve_groupid'], $this->data_collector[$key]['eve_typeid'])) {
                 $this->structure_collector[] = $this->data_collector[$key];
-            } elseif ($this->isStructure($this->data_collector[$key]['eve_groupid'], $this->data_collector[$key]['eve_typeid'])) {
+            } elseif (\VposMoon\Service\ScanManager::isStructure($this->data_collector[$key]['eve_groupid'], $this->data_collector[$key]['eve_typeid'])) {
                 $this->data_collector[$key]['scantype'] = 'STRUCT';
                 // for structures retrieve and add the user given names
                 $this->data_collector[$key]['structure_name'] = $this->cleanEveItemName($scan_elem['eve_itemname']);
                 // add scan element to structure collector
                 $this->structure_collector[] = $this->data_collector[$key];
-            } elseif ($this->isCelestial($this->data_collector[$key]['eve_groupid'], $this->data_collector[$key]['eve_typeid'])) {
+            } elseif (\VposMoon\Service\ScanManager::isCelestial($this->data_collector[$key]['eve_groupid'], $this->data_collector[$key]['eve_typeid'])) {
                 $this->celestial_collector[] = $this->data_collector[$key];
             } else {
                 // let's inspect the item a little bit deeper:
                 $item = $this->eveDataManager->getItemByLocalizedName($this->data_collector[$key]['structure_name']);
-                if ($item && $item['categoryid'] == self::EVE_CATEGORY_STRUCTURE) {
+                if ($item && $item['categoryid'] == \VposMoon\Service\ScanManager::EVE_CATEGORY_STRUCTURE) {
                     $this->structure_elem_collector[] = $this->data_collector[$key];
                 } else {
                     // anything else we have to check individually if categoryID == 23 for structure modules
@@ -383,166 +365,6 @@ class CosmicManager
                 }
             }
         }
-    }
-
-
-    /**
-     * Insert or Update data a AtStructure table entry.
-     *
-     * @param  array Structure-data array
-     * @return array (structure_id, updated)
-     */
-    public function writeStructure($structure_data)
-    {
-        //$this->logger->debug('### writeStructure :: write:' . print_r($structure_data, true));
-
-        $mode_update = 'u';
-        $structure_entity = null;
-        if ($structure_data['atstructure_id']) {
-            $structure_entity = $this->entityManager->getRepository(AtStructure::class)->findOneById($structure_data['atstructure_id']);
-        }
-
-        // insert (or update)
-        if ($structure_entity === null) {
-            $structure_entity = new AtStructure();
-            $structure_entity->setCreateDate(new \DateTime("now"));
-            $structure_entity->setCreatedBy($this->eveSSOManager->getIdentityID());
-            $mode_update = 'n';
-        }
-
-        if ($structure_data['scantype']) {
-            $structure_entity->setScanType($structure_data['scantype']);
-        }
-
-        if ($structure_data['eve_typeid']) {
-            $structure_entity->setTypeId($structure_data['eve_typeid']); // invTypes.typeID (the structure)
-        }
-
-        if ($structure_data['eve_groupid']) {
-            $structure_entity->setGroupId($structure_data['eve_groupid']); // invTypes.typeID (the structure)
-        }
-
-        if ($structure_data['corporation_id']) {
-            $structure_entity->setCorporationId((int) $structure_data['corporation_id']); // owner: EveCorporation.corporationId
-        }
-
-        if ($structure_data['celestial_id']) {
-            $structure_entity->setCelestialId($structure_data['celestial_id']);
-            // celestial id but no solarsystem? fill the gap
-            if (!$structure_data['solarsystem_id']) {
-                $mapdeormalize_entity = $this->entityManager->getRepository(\Application\Entity\Mapdenormalize::class)->findOneByItemid($structure_data['celestial_id']);
-                if ($mapdeormalize_entity) {
-                    $structure_data['solarsystem_id'] = $mapdeormalize_entity->getSolarSystemid();
-                }
-            }
-        }
-
-        if ($structure_data['celestial_distance']) {
-            $structure_entity->setCelestialDistance($structure_data['celestial_distance']);
-        }
-
-        if ($structure_data['structure_name']) {
-            $structure_entity->setStructureName($structure_data['structure_name']);
-        }
-
-        if ($structure_data['signature']) {
-            $structure_entity->setSignature($structure_data['signature']);
-        }
-
-        if ($structure_data['quality']) {
-            $structure_entity->setScanQuality($structure_data['quality']);
-        }
-
-        if ($structure_data['at_cosmic_detail_id']) {
-            $structure_entity->setAtCosmicDetailId($structure_data['at_cosmic_detail_id']);
-        }
-
-        if ($structure_data['solarsystem_id']) {
-            $structure_entity->setSolarSystemId($structure_data['solarsystem_id']);
-        }
-
-        if ($structure_data['target_system_id']) {
-            $structure_entity->setTargetSystemId($structure_data['target_system_id']);
-        }
-
-        $structure_entity->setLastseenDate(new \DateTime("now"));
-        $structure_entity->setLastseenBy($this->eveSSOManager->getIdentityID());
- 
-        $this->entityManager->persist($structure_entity);
-        $this->entityManager->flush();
-
-        return (array('id' => $structure_entity->getId(), 'mod' => $mode_update));
-    }
-
-    /**
-     * Removes a structure from the database
-     *
-     * @param int $structure_id
-     */
-    public function removeStructure($structure_id)
-    {
-        $structure_entity = $this->entityManager->getRepository(AtStructure::class)->findOneById($structure_id);
-
-        if ($structure_entity) {
-            $this->entityManager->remove($structure_entity);
-            $this->entityManager->flush();
-        }
-    }
-
-    /**
-     * Delete all anomalies older than 3 days
-     *
-     * @return void
-     */
-    public function removeOutdatedAnomalies()
-    {
-        $date = new \DateTime("now");
-        $date->modify('-3 day');
-        $removedate = $date->format('Y-m-d H:i:s');
-
-        // $this->logger->debug('### removedate: '. $removedate);
-
-        $parameter['cmpdate'] = $removedate;
-        $parameter['anogrouplist'] = array('885', '502', '988', '26272');
-
-        $qb = $this->entityManager->createQueryBuilder();
-        $qb->delete(\VposMoon\Entity\AtStructure::class, 'at')
-            ->where('at.lastseenDate <= :cmpdate')
-            ->setParameters($parameter)
-            ->andWhere($qb->expr()->in('at.groupId', ':anogrouplist'));
-
-        $numDeleted = $qb->getQuery()->execute();
-        // $this->logger->debug('### removeOutdatedAnomalies : deleted: ' . $numDeleted);
-    }
-
-    /**
-     * Write a target-system into a existing struture
-     *
-     * @param int $structure_id
-     * @param int $target_id <null>
-     * @return int structure id or false on error
-     */
-    public function writeTargetToStructure($structure_id, $target_id = null)
-    {
-        if (empty($structure_id)) {
-            return false;
-        }
-
-        //$this->logger->debug('### writeTargetToStructure :: ' . $structure_id);
-
-        $structure_entity = $this->entityManager->getRepository(AtStructure::class)->findOneById($structure_id);
-        //$this->logger->debug('### writeTargetToStructure :: ' . print_r($structure_entity, true));
-
-        if (!$structure_entity) {
-            return false;
-        }
-
-        $structure_entity->setTargetSystemId($target_id);
-
-        $this->entityManager->persist($structure_entity);
-        $this->entityManager->flush();
-
-        return $structure_id;
     }
 
     /**
@@ -618,10 +440,10 @@ class CosmicManager
     }
 
     /**
-     * Takes a EveItemName like 
+     * Takes a EveItemName like "RLL-9R IX - Intaki Space Police Assembly Plant" and extracts the celestial name from it
      *
      * @param string $itemname
-     * @return void
+     * @return array    celestial
      */
     private function getSystemIDFromEveItemName(string $itemname)
     {
@@ -648,7 +470,7 @@ class CosmicManager
 
     
     /**
-     * Find the nearest celestial to a given distance
+     * Find the nearest celestial from the internal data collector to a given distance
      *
      * @param int distance
      * @param boolean true to consider only moons
@@ -700,141 +522,15 @@ class CosmicManager
 
 
     /**
+     * add a array to local data_collector
      *
-     * @return type
+     * @param array $entry
      */
-    public function getStructureArray()
+    public function addToDataToCollector($entry)
     {
-        return ([
-            'scantype' => null,
-            'atstructure_id' => null,
-            'eve_typeid' => null,
-            'eve_typename' => null, // not written to db, to be resolved to his ID
-            'eve_groupid' => null,
-            'eve_groupname' => null, // not written to db, to be resolved to his ID
-            'eve_categoryname' => null,
-            'celestial_id' => null,
-            'celestial_distance' => null,
-            'structure_name' => null,
-            'signature' => null,
-            'quality' => 0,
-            'distance' => null,
-            'corporation_id' => null,
-            'solarsystem_id' => null,
-            'at_cosmic_detail_id' => null,
-            'target_system_id' => null
-        ]);
+        $this->data_collector[] = $entry;
     }
 
-    /**
-     * Check if scan is a SCAN
-     *
-     * If match the scan will be added as strucutre data into $this->data_collector
-     *
-     * @param  string $line
-     * @return boolean true if match
-     */
-    public function isScan($line)
-    {
-        if (preg_match(CosmicManager::COSMIC_SCAN_REGEXP, $line, $match)) {
-            $structure_data = $this->getStructureArray();
-
-            $structure_data['scantype'] = 'SCAN';
-            $structure_data['signature'] = $match[1];
-            $structure_data['eve_categoryname'] = $match[2];
-            $structure_data['eve_groupname'] = $match[3];
-            $structure_data['eve_typename'] = $match[4];
-            $structure_data['quality'] = $match[5];
-            $structure_data['distance'] = \VposMoon\Service\ScanManager::getEveDistanceKM($match[6]);
-
-            $this->data_collector[] = $structure_data;
-
-            return true;
-        }
-
-        return (false);
-    }
-
-    /**
-     * Check if scan is a DSCAN
-     *
-     * @param  string $line
-     * @return boolean
-     */
-    public function isDscan($line)
-    {
-        if (preg_match(CosmicManager::COSMIC_DSCAN_REGEXP, $line, $match)) {
-            $structure_data = $this->getStructureArray();
-
-            $structure_data['scantype'] = 'DSCAN';
-            $structure_data['eve_typeid'] = $match[1];
-            $structure_data['eve_itemname'] = $match[2];
-            $structure_data['eve_typename'] = $match[3];
-            $structure_data['distance'] = \VposMoon\Service\ScanManager::getEveDistanceKM($match[4]);
-
-            $this->data_collector[] = $structure_data;
-            return true;
-        }
-
-        return (false);
-    }
-
-    /**
-     *
-     * @param  type $eve_groupID
-     * @param  type $eve_typeID
-     * @return type
-     */
-    public function isAnomaly($eve_groupID, $eve_typeID = 0)
-    {
-        if ($eve_groupID == self::EVE_GROUP_COSMICANOMALY
-            || $eve_groupID == self::EVE_GROUP_COSMICSIGNATURE
-            || $eve_groupID == self::EVE_GROUP_WORMHOLE
-            || $eve_typeID == self::EVE_TYPE_UWORMHOLE
-        ) {
-            return (true);
-        }
-        return (false);
-    }
-
-    public function isStructure($eve_groupID, $eve_typeID = 0)
-    {
-        if ($eve_groupID == self::EVE_GROUP_CONTROLTOWER
-            || $eve_groupID == self::EVE_GROUP_CITADEL
-            || $eve_groupID == self::EVE_GROUP_ENGINEERING_COMPLEX
-            || $eve_groupID == self::EVE_GROUP_REFINERY
-        ) {
-            return (true);
-        }
-        return (false);
-    }
-
-    public function isRefinery($eve_groupID, $eve_typeID = 0)
-    {
-        if ($eve_groupID == self::EVE_GROUP_REFINERY) {
-            return (true);
-        }
-        return (false);
-    }
-
-    public function isCelestial($eve_groupID, $eve_typeID = 0)
-    {
-        if ($eve_groupID == self::EVE_GROUP_SUN
-            || $eve_groupID == self::EVE_GROUP_PLANET
-            || $eve_groupID == self::EVE_GROUP_MOON
-            || $eve_groupID == self::EVE_GROUP_ASTEROIDBELT
-            || $eve_groupID == self::EVE_GROUP_STARGATE
-            || $eve_groupID == self::EVE_GROUP_STATION
-        ) {
-            return (true);
-        }
-        return (false);
-    }
-
-    public function ping($param = '')
-    {
-        return ('CosmicManager-ping ' . $param);
-    }
 
     /**
      * Count the number of a give Scantype in $this->structure_collector

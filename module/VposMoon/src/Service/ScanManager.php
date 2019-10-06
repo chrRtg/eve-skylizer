@@ -7,22 +7,35 @@ namespace VposMoon\Service;
  */
 class ScanManager
 {
-
     /*
      * EVE constants
      */
+
     const EVE_CATEGORY_STRUCTURE = 23;
     const EVE_CATEGORY_SHIP = 6;
-
+    // fixed position elements we may use as a reference point
+    const EVE_GROUP_SUN = 6;
+    const EVE_GROUP_PLANET = 7;
     const EVE_GROUP_MOON = 8;
+    const EVE_GROUP_ASTEROIDBELT = 9;
+    const EVE_GROUP_STARGATE = 10;
+    const EVE_GROUP_STATION = 15;
+    // structures we may store individual
     const EVE_GROUP_CONTROLTOWER = 365;
+    const EVE_GROUP_CITADEL = 1657;
+    const EVE_GROUP_ENGINEERING_COMPLEX = 1404;
+    const EVE_GROUP_REFINERY = 1406;
     const EVE_GROUP_COSMICANOMALY = 885;
     const EVE_GROUP_COSMICSIGNATURE = 502;
     const EVE_GROUP_FORCEFIELD = 411;
     const EVE_GROUP_WORMHOLE = 988;
-
     const EVE_TYPE_UWORMHOLE = 26272;
 
+
+    // pattern to analyze and break various inputs
+    private const COSMIC_SCAN_REGEXP = '/^([A-Z]{3}-[0-9]{3})\t(.*)\t(.*)\t(.*)\t([0-9\,\.]+.?\%)\t(.*)/';
+    private const COSMIC_DSCAN_REGEXP = '/^(\S*)\t([\S ]*)\t([\S ]*)\t(-|[0-9\.\,]+ [AEUkm]+)/';
+    
     /**
      * Moon manager.
      *
@@ -73,9 +86,9 @@ class ScanManager
                 // if is moon Scan
                 if ($this->moonManager->isMoonScan($line, $eveuser_id)) {
                     $res_counter['goo']++;
-                } elseif ($this->cosmicManager->isDscan($line)) {
+                } elseif ($this->isDscan($line)) {
                     $res_counter['dscan']++;
-                } elseif ($this->cosmicManager->isScan($line)) {
+                } elseif ($this->isScan($line)) {
                     $res_counter['scan']++;
                 } elseif (trim($line)) { // avoid emtpy lines
                     $this->logger->notice('#Scan: no match for line:  __' . $line . '__');
@@ -195,13 +208,127 @@ class ScanManager
         return (((int) preg_replace('/[^0-9]+/', '', $dist)) * $multiplier);
     }
 
-    public function isAnomaly($data)
+        /**
+     * Check if scan is a SCAN
+     * If match the scan will be added as strucutre data into $this->data_collector
+     *
+     * @param  string $line
+     * @return bool true on match, otherwise false
+     */
+    public function isScan($line)
     {
+        if (preg_match(self::COSMIC_SCAN_REGEXP, $line, $match)) {
+            $structure_data = \VposMoon\Service\StructureManager::getStructureArray();
 
-        if ($data->eve_groupID == self::EVE_GROUP_COSMICANOMALY ||
-            $data->eve_groupID == self::EVE_GROUP_COSMICSIGNATURE ||
-            $data->eve_groupID == self::EVE_GROUP_WORMHOLE ||
-            $data->eve_typeID == self::EVE_TYPE_UWORMHOLE) {
+            $structure_data['scantype'] = 'SCAN';
+            $structure_data['signature'] = $match[1];
+            $structure_data['eve_categoryname'] = $match[2];
+            $structure_data['eve_groupname'] = $match[3];
+            $structure_data['eve_typename'] = $match[4];
+            $structure_data['quality'] = $match[5];
+            $structure_data['distance'] = \VposMoon\Service\ScanManager::getEveDistanceKM($match[6]);
+
+            $this->cosmicManager->addToDataToCollector($structure_data);
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Check if scan is a DSCAN
+     * If match the scan will be added as strucutre data into $this->data_collector
+     *
+     * @param  string $line
+     * @return bool true on match, otherwise false
+     */
+    public function isDscan($line)
+    {
+        if (preg_match(self::COSMIC_DSCAN_REGEXP, $line, $match)) {
+            $structure_data = \VposMoon\Service\StructureManager::getStructureArray();
+
+            $structure_data['scantype'] = 'DSCAN';
+            $structure_data['eve_typeid'] = $match[1];
+            $structure_data['eve_itemname'] = $match[2];
+            $structure_data['eve_typename'] = $match[3];
+            $structure_data['distance'] = \VposMoon\Service\ScanManager::getEveDistanceKM($match[4]);
+
+            $this->cosmicManager->addToDataToCollector($structure_data);
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Check if scan is an anomaly
+     *
+     * @param  type $eve_groupID
+     * @param  type $eve_typeID
+     * @return type
+     */
+    public static function isAnomaly($eve_groupID, $eve_typeID = 0)
+    {
+        if ($eve_groupID == self::EVE_GROUP_COSMICANOMALY
+            || $eve_groupID == self::EVE_GROUP_COSMICSIGNATURE
+            || $eve_groupID == self::EVE_GROUP_WORMHOLE
+            || $eve_typeID == self::EVE_TYPE_UWORMHOLE
+        ) {
+            return (true);
+        }
+        return (false);
+    }
+
+    /**
+     * Check if scan is a structure
+     *
+     * @param [type] $eve_groupID
+     * @param integer $eve_typeID
+     * @return boolean
+     */
+    public static function isStructure($eve_groupID, $eve_typeID = 0)
+    {
+        if ($eve_groupID == self::EVE_GROUP_CONTROLTOWER
+            || $eve_groupID == self::EVE_GROUP_CITADEL
+            || $eve_groupID == self::EVE_GROUP_ENGINEERING_COMPLEX
+            || $eve_groupID == self::EVE_GROUP_REFINERY
+        ) {
+            return (true);
+        }
+        return (false);
+    }
+
+    /**
+     * Check if scan is a refinery
+     *
+     * @param [type] $eve_groupID
+     * @param integer $eve_typeID
+     * @return boolean
+     */
+    public static function isRefinery($eve_groupID, $eve_typeID = 0)
+    {
+        if ($eve_groupID == self::EVE_GROUP_REFINERY) {
+            return (true);
+        }
+        return (false);
+    }
+
+    /**
+     * Check if scan is a celestial
+     *
+     * @param [type] $eve_groupID
+     * @param integer $eve_typeID
+     * @return boolean
+     */
+    public static function isCelestial($eve_groupID, $eve_typeID = 0)
+    {
+        if ($eve_groupID == self::EVE_GROUP_SUN
+            || $eve_groupID == self::EVE_GROUP_PLANET
+            || $eve_groupID == self::EVE_GROUP_MOON
+            || $eve_groupID == self::EVE_GROUP_ASTEROIDBELT
+            || $eve_groupID == self::EVE_GROUP_STARGATE
+            || $eve_groupID == self::EVE_GROUP_STATION
+        ) {
             return (true);
         }
         return (false);

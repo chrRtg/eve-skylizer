@@ -36,9 +36,9 @@ class MoonController extends AbstractActionController
 
     /**
      *
-     * @var VposMoon\Service\CosmicManager
+     * @var \VposMoon\Service\StructureManager
      */
-    private $cosmicManager;
+    private $structureManager;
 
     /**
      *
@@ -55,11 +55,11 @@ class MoonController extends AbstractActionController
     /**
      * Constructor. Its purpose is to inject dependencies into the controller.
      */
-    public function __construct($entityManager, $moonManager, $cosmicManager, $scanManager, $eveDataManager, $logger)
+    public function __construct($entityManager, $moonManager, $structureManager, $scanManager, $eveDataManager, $logger)
     {
         $this->entityManager = $entityManager;
         $this->moonManager = $moonManager;
-        $this->cosmicManager = $cosmicManager;
+        $this->structureManager = $structureManager;
         $this->scanManager = $scanManager;
         $this->eveDataManager = $eveDataManager;
         $this->logger = $logger;
@@ -247,13 +247,12 @@ class MoonController extends AbstractActionController
 
         $params = $this->params()->fromPost();
 
+        // @ todo : introduce input sanitization
         // @ todo : add/edit spec for any kind of structure
         // $this->logger->debug('editStructureAction() ' . print_r($params, true));
 
         if (isset($params['structureid'])) {
-            // @todo this logic belongs to the ScanManager
-
-            $structure_data = $this->cosmicManager->getStructureArray();
+            $structure_data = \VposMoon\Service\StructureManager::getStructureArray();
 
             $structure_data['scantype'] = 'STRUCT';
             $structure_data['atstructure_id'] = (!empty($params['structureid']) ? $params['structureid'] : 0);
@@ -269,7 +268,7 @@ class MoonController extends AbstractActionController
             }
 
             // Any required data available, now we can access the structure
-            $res = $this->cosmicManager->writeStructure($structure_data);
+            $res = $this->structureManager->writeStructure($structure_data);
 
             return new JsonModel(
                 [
@@ -336,7 +335,7 @@ class MoonController extends AbstractActionController
         $query = $this->params()->fromQuery('id');
 
         if (!empty($query)) {
-            $res = $this->cosmicManager->removeStructure($query);
+            $res = $this->structureManager->removeStructure($query);
 
             return new JsonModel(
                 [

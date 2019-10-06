@@ -37,9 +37,9 @@ class VposController extends AbstractActionController
 
     /**
      *
-     * @var VposMoon\Service\CosmicManager
+     * @var VposMoon\Service\StructureManager
      */
-    private $cosmicManager;
+    private $structureManager;
 
     /**
      *
@@ -56,11 +56,11 @@ class VposController extends AbstractActionController
     /**
      * Constructor. Its purpose is to inject dependencies into the controller.
      */
-    public function __construct($entityManager, $moonManager, $cosmicManager, $scanManager, $eveDataManager, $logger)
+    public function __construct($entityManager, $moonManager, $structureManager, $scanManager, $eveDataManager, $logger)
     {
         $this->entityManager = $entityManager;
         $this->vposManager = $moonManager;
-        $this->cosmicManager = $cosmicManager;
+        $this->structureManager = $structureManager;
         $this->scanManager = $scanManager;
         $this->eveDataManager = $eveDataManager;
         $this->logger = $logger;
@@ -78,7 +78,7 @@ class VposController extends AbstractActionController
         $goto_currentsystem = false;
 
         // Delete all anomalies older than 3 days, in the future @todo move to shell script
-        $this->cosmicManager->removeOutdatedAnomalies();
+        $this->structureManager->removeOutdatedAnomalies();
 
         // Create scan input form
         $form = new MoonForm();
@@ -135,7 +135,7 @@ class VposController extends AbstractActionController
         $id = (int) $this->params()->fromRoute('id', 0);
 
         $this->logger->debug('delete a vpos (' . $id . ')');
-        $this->cosmicManager->removeStructure($id);
+        $this->structureManager->removeStructure($id);
 
         return $this->redirect()->toRoute('vpos', ['action' => 'index']);
     }
@@ -147,7 +147,7 @@ class VposController extends AbstractActionController
         $targetid = (int) $this->params()->fromQuery('targetid', 0);
 
         if (!empty($structid) && !empty($targetid)) {
-            $this->cosmicManager->writeTargetToStructure($structid, $targetid);
+            $this->structureManager->writeTargetToStructure($structid, $targetid);
         }
 
         return $this->redirect()->toRoute('vpos', ['action' => 'index']);
@@ -160,9 +160,20 @@ class VposController extends AbstractActionController
 
         if (!empty($structid)) {
             $this->logger->debug('remmove system connection for AtStructureID: ' . $structid);
-            $this->cosmicManager->writeTargetToStructure($structid, null);
+            $this->structureManager->writeTargetToStructure($structid, null);
         }
 
         return $this->redirect()->toRoute('vpos', ['action' => 'index']);
     }
+
+    /**
+     * Undocumented function
+     *
+     * @return void
+     */
+    public function fetchCoprporationStructuresConsole()
+    {
+        $this->logger->debug('## run fetchCoprporationStructuresConsole');
+        return 50;
+    }    
 }
