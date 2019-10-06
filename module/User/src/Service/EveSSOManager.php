@@ -84,13 +84,13 @@ class EveSSOManager
 
     /**
      *
-     * @var array 
+     * @var array
      */
     private $config;
 
     /**
      *
-     * @var array 
+     * @var array
      */
     private $evesso_config;
     
@@ -167,8 +167,8 @@ class EveSSOManager
                     'scope' => $this->evesso_config['scope'] // only ask for what we really need
                 ];
             }
-            $this->sessionContainer->evescope = $options;
-
+            $this->sessionContainer->evescope = $options['scope'];
+            
             // If we don't have an authorization code then get one
             $authUrl = $this->evesso_provider->getAuthorizationUrl($options);
             $this->sessionContainer->oauth2state = $this->evesso_provider->getState();
@@ -494,6 +494,20 @@ class EveSSOManager
         }
 
         return (false);
+    }
+
+    
+    /**
+     * Check if current user is a CliUser
+     *
+     * @return bool
+     */
+    public function checkCliUser() {
+        if ($this->sessionContainer->evescopecli === true) {
+            return true;
+        }
+
+        return false;
     }
 
     /**

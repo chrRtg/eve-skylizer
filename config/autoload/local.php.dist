@@ -30,7 +30,8 @@ return [
             'publicData',
             'esi-location.read_location.v1',
             'esi-corporations.read_structures.v1',
-            'esi-industry.read_corporation_mining.v1'
+            'esi-industry.read_corporation_mining.v1',
+            'esi-universe.read_structures.v1'
         ],
 		'auth' => [
 			// @ Change to reflect your needs
