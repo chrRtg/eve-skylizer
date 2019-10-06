@@ -51,7 +51,7 @@ return [
             Controller\MoonController::class => Controller\Factory\MoonControllerFactory::class,
             Controller\VposController::class => Controller\Factory\VposControllerFactory::class,
         ],
-    ],        
+    ],
     // The 'access_filter' key is used by the User module to restrict or permit
     // access to certain controller actions for unauthorized visitors.
     'access_filter' => [
@@ -73,12 +73,13 @@ return [
     'service_manager' => [
         'factories' => [
             Service\NavManager::class => Service\Factory\NavManagerFactory::class,
-    Service\MoonManager::class => Service\Factory\MoonManagerFactory::class,
-    Service\VposManager::class => Service\Factory\VposManagerFactory::class,
-    Service\ScanManager::class => Service\Factory\ScanManagerFactory::class,
-    Service\CosmicManager::class => Service\Factory\CosmicManagerFactory::class,
+            Service\MoonManager::class => Service\Factory\MoonManagerFactory::class,
+            Service\VposManager::class => Service\Factory\VposManagerFactory::class,
+            Service\ScanManager::class => Service\Factory\ScanManagerFactory::class,
+            Service\CosmicManager::class => Service\Factory\CosmicManagerFactory::class,
+            Service\StructureManager::class => Service\Factory\StructureManagerFactory::class,
         ],
-    ],        
+    ],
     'view_manager' => [
         'template_path_stack' => [
             'VposMoonModule' => __DIR__ . '/../view',
