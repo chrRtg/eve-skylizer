@@ -243,6 +243,9 @@ td > mark {
 .vpos-citadel {
 	border-left: 5px solid  rgb(78, 4, 4);
 }
+.vpos-flex {
+	border-left: 5px solid  rgb(2, 132, 130);
+}
 .vpos-wh {
 	border-left: 5px solid  #2d6987;
 }

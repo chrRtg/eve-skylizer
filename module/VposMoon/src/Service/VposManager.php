@@ -124,6 +124,9 @@ class VposManager
             $filter_gid[] = 1406;
             $filter_gid[] = 1404;
             $filter_gid[] = 1657;
+            $filter_gid[] = 1408;
+            $filter_gid[] = 2016;
+            $filter_gid[] = 2017;
         }
         if (!empty($filters['vpos_filter_unscanned']) && $filters['vpos_filter_unscanned'] == "1") {
             $filter_gid[] = 502;

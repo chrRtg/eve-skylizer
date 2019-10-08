@@ -45,6 +45,15 @@ class VposMoonHelper extends AbstractHelper
             case '1657':
                 $type = ['cat' => 'structure', 'type' => 'citadel', 'name' => 'Citadel'];
                 break;
+            case '1408':
+                $type = ['cat' => 'structure', 'type' => 'flex', 'name' => 'Flex'];
+                break;
+            case '2016':
+                $type = ['cat' => 'structure', 'type' => 'flex', 'name' => 'Flex'];
+                break;
+            case '2017':
+                $type = ['cat' => 'structure', 'type' => 'flex', 'name' => 'Flex'];
+                break;
             case '988':
                 $type = ['cat' => 'celestial', 'type' => 'wh', 'name' => 'Wormhole'];
                 break;

@@ -32,6 +32,9 @@ class CosmicManager
     const EVE_GROUP_CITADEL = 1657;
     const EVE_GROUP_ENGINEERING_COMPLEX = 1404;
     const EVE_GROUP_REFINERY = 1406;
+    const EVE_GROUP_UPWELL_JUMP_GATE = 1408;
+    const EVE_GROUP_UPWELL_CYNO_JAMMER = 2016;
+    const EVE_GROUP_UPWELL_CYNO_BEACON = 2017;
     const EVE_GROUP_COSMICANOMALY = 885;
     const EVE_GROUP_COSMICSIGNATURE = 502;
     const EVE_GROUP_FORCEFIELD = 411;
@@ -803,6 +806,9 @@ class CosmicManager
             || $eve_groupID == self::EVE_GROUP_CITADEL
             || $eve_groupID == self::EVE_GROUP_ENGINEERING_COMPLEX
             || $eve_groupID == self::EVE_GROUP_REFINERY
+            || $eve_groupID == self::EVE_GROUP_UPWELL_JUMP_GATE
+            || $eve_groupID == self::EVE_GROUP_UPWELL_CYNO_JAMMER
+            || $eve_groupID == self::EVE_GROUP_UPWELL_CYNO_BEACON
         ) {
             return (true);
         }
