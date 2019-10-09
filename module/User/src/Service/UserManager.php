@@ -166,13 +166,12 @@ class UserManager
      *
      * @param int $eve_char_id
      * @param int $eve_corporation
-     * @param string $token
-     * @param string $scope
+     * @param object \Seat\Eseye\Containers\EsiAuthentication()
      * @param string $expire
      *
-     * @return object User_cli entry created or updated
+     * @return  object User_cli entry created or updated
      */
-    public function setCliUser($eve_char_id, $eve_corporation, $token, $scope, $expire)
+    public function setCliUser($eve_char_id, $eve_corporation, $authcontainer, $expire)
     {
         $usercli = $this->entityManager->getRepository(UserCli::class)->findOneByEveUserid($eve_char_id);
         if (!$usercli) {
@@ -180,15 +179,13 @@ class UserManager
             $usercli = new UserCli();
         }
         
-        $date_expire = new \DateTime();
-        $date_expire->setTimestamp($expire);
-
+        $usercli->setAuthContainer(serialize($authcontainer));
         $usercli->setEveCorpid($eve_corporation);
         $usercli->setEveUserid($eve_char_id);
-        $usercli->setEveToken($token);
-        $usercli->setEveScope($scope);
-        $usercli->setEveTokenlifetime($date_expire);
 
+        $date_expire = new \DateTime();
+        $date_expire->setTimestamp($expire);
+        $usercli->setEveTokenlifetime($date_expire);
 
         // Add the entity to the entity manager.
         $this->entityManager->persist($usercli);
@@ -197,5 +194,34 @@ class UserManager
         $this->entityManager->flush();
 
         return $usercli;
+    }
+
+    /**
+     * Set in_use=1 for $usercli
+     *
+     * @param Object UserCli
+     * @return boolean true on success
+     */
+    public function setCliUserInUse($usercli) 
+    {
+        if (!$usercli) {
+            return false;
+        }
+
+        $usercli->setInUse(1);
+        $this->entityManager->persist($usercli);
+        $this->entityManager->flush();
+
+        return true;
+    }
+
+    /**
+     * Return the next entry in UserCli with in_use = 0
+     *
+     * @return  Object   UserCli
+     */
+    public function getNextCliUser()
+    {
+        return $this->entityManager->getRepository(UserCli::class)->findOneBy(array('inUse' => 0));
     }
 }

@@ -16,6 +16,20 @@ class StructureManager
      * @var Doctrine\ORM\EntityManager
      */
     private $entityManager;
+
+    /**
+     * UserManager
+     *
+     * @var \User\Service\UserManager
+     */
+    private $userManager;
+
+    /**
+     *
+     * @var \Application\Service\EveEsiManager
+     */
+    private $eveESIManager;
+
     /**
      *
      * @var \Application\Controller\Plugin\LoggerPlugin
@@ -25,9 +39,11 @@ class StructureManager
     /**
      * Constructs the service.
      */
-    public function __construct($entityManager, $logger)
+    public function __construct($entityManager, $userManager, $eveESIManager, $logger)
     {
         $this->entityManager = $entityManager;
+        $this->userManager = $userManager;
+        $this->eveESIManager = $eveESIManager;
         $this->logger = $logger;
     }
 
@@ -186,6 +202,41 @@ class StructureManager
 
         $numDeleted = $qb->getQuery()->execute();
     }
+
+
+    public function fetchCoprporationStructures()
+    {
+        // get next cliUser and set in_use = 1
+        $cli_users = $this->userManager->getNextCliUser();
+        if(!$cli_users) {
+            return 0;
+        }
+        // ... and set in_use = 1
+        // $this->userManager->setCliUserInUse($cli_users);
+        $this->logger->debug('## run fetchCoprporationStructures: ' . print_r($cli_users->getEveCorpid(),true));
+
+        
+  
+        $this->logger->debug('## /corporation/{corporation_id}/mining/extractions/ ' . print_r($cli_users->getEveCorpid(),true));
+
+        $extractions = $this->eveESIManager->authedRequest('get', '/corporation/{corporation_id}/mining/extractions/', ['corporation_id' => $cli_users->getEveCorpid()], unserialize($cli_users->getAuthContainer()));
+
+        $this->logger->debug('## run fetchCoprporationStructures HEADER: X-Pages :: ' . print_r($extractions->headers['X-Pages'],true));
+
+        $extractions_arr = (array) $extractions;
+        $extractions2 = $this->eveESIManager->authedRequest('get', '/corporation/{corporation_id}/mining/extractions/', ['corporation_id' => $cli_users->getEveCorpid()], unserialize($cli_users->getAuthContainer()));
+
+        $extractions2_arr = (array) $extractions2;
+        $ea = array_merge($extractions_arr, $extractions2_arr);
+        $this->logger->debug('## run fetchCoprporationStructures: ' . print_r($ea,true));
+
+        // for each CliUser 
+
+        // remove CliUser
+
+    }
+
+
     /**
      *
      * @return type

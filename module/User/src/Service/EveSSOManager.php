@@ -295,15 +295,24 @@ class EveSSOManager
 
 
         // also CLI user?
-        if($this->sessionContainer->evescopecli === true) {
-            $this->logger->debug("cli user with token: " . print_r($this->sessionContainer->token->getToken(), true));
-            $this->logger->debug("   and scope: " . print_r(serialize($this->sessionContainer->evescope["scope"]), true));
+        if ($this->sessionContainer->evescopecli === true) {
+
+            // Prepare an authentication container for Eseye
+            $esi_authentication = new \Seat\Eseye\Containers\EsiAuthentication(
+                [
+                    'client_id' => $this->sessionContainer->eveauth['eve_app']['client_id'],
+                    'secret' => $this->sessionContainer->eveauth['eve_app']['client_secret'],
+                    'scopes' => $this->sessionContainer->eveauth['eve_app']['client_scope'],
+                    'access_token' => $this->sessionContainer->eveauth['eve_user']['token'],
+                    'refresh_token' => $this->sessionContainer->eveauth['eve_user']['refresh_token'],
+                    'token_expires' => date('Y-m-d H:i:s', $this->sessionContainer->eveauth['eve_user']['token_expires']),
+                ]
+            );
 
             $this->userManager->setCliUser(
                 $sso_user->getCharacterId(),
-                $character->corporation_id, 
-                $this->sessionContainer->token->getToken(), 
-                serialize($this->sessionContainer->evescope["scope"]),
+                $character->corporation_id,
+                $esi_authentication,
                 $this->sessionContainer->token->getExpires()
             );
         }

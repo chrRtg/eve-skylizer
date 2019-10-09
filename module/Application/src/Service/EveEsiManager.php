@@ -102,26 +102,30 @@ class EveEsiManager
      * @param  string Method of the request (e.g. get, post )
      * @param  string the request (e.g. /characters/{character_id} )
      * @param  array variables from the request and their values (e.g. ['character_id' => 90585056] )
+     * @param object EsiAuthentication
      * @return type
      */
-    public function authedRequest($method, $request, $params)
+    public function authedRequest($method, $request, $params, $authentication=null)
     {
-        // does the application is authed against Eve SSO?
-        if (empty($this->sessionContainer->eveauth['eve_app']['client_id']) || empty($this->sessionContainer->eveauth['eve_user']['token'])) {
-            throw new \Exception('authedRequest to Eve ESI without having client_id and user-token');
-        }
 
-        // Prepare an authentication container for Eseye
-        $authentication = new EsiAuthentication(
-            [
-                'client_id' => $this->sessionContainer->eveauth['eve_app']['client_id'],
-                'secret' => $this->sessionContainer->eveauth['eve_app']['client_secret'],
-                'scopes' => $this->sessionContainer->eveauth['eve_app']['client_scope'],
-                'access_token' => $this->sessionContainer->eveauth['eve_user']['token'],
-                'refresh_token' => $this->sessionContainer->eveauth['eve_user']['refresh_token'],
-                'token_expires' => date('Y-m-d H:i:s', $this->sessionContainer->eveauth['eve_user']['token_expires']),
-            ]
-        );
+        if(!$authentication) {
+            // does the application is authed against Eve SSO?
+            if (empty($this->sessionContainer->eveauth['eve_app']['client_id']) || empty($this->sessionContainer->eveauth['eve_user']['token'])) {
+                throw new \Exception('authedRequest to Eve ESI without having client_id and user-token');
+            }
+
+            // Prepare an authentication container for Eseye
+            $authentication = new EsiAuthentication(
+                [
+                    'client_id' => $this->sessionContainer->eveauth['eve_app']['client_id'],
+                    'secret' => $this->sessionContainer->eveauth['eve_app']['client_secret'],
+                    'scopes' => $this->sessionContainer->eveauth['eve_app']['client_scope'],
+                    'access_token' => $this->sessionContainer->eveauth['eve_user']['token'],
+                    'refresh_token' => $this->sessionContainer->eveauth['eve_user']['refresh_token'],
+                    'token_expires' => date('Y-m-d H:i:s', $this->sessionContainer->eveauth['eve_user']['token_expires']),
+                ]
+            );
+        }
 
         // Instantiate a new Eseye instance.
         $esi = new Eseye($authentication);
