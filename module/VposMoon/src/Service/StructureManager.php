@@ -204,7 +204,7 @@ class StructureManager
     }
 
 
-    public function fetchCoprporationStructures()
+    public function fetchCoprporationStructures($climode=false)
     {
         // get next cliUser and set in_use = 1
         $cli_users = $this->userManager->getNextCliUser();
@@ -213,29 +213,114 @@ class StructureManager
         }
         // ... and set in_use = 1
         // $this->userManager->setCliUserInUse($cli_users);
-        $this->logger->debug('## run fetchCoprporationStructures: ' . print_r($cli_users->getEveCorpid(),true));
 
-        
-  
-        $this->logger->debug('## /corporation/{corporation_id}/mining/extractions/ ' . print_r($cli_users->getEveCorpid(),true));
+        // Get all corporation structures
+        $struct_arr = $this->getAllCorpStructures($cli_users->getEveCorpid(), unserialize($cli_users->getAuthContainer()));
+        if ($climode) {
+            echo "fetched " . count($struct_arr) . " structures for corporation ".$cli_users->getEveCorpid()." " . PHP_EOL;
+        }
 
-        $extractions = $this->eveESIManager->authedRequest('get', '/corporation/{corporation_id}/mining/extractions/', ['corporation_id' => $cli_users->getEveCorpid()], unserialize($cli_users->getAuthContainer()));
+        // enrich them with name, type and solar system
+        $struct_arr = $this->getCorpStructuresByStructures($struct_arr, unserialize($cli_users->getAuthContainer()));
+        if ($climode) {
+            echo "enriched them with detail information like name and type" . PHP_EOL;
+        }
 
-        $this->logger->debug('## run fetchCoprporationStructures HEADER: X-Pages :: ' . print_r($extractions->headers['X-Pages'],true));
+        // enrich them with their extractions if drilling plattforms
+        $struct_arr = $this->getCorpMinningExtractions($struct_arr, $cli_users->getEveCorpid(), unserialize($cli_users->getAuthContainer()));
+        if ($climode) {
+            echo "enriched them with some moon mining extractions" . PHP_EOL;
+        }
 
-        $extractions_arr = (array) $extractions;
-        $extractions2 = $this->eveESIManager->authedRequest('get', '/corporation/{corporation_id}/mining/extractions/', ['corporation_id' => $cli_users->getEveCorpid()], unserialize($cli_users->getAuthContainer()));
-
-        $extractions2_arr = (array) $extractions2;
-        $ea = array_merge($extractions_arr, $extractions2_arr);
-        $this->logger->debug('## run fetchCoprporationStructures: ' . print_r($ea,true));
+        $this->logger->debug('## run fetchCoprporationStructures: ' . print_r($struct_arr, true));
 
         // for each CliUser 
 
         // remove CliUser
-
     }
 
+    /**
+     * Get array of all corporation structures
+     *
+     * @param string $corp_id
+     * @param \Seat\Eseye\Containers\EsiAuthentication auth_container
+     * @return array structures Array
+     */
+    private function getAllCorpStructures($corp_id, $auth_container)
+    {
+        $extractions = array();
+        $page = 1;
+        $xpages = 0;
+
+        do {
+            $res = $this->eveESIManager->authedRequest('get', '/corporations/{corporation_id}/structures/', ['corporation_id' => $corp_id], $auth_container, $page);
+            $extractions = array_merge($extractions, (array) $res);
+            $xpages = $res->headers['X-Pages'];
+        } while ($page++ < $xpages);
+
+        // convert the result into a assoc array with the structure ID as a key
+        $extractions_arr = [];
+        foreach($extractions as $v) {
+            $extractions_arr[$v->structure_id] = (array) $v;
+        }
+
+        return $extractions_arr;
+    }
+
+    /**
+     * Enrich structures array by calling ESI for each structure with
+     *  - name
+     *  - solar_system_id
+     *  - type_id
+     *
+     * @param array struct_arr
+     * @param \Seat\Eseye\Containers\EsiAuthentication auth_container
+     * @return array updated struct_arr
+     */
+    private function getCorpStructuresByStructures($struct_arr, $auth_container)
+    {
+        foreach($struct_arr as $k => $v) {
+            $res = $this->eveESIManager->authedRequest('get', '/universe/structures/{structure_id}/', ['structure_id' => $k], $auth_container);
+            $struct_arr[$k]['name'] = $res->name;
+            $struct_arr[$k]['solar_system_id'] = $res->solar_system_id;
+            $struct_arr[$k]['type_id'] = $res->type_id;
+        }
+
+        return $struct_arr;
+    }
+
+    /**
+     * Enrich structures array by calling ESI for each structure with
+     *  - moon id
+     *  - extraction details
+     *
+     * @param array struct_arr
+     * @param string $corp_id
+     * @param \Seat\Eseye\Containers\EsiAuthentication auth_container
+     * @return array structures Array
+     */
+    private function getCorpMinningExtractions($struct_arr, $corp_id, $auth_container)
+    {
+        $extractions = array();
+        $page = 1;
+        $xpages = 0;
+
+        do {
+            $res = $this->eveESIManager->authedRequest('get', '/corporation/{corporation_id}/mining/extractions/', ['corporation_id' => $corp_id], $auth_container, $page);
+            $extractions = array_merge($extractions, (array) $res);
+            $xpages = $res->headers['X-Pages'];
+        } while ($page++ < $xpages);
+
+        // enrich struct_arr with the data from the extractions
+        foreach ($extractions as $v) {
+            $struct_arr[$v->structure_id]['moon_id'] = $v->moon_id;
+            $struct_arr[$v->structure_id]['chunk_arrival_time'] = $v->chunk_arrival_time;
+            $struct_arr[$v->structure_id]['extraction_start_time'] = $v->extraction_start_time;
+            $struct_arr[$v->structure_id]['natural_decay_time'] = $v->natural_decay_time;
+        }
+
+        return $struct_arr;
+    }
 
     /**
      *
@@ -262,9 +347,5 @@ class StructureManager
             'at_cosmic_detail_id' => null,
             'target_system_id' => null
         ]);
-    }
-
-    public function ping() {
-        $this->logger->debug('#### StructureManager PING()  says "Hello!" ');
     }
 }

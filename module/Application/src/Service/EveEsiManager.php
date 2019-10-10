@@ -105,7 +105,7 @@ class EveEsiManager
      * @param object EsiAuthentication
      * @return type
      */
-    public function authedRequest($method, $request, $params, $authentication=null)
+    public function authedRequest($method, $request, $params, $authentication=null, $page=null)
     {
 
         if(!$authentication) {
@@ -129,6 +129,10 @@ class EveEsiManager
 
         // Instantiate a new Eseye instance.
         $esi = new Eseye($authentication);
+
+        if($page && \is_int($page)) {
+            $esi->page($page);
+        }
 
         // make a call
         try {
