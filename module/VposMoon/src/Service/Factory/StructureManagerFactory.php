@@ -23,6 +23,7 @@ class StructureManagerFactory
             $container->get('doctrine.entitymanager.orm_default'),
             $container->get(\User\Service\UserManager::class),
             $container->get(\Application\Service\EveEsiManager::class),
+            $container->get(\User\Service\EveSSOManager::class),
             $container->get('MyLogger')
         );
     }

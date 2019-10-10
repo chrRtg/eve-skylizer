@@ -19,6 +19,7 @@ class CosmicManager
     // up to which distance we accept a relation between a refinery and a moon?
     const MAX_POSSIBLE_MOONDISTANCE = 10000;
 
+    private const COSMIC_NAMESPLIT_REGEXP = '/.+? - ([\S -]+)/';
     /**
      * Doctrine entity manager.
      *
@@ -428,15 +429,18 @@ class CosmicManager
      *
      * @return string   clean name or item name as not stripable
      */
-    private function cleanEveItemName(string $itemname)
+    public static function cleanEveItemName(string $itemname)
     {
+        $re = '/.+? - ([\S -]+)/';
+
         if ($itemname) {
-            $splitname = explode(' - ', $itemname);
-            if (isset($splitname[1])) {
-                $itemname = $splitname[1];
-            }
+            preg_match($re, $itemname, $name_split_arr);
+            if (!empty($name_split_arr[1])) {
+                $itemname = $name_split_arr[1];
+           }
         }
-        return($itemname);
+
+        return $itemname;
     }
 
     /**

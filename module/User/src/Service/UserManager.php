@@ -182,6 +182,7 @@ class UserManager
         $usercli->setAuthContainer(serialize($authcontainer));
         $usercli->setEveCorpid($eve_corporation);
         $usercli->setEveUserid($eve_char_id);
+        $usercli->setInUse(0);
 
         $date_expire = new \DateTime();
         $date_expire->setTimestamp($expire);

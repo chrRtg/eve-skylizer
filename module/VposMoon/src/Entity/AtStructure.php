@@ -7,14 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * AtStructure
  *
- * @ORM\Table(name="at_structure",         indexes={
- * @ORM\Index(name="idx_targetsystem_id",   columns={"solar_system_id"}),
- * @ORM\Index(name="idx_cosmic_detail_id", columns={"at_cosmic_detail_id"}),
- * @ORM\Index(name="idx_lastseen_data",    columns={"lastseen_date"}),
- * @ORM\Index(name="idx_create_date",      columns={"create_date"}),
- * @ORM\Index(name="idx_st_invtype",       columns={"type_id"}),
- * @ORM\Index(name="idx_targetsystem_id",   columns={"target_system_id"})
- * })
+ * @ORM\Table(name="at_structure", indexes={@ORM\Index(name="idx_targetsystem_id", columns={"target_system_id"}), @ORM\Index(name="idx_lastseen_data", columns={"lastseen_date"}), @ORM\Index(name="idx_structure_id", columns={"structure_id"}), @ORM\Index(name="idx_st_invtype", columns={"type_id"}), @ORM\Index(name="idx_cosmic_detail_id", columns={"at_cosmic_detail_id"}), @ORM\Index(name="idx_create_date", columns={"create_date"})})
  * @ORM\Entity
  */
 class AtStructure
@@ -22,7 +15,7 @@ class AtStructure
     /**
      * @var int
      *
-     * @ORM\Column(name="id",                   type="integer", nullable=false)
+     * @ORM\Column(name="id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -31,119 +24,176 @@ class AtStructure
     /**
      * @var int|null
      *
-     * @ORM\Column(name="type_id", type="integer", nullable=true, options={"comment"="invTypes in case of structures"})
+     * @ORM\Column(name="type_id", type="integer", precision=0, scale=0, nullable=true, options={"comment"="invTypes in case of structures"}, unique=false)
      */
     private $typeId;
 
     /**
      * @var int|null
      *
-     * @ORM\Column(name="corporation_id", type="integer", nullable=true)
+     * @ORM\Column(name="corporation_id", type="integer", precision=0, scale=0, nullable=true, unique=false)
      */
     private $corporationId;
 
     /**
      * @var string|null
      *
-     * @ORM\Column(name="structure_name", type="string", length=255, nullable=true, options={"comment"="player give name"})
+     * @ORM\Column(name="structure_name", type="string", length=255, precision=0, scale=0, nullable=true, options={"comment"="player give name"}, unique=false)
      */
     private $structureName;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="created_by", type="integer", nullable=false)
+     * @ORM\Column(name="created_by", type="integer", precision=0, scale=0, nullable=false, unique=false)
      */
     private $createdBy;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="create_date", type="datetime", nullable=false)
+     * @ORM\Column(name="create_date", type="datetime", precision=0, scale=0, nullable=false, unique=false)
      */
     private $createDate;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="lastseen_by", type="integer", nullable=false)
+     * @ORM\Column(name="lastseen_by", type="integer", precision=0, scale=0, nullable=false, unique=false)
      */
     private $lastseenBy;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="lastseen_date", type="datetime", nullable=false)
+     * @ORM\Column(name="lastseen_date", type="datetime", precision=0, scale=0, nullable=false, unique=false)
      */
     private $lastseenDate;
 
     /**
      * @var int|null
      *
-     * @ORM\Column(name="group_id", type="bigint", nullable=true)
+     * @ORM\Column(name="group_id", type="bigint", precision=0, scale=0, nullable=true, unique=false)
      */
     private $groupId;
 
     /**
      * @var string|null
      *
-     * @ORM\Column(name="signature", type="string", length=10, nullable=true, options={"comment"="scan signature"})
+     * @ORM\Column(name="signature", type="string", length=10, precision=0, scale=0, nullable=true, options={"comment"="scan signature"}, unique=false)
      */
     private $signature;
 
     /**
      * @var int|null
      *
-     * @ORM\Column(name="scan_quality", type="integer", nullable=true)
+     * @ORM\Column(name="scan_quality", type="integer", precision=0, scale=0, nullable=true, unique=false)
      */
     private $scanQuality;
 
     /**
      * @var string|null
      *
-     * @ORM\Column(name="scan_type", type="string", length=10, nullable=true, options={"comment"="scan signature"})
+     * @ORM\Column(name="scan_type", type="string", length=10, precision=0, scale=0, nullable=true, options={"comment"="scan signature"}, unique=false)
      */
     private $scanType;
 
     /**
      * @var int|null
      *
-     * @ORM\Column(name="solar_system_id", type="integer", nullable=true, options={"comment"="maps to mapdenormalize.itemID to indicate the solarsystem"})
+     * @ORM\Column(name="solar_system_id", type="integer", precision=0, scale=0, nullable=true, options={"comment"="maps to mapdenormalize.itemID to indicate the solarsystem"}, unique=false)
      */
     private $solarSystemId;
 
     /**
      * @var int|null
      *
-     * @ORM\Column(name="celestial_id", type="integer", nullable=true, options={"comment"="maps to mapdenormalize. Indicates the nearest celstial"})
+     * @ORM\Column(name="celestial_id", type="integer", precision=0, scale=0, nullable=true, options={"comment"="maps to mapdenormalize. Indicates the nearest celstial"}, unique=false)
      */
     private $celestialId;
 
     /**
      * @var int|null
      *
-     * @ORM\Column(name="celestial_distance", type="bigint", nullable=true, options={"comment"="in KM, how far is the structure away from the celestial"})
+     * @ORM\Column(name="celestial_distance", type="bigint", precision=0, scale=0, nullable=true, options={"comment"="in KM, how far is the structure away from the celestial"}, unique=false)
      */
     private $celestialDistance;
 
     /**
      * @var int|null
      *
-     * @ORM\Column(name="at_cosmic_detail_id", type="integer", nullable=true, options={"comment"="maps to at_cosmic_detail if entity is a site"})
+     * @ORM\Column(name="at_cosmic_detail_id", type="integer", precision=0, scale=0, nullable=true, options={"comment"="maps to at_cosmic_detail if entity is a site"}, unique=false)
      */
     private $atCosmicDetailId;
 
     /**
      * @var int|null
      *
-     * @ORM\Column(name="target_system_id", type="integer", nullable=true, options={"comment"="to link this structure to another solarsystem - wh or gate"})
+     * @ORM\Column(name="target_system_id", type="integer", precision=0, scale=0, nullable=true, options={"comment"="to link this structure to another solarsystem - wh or gate"}, unique=false)
      */
     private $targetSystemId;
 
     /**
-     * Get id
+     * @var int|null
      *
-     * @return integer
+     * @ORM\Column(name="structure_id", type="bigint", precision=0, scale=0, nullable=true, unique=false)
+     */
+    private $structureId;
+
+    /**
+     * @var \DateTime|null
+     *
+     * @ORM\Column(name="fuel_expires", type="datetime", precision=0, scale=0, nullable=true, unique=false)
+     */
+    private $fuelExpires;
+
+    /**
+     * @var int|null
+     *
+     * @ORM\Column(name="reinforce_hour", type="integer", precision=0, scale=0, nullable=true, unique=false)
+     */
+    private $reinforceHour;
+
+    /**
+     * @var int|null
+     *
+     * @ORM\Column(name="reinforce_weekday", type="integer", precision=0, scale=0, nullable=true, unique=false)
+     */
+    private $reinforceWeekday;
+
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(name="structure_state", type="string", length=80, precision=0, scale=0, nullable=true, unique=false)
+     */
+    private $structureState;
+
+    /**
+     * @var \DateTime|null
+     *
+     * @ORM\Column(name="chunk_arrival_time", type="datetime", precision=0, scale=0, nullable=true, unique=false)
+     */
+    private $chunkArrivalTime;
+
+    /**
+     * @var \DateTime|null
+     *
+     * @ORM\Column(name="extraction_start_time", type="datetime", precision=0, scale=0, nullable=true, unique=false)
+     */
+    private $extractionStartTime;
+
+    /**
+     * @var \DateTime|null
+     *
+     * @ORM\Column(name="natural_decay_time", type="datetime", precision=0, scale=0, nullable=true, unique=false)
+     */
+    private $naturalDecayTime;
+
+
+    /**
+     * Get id.
+     *
+     * @return int
      */
     public function getId()
     {
@@ -151,13 +201,13 @@ class AtStructure
     }
 
     /**
-     * Set typeId
+     * Set typeId.
      *
-     * @param integer $typeId
+     * @param int|null $typeId
      *
      * @return AtStructure
      */
-    public function setTypeId($typeId)
+    public function setTypeId($typeId = null)
     {
         $this->typeId = $typeId;
 
@@ -165,48 +215,23 @@ class AtStructure
     }
 
     /**
-     * Get typeId
+     * Get typeId.
      *
-     * @return integer
+     * @return int|null
      */
     public function getTypeId()
     {
         return $this->typeId;
     }
 
-
     /**
-     * Set groupId
+     * Set corporationId.
      *
-     * @param integer $groupId
+     * @param int|null $corporationId
      *
      * @return AtStructure
      */
-    public function setGroupId($groupId)
-    {
-        $this->groupId = $groupId;
-
-        return $this;
-    }
-
-    /**
-     * Get groupId
-     *
-     * @return integer
-     */
-    public function getGroupId()
-    {
-        return $this->groupId;
-    }
-
-    /**
-     * Set corporationId
-     *
-     * @param integer $corporationId
-     *
-     * @return AtStructure
-     */
-    public function setCorporationId($corporationId)
+    public function setCorporationId($corporationId = null)
     {
         $this->corporationId = $corporationId;
 
@@ -214,9 +239,9 @@ class AtStructure
     }
 
     /**
-     * Get corporationId
+     * Get corporationId.
      *
-     * @return integer
+     * @return int|null
      */
     public function getCorporationId()
     {
@@ -224,13 +249,13 @@ class AtStructure
     }
 
     /**
-     * Set structureName
+     * Set structureName.
      *
-     * @param string $structureName
+     * @param string|null $structureName
      *
      * @return AtStructure
      */
-    public function setStructureName($structureName)
+    public function setStructureName($structureName = null)
     {
         $this->structureName = $structureName;
 
@@ -238,9 +263,9 @@ class AtStructure
     }
 
     /**
-     * Get structureName
+     * Get structureName.
      *
-     * @return string
+     * @return string|null
      */
     public function getStructureName()
     {
@@ -248,9 +273,9 @@ class AtStructure
     }
 
     /**
-     * Set createdBy
+     * Set createdBy.
      *
-     * @param integer $createdBy
+     * @param int $createdBy
      *
      * @return AtStructure
      */
@@ -262,9 +287,9 @@ class AtStructure
     }
 
     /**
-     * Get createdBy
+     * Get createdBy.
      *
-     * @return integer
+     * @return int
      */
     public function getCreatedBy()
     {
@@ -272,7 +297,7 @@ class AtStructure
     }
 
     /**
-     * Set createDate
+     * Set createDate.
      *
      * @param \DateTime $createDate
      *
@@ -286,7 +311,7 @@ class AtStructure
     }
 
     /**
-     * Get createDate
+     * Get createDate.
      *
      * @return \DateTime
      */
@@ -296,9 +321,9 @@ class AtStructure
     }
 
     /**
-     * Set lastseenBy
+     * Set lastseenBy.
      *
-     * @param integer $lastseenBy
+     * @param int $lastseenBy
      *
      * @return AtStructure
      */
@@ -310,9 +335,9 @@ class AtStructure
     }
 
     /**
-     * Get lastseenBy
+     * Get lastseenBy.
      *
-     * @return integer
+     * @return int
      */
     public function getLastseenBy()
     {
@@ -320,7 +345,7 @@ class AtStructure
     }
 
     /**
-     * Set lastseenDate
+     * Set lastseenDate.
      *
      * @param \DateTime $lastseenDate
      *
@@ -334,13 +359,37 @@ class AtStructure
     }
 
     /**
-     * Get lastseenDate
+     * Get lastseenDate.
      *
      * @return \DateTime
      */
     public function getLastseenDate()
     {
         return $this->lastseenDate;
+    }
+
+    /**
+     * Set groupId.
+     *
+     * @param int|null $groupId
+     *
+     * @return AtStructure
+     */
+    public function setGroupId($groupId = null)
+    {
+        $this->groupId = $groupId;
+
+        return $this;
+    }
+
+    /**
+     * Get groupId.
+     *
+     * @return int|null
+     */
+    public function getGroupId()
+    {
+        return $this->groupId;
     }
 
     /**
@@ -533,5 +582,197 @@ class AtStructure
     public function getTargetSystemId()
     {
         return $this->targetSystemId;
+    }
+
+    /**
+     * Set structureId.
+     *
+     * @param int|null $structureId
+     *
+     * @return AtStructure
+     */
+    public function setStructureId($structureId = null)
+    {
+        $this->structureId = $structureId;
+
+        return $this;
+    }
+
+    /**
+     * Get structureId.
+     *
+     * @return int|null
+     */
+    public function getStructureId()
+    {
+        return $this->structureId;
+    }
+
+    /**
+     * Set fuelExpires.
+     *
+     * @param \DateTime|null $fuelExpires
+     *
+     * @return AtStructure
+     */
+    public function setFuelExpires($fuelExpires = null)
+    {
+        $this->fuelExpires = $fuelExpires;
+
+        return $this;
+    }
+
+    /**
+     * Get fuelExpires.
+     *
+     * @return \DateTime|null
+     */
+    public function getFuelExpires()
+    {
+        return $this->fuelExpires;
+    }
+
+    /**
+     * Set reinforceHour.
+     *
+     * @param int|null $reinforceHour
+     *
+     * @return AtStructure
+     */
+    public function setReinforceHour($reinforceHour = null)
+    {
+        $this->reinforceHour = $reinforceHour;
+
+        return $this;
+    }
+
+    /**
+     * Get reinforceHour.
+     *
+     * @return int|null
+     */
+    public function getReinforceHour()
+    {
+        return $this->reinforceHour;
+    }
+
+    /**
+     * Set reinforceWeekday.
+     *
+     * @param int|null $reinforceWeekday
+     *
+     * @return AtStructure
+     */
+    public function setReinforceWeekday($reinforceWeekday = null)
+    {
+        $this->reinforceWeekday = $reinforceWeekday;
+
+        return $this;
+    }
+
+    /**
+     * Get reinforceWeekday.
+     *
+     * @return int|null
+     */
+    public function getReinforceWeekday()
+    {
+        return $this->reinforceWeekday;
+    }
+
+    /**
+     * Set structureState.
+     *
+     * @param string|null $structureState
+     *
+     * @return AtStructure
+     */
+    public function setStructureState($structureState = null)
+    {
+        $this->structureState = $structureState;
+
+        return $this;
+    }
+
+    /**
+     * Get structureState.
+     *
+     * @return string|null
+     */
+    public function getStructureState()
+    {
+        return $this->structureState;
+    }
+
+    /**
+     * Set chunkArrivalTime.
+     *
+     * @param \DateTime|null $chunkArrivalTime
+     *
+     * @return AtStructure
+     */
+    public function setChunkArrivalTime($chunkArrivalTime = null)
+    {
+        $this->chunkArrivalTime = $chunkArrivalTime;
+
+        return $this;
+    }
+
+    /**
+     * Get chunkArrivalTime.
+     *
+     * @return \DateTime|null
+     */
+    public function getChunkArrivalTime()
+    {
+        return $this->chunkArrivalTime;
+    }
+
+    /**
+     * Set extractionStartTime.
+     *
+     * @param \DateTime|null $extractionStartTime
+     *
+     * @return AtStructure
+     */
+    public function setExtractionStartTime($extractionStartTime = null)
+    {
+        $this->extractionStartTime = $extractionStartTime;
+
+        return $this;
+    }
+
+    /**
+     * Get extractionStartTime.
+     *
+     * @return \DateTime|null
+     */
+    public function getExtractionStartTime()
+    {
+        return $this->extractionStartTime;
+    }
+
+    /**
+     * Set naturalDecayTime.
+     *
+     * @param \DateTime|null $naturalDecayTime
+     *
+     * @return AtStructure
+     */
+    public function setNaturalDecayTime($naturalDecayTime = null)
+    {
+        $this->naturalDecayTime = $naturalDecayTime;
+
+        return $this;
+    }
+
+    /**
+     * Get naturalDecayTime.
+     *
+     * @return \DateTime|null
+     */
+    public function getNaturalDecayTime()
+    {
+        return $this->naturalDecayTime;
     }
 }
