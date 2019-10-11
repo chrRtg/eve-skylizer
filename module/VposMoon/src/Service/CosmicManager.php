@@ -183,7 +183,7 @@ class CosmicManager
             if ($next_celestial['match']) {
                 $celestial_id = (int) $next_celestial['match']['celestial_id'];
                 if ($next_celestial['match']['eve_groupid'] == self::EVE_GROUP_STARGATE) {
-                    $this->structure_collector[$key]['target_system_id'] =  $celestial_id;
+                    $this->structure_collector[$key]['target_system_id'] = $celestial_id;
                 } else {
                     $this->structure_collector[$key]['celestial_id'] =  $celestial_id;
                 }
@@ -202,6 +202,10 @@ class CosmicManager
                 $this->structure_collector[$key]['celestial_distance'] = $celestial_distance;
             }
 
+			// Ansiblex gate, link the destination like a WH
+			if ($struct['eve_typeid'] == 35841) {
+				$this->structure_collector[$key]['target_system_id'] = $this->getSystemIDFromEveItemName(explode(' » ', $struct['eve_itemname'])[1]);
+			}
 
             // do we already have this structure in DB?
             $atstructure_entity = $this->entityManager->getRepository(AtStructure::class)->findOneBy(array(
@@ -314,7 +318,7 @@ class CosmicManager
                     if ($sytem_id) {
                         $this->data_collector[$key]['solarsystem_id'] = $sytem_id;
                     }
-                }
+			    }
             }
 
 
