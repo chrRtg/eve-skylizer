@@ -16,11 +16,12 @@ class UserManagerFactory
      * This method creates the UserManager service and returns its instance. 
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
-    {        
-        $entityManager = $container->get('doctrine.entitymanager.orm_default');
-        $roleManager = $container->get(RoleManager::class);
-        $permissionManager = $container->get(PermissionManager::class);
-        
-        return new UserManager($entityManager, $roleManager, $permissionManager, $container->get('MyLogger'));
+    {
+        return new UserManager(
+            $container->get('doctrine.entitymanager.orm_default'),
+            $container->get(RoleManager::class),
+            $container->get(PermissionManager::class),
+            $container->get('MyLogger')
+        );
     }
 }

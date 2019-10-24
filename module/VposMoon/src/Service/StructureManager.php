@@ -221,7 +221,7 @@ class StructureManager
     /**
      * Delete all anomalies older than 3 days
      *
-     * @return void
+     * @return int  amount of entries deleted
      */
     public function removeOutdatedAnomalies()
     {
@@ -240,7 +240,7 @@ class StructureManager
             ->setParameters($parameter)
             ->andWhere($qb->expr()->in('at.groupId', ':anogrouplist'));
 
-        $numDeleted = $qb->getQuery()->execute();
+        return $qb->getQuery()->execute();
     }
 
     /**
@@ -261,6 +261,14 @@ class StructureManager
         if (!$cli_users) {
             return 0;
         }
+
+        // if SSO token in user-cli entry has expired renew it
+       if ($this->userManager->checkCliUserTokenExpiry($cli_users)) {
+            $ac = unserialize($cli_users->getAuthContainer());
+            $new_token = $this->eveSSOManager->getFreshAccessToken($ac['refresh_token']);
+            $this->userManager->updateSsoCliUser($cli_users->getEveUserid(), $new_token);
+        }
+
         // ... and set in_use = 1
 // @todo enable inUse
         // $this->userManager->setCliUserInUse($cli_users);

@@ -49,7 +49,7 @@ class UserManager
 
     /**
      * User insert or update
-     * 
+     *
      * @param  int     $eve_char_id
      * @param  Object  $eve_char
      * @param  Object  $eve_corporation
@@ -96,7 +96,7 @@ class UserManager
      * @param  string $corp_ticker
      * @return Object EveCorporation
      */
-    private function getOrAddCorporation($corp_id, $corp_name, $corp_ticker = '', $alliance_id=0)
+    private function getOrAddCorporation($corp_id, $corp_name, $corp_ticker = '', $alliance_id = 0)
     {
         $corp = $this->entityManager->getRepository(EveCorporation::class)->findOneByCorporationId($corp_id);
         if (!$corp) {
@@ -119,14 +119,14 @@ class UserManager
     
     /**
      * This method updates the roles of an existing user.
-     * 
+     *
      * @param  Object $user
      * @param  Array  $data
      * @return boolean
      */
     public function updateUser($user, $data)
     {
-        $user->setStatus($data['status']); 
+        $user->setStatus($data['status']);
         // Assign roles to user.
         $this->assignRoles($user, $data['roles']);
 
@@ -138,7 +138,7 @@ class UserManager
 
     /**
      * A helper method which assigns new roles to the user.
-     * 
+     *
      * @param  Object $user
      * @param  Array  $roleIds
      * @throws \Exception
@@ -167,11 +167,11 @@ class UserManager
      * @param int $eve_char_id
      * @param int $eve_corporation
      * @param object \Seat\Eseye\Containers\EsiAuthentication()
-     * @param string $expire
+     * @param string $expire as unix timezone
      *
      * @return  object User_cli entry created or updated
      */
-    public function setCliUser($eve_char_id, $eve_corporation, $authcontainer, $expire)
+    public function setCliUser($eve_char_id, $eve_corporation, $authcontainer, $token, $expire)
     {
         $usercli = $this->entityManager->getRepository(UserCli::class)->findOneByEveUserid($eve_char_id);
         if (!$usercli) {
@@ -180,6 +180,7 @@ class UserManager
         }
         
         $usercli->setAuthContainer(serialize($authcontainer));
+        $usercli->setToken(serialize($token));
         $usercli->setEveCorpid($eve_corporation);
         $usercli->setEveUserid($eve_char_id);
         $usercli->setInUse(0);
@@ -203,7 +204,7 @@ class UserManager
      * @param Object UserCli
      * @return boolean true on success
      */
-    public function setCliUserInUse($usercli) 
+    public function setCliUserInUse($usercli)
     {
         if (!$usercli) {
             return false;
@@ -224,5 +225,60 @@ class UserManager
     public function getNextCliUser()
     {
         return $this->entityManager->getRepository(UserCli::class)->findOneBy(array('inUse' => 0));
+    }
+
+    /**
+     * Check if SSO token from one UserCli entry has been expired
+     *
+     * @param [type] \User\Entity\UserCli
+     * @return bool true if expired
+     */
+    public function checkCliUserTokenExpiry($usercli)
+    {
+        if ($usercli) {
+            $authcontainer = unserialize($usercli->getAuthcontainer());
+            if (strtotime($authcontainer['token_expires']) < time()) {
+                //expired!
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Update one UserCli entry after a SSO refresh has been performed.accordion
+     * 
+     * All data objects will get updated internally according to the AccessToken provided.
+     *
+     * @param int $eve_userid
+     * @param object \League\OAuth2\Client\Token\AccessToken
+     * @return void
+     */
+    public function updateSsoCliUser($eve_userid, $token)
+    {
+        $this->logger->debug('### UserManager - refreshSsoCliUser() ');
+
+        $usercli = $this->entityManager->getRepository(UserCli::class)->findOneByEveUserid($eve_userid);
+        if ($usercli) {
+            $this->logger->debug('### UserManager - refreshSsoCliUser() entry found for EveID: ' . $eve_userid);
+
+            $date_expire = new \DateTime();
+            $date_expire->setTimestamp($token->getExpires());
+
+            // update authcontainer with new data
+            $authcontainer = unserialize($usercli->getAuthcontainer());
+            $authcontainer['access_token'] = $token->getToken();
+            $authcontainer['refresh_token'] = $token->getRefreshToken();
+            $authcontainer['token_expires'] = $date_expire->format('Y-m-d H:i:s');
+    
+            // write back
+            $this->setCliUser(
+                $usercli->getEveUserid(),
+                $usercli->getEveCorpid(),
+                $authcontainer,
+                $token,
+                $token->getExpires()
+            );
+        }
     }
 }

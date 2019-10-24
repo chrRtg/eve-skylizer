@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * UserCli
  *
- * @ORM\Table(name="user_cli", indexes={@ORM\Index(name="ids_inuse", columns={"in_use"}), @ORM\Index(name="idx_lifetime", columns={"eve_tokenlifetime"})})
+ * @ORM\Table(name="user_cli", uniqueConstraints={@ORM\UniqueConstraint(name="eve_userid_UNIQUE", columns={"eve_userid"})}, indexes={@ORM\Index(name="ids_inuse", columns={"in_use"}), @ORM\Index(name="idx_lifetime", columns={"eve_tokenlifetime"})})
  * @ORM\Entity
  */
 class UserCli
@@ -15,7 +15,7 @@ class UserCli
     /**
      * @var int
      *
-     * @ORM\Column(name="eve_userid", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="eve_userid", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
      */
@@ -24,38 +24,41 @@ class UserCli
     /**
      * @var int
      *
-     * @ORM\Column(name="eve_corpid", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="eve_corpid", type="integer", nullable=false)
      */
     private $eveCorpid;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="eve_tokenlifetime", type="datetime", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="eve_tokenlifetime", type="datetime", nullable=false)
      */
     private $eveTokenlifetime;
 
     /**
      * @var string|null
      *
-     * @ORM\Column(name="authcontainer", type="text", length=16777215, precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="authcontainer", type="text", length=16777215, nullable=true)
      */
     private $authcontainer;
-
-        /**
-     * @var string|null
-     *
-     * @ORM\Column(name="token", type="text", length=16777215, precision=0, scale=0, nullable=true, unique=false)
-     */
-    private $token;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="in_use", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="in_use", type="integer", nullable=false)
      */
-    private $inUse;
+    private $inUse = '0';
 
+
+    /**
+     * Get eveUserid.
+     *
+     * @return int
+     */
+    public function getEveUserid()
+    {
+        return $this->eveUserid;
+    }
 
     /**
      * Set eveUserid.
@@ -71,15 +74,6 @@ class UserCli
         return $this;
     }
 
-    /**
-     * Get eveUserid.
-     *
-     * @return int
-     */
-    public function getEveUserid()
-    {
-        return $this->eveUserid;
-    }
 
     /**
      * Set eveCorpid.
@@ -136,7 +130,7 @@ class UserCli
      *
      * @return UserCli
      */
-    public function setAuthcontainer($authcontainer = null)
+    public function setAuthContainer($authcontainer = null)
     {
         $this->authcontainer = $authcontainer;
 
@@ -148,43 +142,19 @@ class UserCli
      *
      * @return string|null
      */
-    public function getAuthcontainer()
+    public function getAuthContainer()
     {
         return $this->authcontainer;
     }
 
     /**
-     * Set token.
-     *
-     * @param string|null $token
-     *
-     * @return UserCli
-     */
-    public function setToken($token = null)
-    {
-        $this->token = $token;
-
-        return $this;
-    }
-
-    /**
-     * Get token.
-     *
-     * @return string|null
-     */
-    public function getToken()
-    {
-        return $this->token;
-    }
-
-    /**
      * Set inUse.
      *
-     * @param int $inUse
+     * @param string|null $inUse
      *
      * @return UserCli
      */
-    public function setInUse($inUse)
+    public function setInUse($inUse = null)
     {
         $this->inUse = $inUse;
 
@@ -194,7 +164,7 @@ class UserCli
     /**
      * Get inUse.
      *
-     * @return int
+     * @return string|null
      */
     public function getInUse()
     {
