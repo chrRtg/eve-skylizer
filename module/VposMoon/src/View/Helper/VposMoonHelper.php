@@ -354,6 +354,13 @@ class VposMoonHelper extends AbstractHelper
         return ($res);
     }
 
+    /**
+     * Undocumented function
+     *
+     * @param [type] $group_ids
+     * @param integer $selected_id
+     * @return void
+     */
     public function getEveTypesListAsOptions($group_ids, $selected_id = 0)
     {
         if (!is_array($group_ids)) {
@@ -458,6 +465,45 @@ class VposMoonHelper extends AbstractHelper
         }
 
         return ('');
+    }
+
+    /**
+     * Human readable difference between two dates. 
+     * If the amount of remaining days is equal or less than $warndays the result is formated as a badge.scanname
+     *
+     * The method accept date strings and DateTime objects for both date parameters
+     *
+     * @param string-DateTime $date_to
+     * @param string-DateTime $date_from [now]
+     * @param integer $warndays [5]
+     * @param string $differenceFormat [days. hours:minutes]
+     * @return string human readable date difference
+     */
+    public function dateDifference($date_to, $date_from=null, $warndays=5, $differenceFormat = '%ad.%H:%i')
+    {
+        if(empty($date_from)) {
+            $date_from = new \DateTime('NOW');
+        }
+
+        if (is_string($date_to)) {
+            $tmp_t = new \DateTime($date_to);
+            $date_to = $tmp_t;
+        }
+
+        if (is_string($date_from)) {
+            $tmp_f = new \DateTime($date_from);
+            $date_from = $tmp_f;
+        }
+        
+
+        $interval = date_diff($date_from, $date_to);
+
+        $diff_days = (int) $interval->format('%a');
+        if ($diff_days <= $warndays) {
+            return $interval->format('<span class="badge  badge-warning">'.$differenceFormat.'</span>');
+        }
+
+        return $interval->format($differenceFormat);
     }
 
     /**

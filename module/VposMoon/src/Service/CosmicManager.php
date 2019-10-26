@@ -95,8 +95,6 @@ class CosmicManager
      */
     public function processScan()
     {
-        $this->structureManager->ping();
-
         $res_arr = array(
             'del_anom' => 0,
             'scan_anom' => array()

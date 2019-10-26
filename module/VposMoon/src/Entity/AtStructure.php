@@ -171,6 +171,20 @@ class AtStructure
     /**
      * @var \DateTime|null
      *
+     * @ORM\Column(name="state_timer_start", type="datetime", precision=0, scale=0, nullable=true, unique=false)
+     */
+    private $stateTimerStart;
+
+    /**
+     * @var \DateTime|null
+     *
+     * @ORM\Column(name="state_timer_end", type="datetime", precision=0, scale=0, nullable=true, unique=false)
+     */
+    private $stateTimerEnd;
+
+    /**
+     * @var \DateTime|null
+     *
      * @ORM\Column(name="chunk_arrival_time", type="datetime", precision=0, scale=0, nullable=true, unique=false)
      */
     private $chunkArrivalTime;
@@ -702,6 +716,54 @@ class AtStructure
     public function getStructureState()
     {
         return $this->structureState;
+    }
+
+    /**
+     * Set stateTimerStart.
+     *
+     * @param \DateTime|null $stateTimerStart
+     *
+     * @return AtStructure
+     */
+    public function setStateTimerStart($stateTimerStart = null)
+    {
+        $this->stateTimerStart = $stateTimerStart;
+
+        return $this;
+    }
+
+    /**
+     * Get stateTimerStart.
+     *
+     * @return \DateTime|null
+     */
+    public function getStateTimerStart()
+    {
+        return $this->stateTimerStart;
+    }
+
+    /**
+     * Set stateTimerEnd.
+     *
+     * @param \DateTime|null $stateTimerEnd
+     *
+     * @return AtStructure
+     */
+    public function setStateTimerEnd($stateTimerEnd = null)
+    {
+        $this->stateTimerEnd = $stateTimerEnd;
+
+        return $this;
+    }
+
+    /**
+     * Get stateTimerEnd.
+     *
+     * @return \DateTime|null
+     */
+    public function getStateTimerEnd()
+    {
+        return $this->stateTimerEnd;
     }
 
     /**

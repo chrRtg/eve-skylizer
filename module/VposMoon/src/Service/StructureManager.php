@@ -291,6 +291,8 @@ class StructureManager
             echo "enriched them with some moon mining extractions" . PHP_EOL;
         }
 
+        //$this->logger->debug('### esiFetchCoprporationStructures :: after #1 :: ' . print_r($struct_arr, true));
+     
         // A
         $this->esiWriteStructure($struct_arr, $climode);
 
@@ -339,6 +341,8 @@ class StructureManager
             $structure_data['corporation_id'] = $v['corporation_id'];
             $structure_data['solarsystem_id'] = $v['solar_system_id'];
             $structure_data['structure_id'] = $v['structure_id'];
+            $structure_data['state_timer_start'] = (!empty($v['state_timer_start']) ? self::eveDateToTimestamp($v['state_timer_start']) : null);
+            $structure_data['state_timer_end'] = (!empty($v['state_timer_end']) ? self::eveDateToTimestamp($v['state_timer_end']) : null);
             $structure_data['fuel_expires'] = self::eveDateToTimestamp($v['fuel_expires']);
             $structure_data['reinforce_hour'] = $v['reinforce_hour'];
             $structure_data['reinforce_weekday'] = $v['reinforce_weekday'];
@@ -476,6 +480,8 @@ class StructureManager
             'reinforce_hour' => null,
             'reinforce_weekday' => null,
             'structure_state' => null,
+            'state_timer_start' => null,
+            'state_timer_end' => null,
             'chunk_arrival_time' => null,
             'extraction_start_time' => null,
             'natural_decay_time' => null

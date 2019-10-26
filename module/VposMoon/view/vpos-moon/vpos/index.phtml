@@ -116,7 +116,10 @@ if (empty($filters['info_system']['constellation'])) {
 									<?=(($struct['at_scanQuality'] && $struct['at_scanQuality'] > 0 && $struct['at_scanQuality'] < 100) ? '<span class="scanname">' . $this->escapeHtml($struct['at_scanQuality']) . '%</span>' : "")?>
 								</td>
 								<td>
-									<span class="vpos-<?=$vptype['type'];?>">&nbsp;<?=$vptype['name'];?></span>
+									<div class="vpos-<?=$vptype['type'];?>">&nbsp;<?=$vptype['name'];?>
+										<?=($struct['at_extractionStartTime'] ? '<hr>&nbsp;<span class="tertiary small">Chunk: ' . $this->vpViewTool()->dateDifference($struct['at_extractionStartTime'], $struct['at_naturalDecayTime'], 2) . '</span>' : '')?>
+										<?=($struct['at_fuelExpires'] ? '<br>&nbsp;<span class="tertiary small">Fuel: ' . $this->vpViewTool()->dateDifference($struct['at_fuelExpires']) . '</span>' : '')?>&nbsp;
+										</div>
 									<?=($struct['acd_class'] ? '<br><span class="vpos-' . $vptype['type'] . '">&nbsp;' . $this->escapeHtml($struct['acd_class']) . '</span>' : '')?>
 								</td>
 								<td>
@@ -171,7 +174,7 @@ if (empty($filters['info_system']['constellation'])) {
 										<?=$this->escapeHtml($struct['celest_name']);?>
 									<?php endif;?>
 									<?php if (isset($struct['at_celestialDistance']) && isset($struct['at_celestialId'])): ?>
-										<br><span class="secondarytext"><?=$this->escapeHtml(number_format($struct['at_celestialDistance'], 0, ',', '.'));?> KM</span>
+										<br><span class="tertiary"><?=$this->escapeHtml(number_format($struct['at_celestialDistance'], 0, ',', '.'));?> KM</span>
 										<?php endif;?>
 								</td>
 								<td>
