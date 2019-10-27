@@ -19,7 +19,6 @@ class CosmicManager
     // up to which distance we accept a relation between a refinery and a moon?
     const MAX_POSSIBLE_MOONDISTANCE = 10000;
 
-    private const COSMIC_NAMESPLIT_REGEXP = '/.+? - ([\S -]+)/';
     /**
      * Doctrine entity manager.
      *
@@ -161,9 +160,9 @@ class CosmicManager
             if ($next_celestial['match']) {
                 $celestial_id = (int) $next_celestial['match']['celestial_id'];
                 if ($next_celestial['match']['eve_groupid'] == \VposMoon\Service\ScanManager::EVE_GROUP_STARGATE) {
-                    $this->structure_collector[$key]['target_system_id'] =  $celestial_id;
+                    $this->structure_collector[$key]['target_system_id'] = $celestial_id;
                 } else {
-                    $this->structure_collector[$key]['celestial_id'] =  $celestial_id;
+                    $this->structure_collector[$key]['celestial_id'] = $celestial_id;
                 }
 
                 $celestial_distance = (int) $next_celestial['dist'];
@@ -180,6 +179,10 @@ class CosmicManager
                 $this->structure_collector[$key]['celestial_distance'] = $celestial_distance;
             }
 
+            // Ansiblex gate, link the destination like a WH
+            if ($struct['eve_typeid'] == 35841) {
+                $this->structure_collector[$key]['target_system_id'] = $this->getSystemIDFromEveItemName(explode(' » ', $struct['eve_itemname'])[1]);
+            }
 
             // do we already have this structure in DB?
             $atstructure_entity = $this->entityManager->getRepository(AtStructure::class)->findOneBy(array(
@@ -444,30 +447,34 @@ class CosmicManager
     /**
      * Takes a EveItemName like "RLL-9R IX - Intaki Space Police Assembly Plant" and extracts the celestial name from it
      *
-     * @param string $itemname
-     * @return array    celestial
+     * @param string name of celestial
+     * @return string celestial ID or null
      */
     private function getSystemIDFromEveItemName(string $itemname)
     {
+        if(empty($itemname)) {
+            return null;
+        }
+
         $systemname = null;
 
         // EveItemname of a celestial looks like "RLL-9R IX - Intaki Space Police Assembly Plant"
         // we split the input by " - ", the first part is the system name
-        $splitname = explode(' - ', $itemname);
-        if (isset($splitname[0])) {
-            $systemname = $splitname[0];
+        $re_regular = '/(.*?) (»|-) (.*)/';
+        preg_match($re_regular, $itemname, $name_split_arr);
+        if (!empty($name_split_arr[1])) {
+            $systemname = $name_split_arr[1];
         }
-
         if (!$systemname) {
-            return (false);
+            return (null);
         }
 
         $celstial = $this->eveDataManager->getCelestialByName($systemname);
 
-        if($celstial) {
+        if ($celstial) {
             return($celstial->getItemid());
         }
-        return(false);
+        return(null);
     }
 
     
@@ -503,7 +510,6 @@ class CosmicManager
 
         // only one match, then accept it
         if (count($celstial_dist_collector) == 1) {
-            $this->logger->debug('##D : one');
             $res['match'] = $this->celestial_collector[$first];
             $res['dist'] = $celstial_dist_collector[$first];
             return($res);

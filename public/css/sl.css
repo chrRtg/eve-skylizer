@@ -287,6 +287,9 @@ hr {
 .vpos-ore {
 	border-left: 5px solid #8439BB;
 }
+.vpos-flex {
+	border-left: 5px solid  rgb(2, 132, 130);
+}
 
 .vpos-unscanned {
 	border-left: 5px solid  #aaa;

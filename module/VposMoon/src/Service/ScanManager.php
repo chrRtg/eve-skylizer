@@ -30,7 +30,10 @@ class ScanManager
     const EVE_GROUP_FORCEFIELD = 411;
     const EVE_GROUP_WORMHOLE = 988;
     const EVE_TYPE_UWORMHOLE = 26272;
-
+    // flex structures
+    const EVE_GROUP_UPWELL_JUMP_GATE = 1408;
+    const EVE_GROUP_UPWELL_CYNO_JAMMER = 2016;
+    const EVE_GROUP_UPWELL_CYNO_BEACON = 2017;
 
     // pattern to analyze and break various inputs
     private const COSMIC_SCAN_REGEXP = '/^([A-Z]{3}-[0-9]{3})\t(.*)\t(.*)\t(.*)\t([0-9\,\.]+.?\%)\t(.*)/';
@@ -292,6 +295,9 @@ class ScanManager
             || $eve_groupID == self::EVE_GROUP_CITADEL
             || $eve_groupID == self::EVE_GROUP_ENGINEERING_COMPLEX
             || $eve_groupID == self::EVE_GROUP_REFINERY
+            || $eve_groupID == self::EVE_GROUP_UPWELL_JUMP_GATE
+            || $eve_groupID == self::EVE_GROUP_UPWELL_CYNO_JAMMER
+            || $eve_groupID == self::EVE_GROUP_UPWELL_CYNO_BEACON
         ) {
             return (true);
         }

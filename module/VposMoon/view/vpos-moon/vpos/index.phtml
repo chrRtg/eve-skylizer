@@ -140,19 +140,8 @@ if (empty($filters['info_system']['constellation'])) {
 								<?php endif;?>
 								</td>
 								<td>
-									<?php if ($vptype['cat'] == 'structure'): ?>
-										<a href="#" class="structlink" data-toggle="modal"
-											data-structid="<?=$struct['at_id'];?>"
-											data-structtype="<?=$struct['at_typeId'];?>"
-											data-structgivename="<?=$struct['at_structureName'];?>"
-											data-scorpid="<?=$struct['own_corpticker'];?>"
-											data-scorpname="<?=$struct['own_corporationName'];?>"
-											data-scorpticker="<?=$struct['at_corporationId'];?>"
-											data-moonid="<?=$struct['at_celestialId'];?>"
-											data-target="#structureEditModal">
-										<?=($struct['own_corpticker'] ? $this->escapeHtml($struct['own_corpticker']) : '<i class="glyphicon glyphicon-plus passive"></i>');?></a>
-									<?php elseif ($vptype['type'] == 'wh'): ?>
-										<!-- WH management -->
+									<?php if ($vptype['type'] == 'wh' || $struct['at_typeId'] == 35841): ?>
+										<!-- WH / JumpGate management -->
 										<?php if ($struct['target_name']): ?>
 											<a href="<?= $this->url('vpos', [], array('query' => array('system' => $struct['at_targetSystemId']))); ?>" title="jump to system in skYlizer" class="unobtrusive"><i class="glyphicon glyphicon-new-window passive"></i></a>
 											<a href="<?=$this->vpViewTool()->createExternalSystemURL($struct['target_name']);?>" title="open system information in new window" class="unobtrusive" target="_blank"><?=$this->escapeHtml($struct['target_name']);?></a>
@@ -162,6 +151,18 @@ if (empty($filters['info_system']['constellation'])) {
 											<input class="typeahead" data-action="settargetsystem" data-pk="<?=$struct['at_id'];?>" type="text" placeholder="WH goes to?">
 											&nbsp;<span class="secondarytext"><?=$this->vpViewTool()->formatClassid(false, abs($struct['at_targetSystemId'])); ?></span>
 										<?php endif; ?>
+									<?php elseif ($vptype['cat'] == 'structure'): ?>
+									<a href="#" class="structlink" data-toggle="modal"
+										data-structid="<?=$struct['at_id'];?>"
+										data-structtype="<?=$struct['at_typeId'];?>"
+										data-structgivename="<?=$struct['at_structureName'];?>"
+										data-scorpid="<?=$struct['own_corpticker'];?>"
+										data-scorpname="<?=$struct['own_corporationName'];?>"
+										data-scorpticker="<?=$struct['at_corporationId'];?>"
+										data-moonid="<?=$struct['at_celestialId'];?>"
+										data-target="#structureEditModal">
+									<?=($struct['own_corpticker'] ? $this->escapeHtml($struct['own_corpticker']) : '<i class="glyphicon glyphicon-plus passive"></i>');?></a>
+
 									<?php endif;?>
 								</td>
 								<td>
