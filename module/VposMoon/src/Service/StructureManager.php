@@ -246,6 +246,9 @@ class StructureManager
     /**
      * Fetch all information about the Corporations structures
      *
+     * Takes care to refresh SSO token in user_cli if required
+     * Blocks unblocks user_cli entries
+     *
      * Call requires some elaborated ESI scopes
      *  - esi-corporations.read_structures.v1
      *  - esi-industry.read_corporation_mining.v1
@@ -256,48 +259,57 @@ class StructureManager
      */
     public function esiFetchCoprporationStructures($climode = false)
     {
-        // get next cliUser and set in_use = 1
-        $cli_users = $this->userManager->getNextCliUser();
-        if (!$cli_users) {
+        // any cli user already in progress?
+        $running = $this->userManager->checkCliUserInUse();
+        if ($running != 0) {
+            if ($climode) {
+                echo "STOP :: at least one UserCli entry still in use." . PHP_EOL;
+            }
+            $this->logger->debug('STOP :: StructureManager->esiFetchCoprporationStructures() :: still a UserCli entry in use!');
             return 0;
         }
 
+        // get next cliUser and set in_use = 1
+        $cli_user = $this->userManager->getNextCliUser();
+        if (!$cli_user) {
+            return 0;
+        }
+ 
         // if SSO token in user-cli entry has expired renew it
-       if ($this->userManager->checkCliUserTokenExpiry($cli_users)) {
-            $ac = unserialize($cli_users->getAuthContainer());
+        if ($this->userManager->checkCliUserTokenExpiry($cli_user)) {
+            $ac = unserialize($cli_user->getAuthContainer());
             $new_token = $this->eveSSOManager->getFreshAccessToken($ac['refresh_token']);
-            $this->userManager->updateSsoCliUser($cli_users->getEveUserid(), $new_token);
+            $this->userManager->updateSsoCliUser($cli_user->getEveUserid(), $new_token);
         }
 
         // ... and set in_use = 1
-// @todo enable inUse
-        // $this->userManager->setCliUserInUse($cli_users);
+        $this->userManager->setCliUserInUse($cli_user);
 
         // Get all corporation structures
-        $struct_arr = $this->esiGetAllCorpStructures($cli_users->getEveCorpid(), unserialize($cli_users->getAuthContainer()));
+        $struct_arr = $this->esiGetAllCorpStructures($cli_user->getEveCorpid(), unserialize($cli_user->getAuthContainer()));
         if ($climode) {
-            echo "fetched " . count($struct_arr) . " structures for corporation ".$cli_users->getEveCorpid()." " . PHP_EOL;
+            echo "fetched " . count($struct_arr) . " structures for corporation ".$cli_user->getEveCorpid()." " . PHP_EOL;
         }
 
         // enrich them with name, type and solar system
-        $struct_arr = $this->esiGetCorpStructuresByStructures($struct_arr, unserialize($cli_users->getAuthContainer()));
+        $struct_arr = $this->esiGetCorpStructuresByStructures($struct_arr, unserialize($cli_user->getAuthContainer()));
         if ($climode) {
             echo "enriched them with detail information like name and type" . PHP_EOL;
         }
 
         // enrich them with their extractions if drilling plattforms
-        $struct_arr = $this->esiGetCorpMinningExtractions($struct_arr, $cli_users->getEveCorpid(), unserialize($cli_users->getAuthContainer()));
+        $struct_arr = $this->esiGetCorpMinningExtractions($struct_arr, $cli_user->getEveCorpid(), unserialize($cli_user->getAuthContainer()));
         if ($climode) {
             echo "enriched them with some moon mining extractions" . PHP_EOL;
         }
 
         //$this->logger->debug('### esiFetchCoprporationStructures :: after #1 :: ' . print_r($struct_arr, true));
      
-        // A
+        // Write the result data object to DB
         $this->esiWriteStructure($struct_arr, $climode);
 
-// @todo remove CliUser
-        // remove CliUser
+        // reset CliUser for next usage
+        $this->userManager->unsetCliUserInUse($cli_user);
     }
 
     /**

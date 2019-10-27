@@ -6,12 +6,15 @@ CREATE TABLE `user_cli` (
   `eve_corpid` int(11) NOT NULL,
   `eve_tokenlifetime` datetime NOT NULL,
   `authcontainer` mediumtext,
-  `in_use` int(1) NOT NULL DEFAULT '0',
   `token` mediumtext,
+  `in_use` int(1) NOT NULL DEFAULT '0',
+  `fetch_due` datetime DEFAULT NULL,
   PRIMARY KEY (`eve_userid`),
   KEY `idx_lifetime` (`eve_tokenlifetime`),
-  KEY `ids_inuse` (`in_use`)
+  KEY `idx_inuse` (`in_use`),
+  KEY `idx_fetchdue` (`fetch_due`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 
 ALTER TABLE `annotare`.`at_structure` 
 ADD COLUMN `structure_id` BIGINT(20) NULL DEFAULT NULL COMMENT '' AFTER `target_system_id`,

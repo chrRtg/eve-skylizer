@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * UserCli
  *
- * @ORM\Table(name="user_cli", indexes={@ORM\Index(name="ids_inuse", columns={"in_use"}), @ORM\Index(name="idx_lifetime", columns={"eve_tokenlifetime"})})
+ * @ORM\Table(name="user_cli", indexes={@ORM\Index(name="idx_inuse", columns={"in_use"}), @ORM\Index(name="idx_lifetime", columns={"eve_tokenlifetime"}), @ORM\Index(name="idx_fetchdue", columns={"fetch_due"})})
  * @ORM\Entity
  */
 class UserCli
@@ -56,6 +56,12 @@ class UserCli
      */
     private $inUse;
 
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="fetch_due", type="datetime", precision=0, scale=0, nullable=false, unique=false)
+     */
+    private $fetchDue;
 
     /**
      * Set eveUserid.
@@ -199,5 +205,28 @@ class UserCli
     public function getInUse()
     {
         return $this->inUse;
+    }
+    /**
+     * Set fetchDue.
+     *
+     * @param int $fetchDue
+     *
+     * @return UserCli
+     */
+    public function setFetchDue($fetchDue)
+    {
+        $this->fetchDue = $fetchDue;
+
+        return $this;
+    }
+
+    /**
+     * Get fetchDue.
+     *
+     * @return int
+     */
+    public function getFetchDue()
+    {
+        return $this->fetchDue;
     }
 }

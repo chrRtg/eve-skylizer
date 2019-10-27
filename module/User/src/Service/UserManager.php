@@ -184,6 +184,7 @@ class UserManager
         $usercli->setEveCorpid($eve_corporation);
         $usercli->setEveUserid($eve_char_id);
         $usercli->setInUse(0);
+        $usercli->setFetchDue(new \DateTime("now"));
 
         $date_expire = new \DateTime();
         $date_expire->setTimestamp($expire);
@@ -218,13 +219,61 @@ class UserManager
     }
 
     /**
+     * Set in_use=0 and update due date for on entry in $usercli
+     *
+     * @param Object UserCli
+     * @return boolean true on success
+     */
+    public function unsetCliUserInUse($usercli)
+    {
+        if (!$usercli) {
+            return false;
+        }
+
+        $new_due = new \DateTime('now');
+        $new_due->add(new \DateInterval('PT10M'));
+
+        $usercli->setInUse(0);
+        $usercli->setFetchDue($new_due);
+        $this->entityManager->persist($usercli);
+        $this->entityManager->flush();
+
+        return true;
+    }
+
+
+    /**
+     * Return ammount of CliUsers in use (in_use=1)
+     *
+     * @return object UserCli result object
+     */
+    public function checkCliUserInUse()
+    {
+        return $this->entityManager->getRepository(UserCli::class)->createQueryBuilder('uc')
+            ->select('count(uc.eveUserid)')
+            ->where('uc.inUse = 1')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
+    /**
      * Return the next entry in UserCli with in_use = 0
      *
      * @return  Object   UserCli
      */
     public function getNextCliUser()
     {
-        return $this->entityManager->getRepository(UserCli::class)->findOneBy(array('inUse' => 0));
+        // select * from user_cli where in_use = 0 AND fetch_due <= now() order by fetch_due asc;
+        $qb = $this->entityManager->createQueryBuilder();
+        $qb->select('uc')
+            ->from(UserCli::class, 'uc')
+            ->where('uc.inUse = 0')
+            ->andWhere('uc.fetchDue <= :date_due')
+            ->orderBy('uc.fetchDue')
+            ->setParameter('date_due', new \DateTime('now'))
+            ->setMaxResults(1);
+
+        return $qb->getQuery()->getOneOrNullResult();
     }
 
     /**
@@ -247,7 +296,7 @@ class UserManager
 
     /**
      * Update one UserCli entry after a SSO refresh has been performed.accordion
-     * 
+     *
      * All data objects will get updated internally according to the AccessToken provided.
      *
      * @param int $eve_userid
