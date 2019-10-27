@@ -16,7 +16,7 @@ CREATE TABLE `user_cli` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-ALTER TABLE `annotare`.`at_structure` 
+ALTER TABLE `at_structure` 
 ADD COLUMN `structure_id` BIGINT(20) NULL DEFAULT NULL COMMENT '' AFTER `target_system_id`,
 ADD COLUMN `fuel_expires` DATETIME NULL DEFAULT NULL COMMENT '' AFTER `structure_id`,
 ADD COLUMN `reinforce_hour` INT(2) NULL DEFAULT NULL COMMENT '' AFTER `fuel_expires`,
@@ -27,6 +27,5 @@ ADD COLUMN `extraction_start_time` DATETIME NULL DEFAULT NULL COMMENT '' AFTER `
 ADD COLUMN `natural_decay_time` DATETIME NULL DEFAULT NULL COMMENT '' AFTER `extraction_start_time`,
 ADD COLUMN `state_timer_start` DATETIME NULL DEFAULT NULL COMMENT '' AFTER `structure_state`,
 ADD COLUMN `state_timer_end` DATETIME NULL COMMENT '' AFTER `state_timer_start`;
-ADD INDEX `idx_structure_id` (`structure_id` ASC)  COMMENT '';
 
 SET FOREIGN_KEY_CHECKS = 1;
