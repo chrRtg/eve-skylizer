@@ -2,39 +2,13 @@
 
 namespace VposMoon\Service;
 
+use Application\Service\EveDataManager;
+
 /**
  * The MoonController is about Moons, Survey Scans and Moon Goo
  */
 class ScanManager
 {
-    /*
-     * EVE constants
-     */
-
-    const EVE_CATEGORY_STRUCTURE = 23;
-    const EVE_CATEGORY_SHIP = 6;
-    // fixed position elements we may use as a reference point
-    const EVE_GROUP_SUN = 6;
-    const EVE_GROUP_PLANET = 7;
-    const EVE_GROUP_MOON = 8;
-    const EVE_GROUP_ASTEROIDBELT = 9;
-    const EVE_GROUP_STARGATE = 10;
-    const EVE_GROUP_STATION = 15;
-    // structures we may store individual
-    const EVE_GROUP_CONTROLTOWER = 365;
-    const EVE_GROUP_CITADEL = 1657;
-    const EVE_GROUP_ENGINEERING_COMPLEX = 1404;
-    const EVE_GROUP_REFINERY = 1406;
-    const EVE_GROUP_COSMICANOMALY = 885;
-    const EVE_GROUP_COSMICSIGNATURE = 502;
-    const EVE_GROUP_FORCEFIELD = 411;
-    const EVE_GROUP_WORMHOLE = 988;
-    const EVE_TYPE_UWORMHOLE = 26272;
-    // flex structures
-    const EVE_GROUP_UPWELL_JUMP_GATE = 1408;
-    const EVE_GROUP_UPWELL_CYNO_JAMMER = 2016;
-    const EVE_GROUP_UPWELL_CYNO_BEACON = 2017;
-
     // pattern to analyze and break various inputs
     private const COSMIC_SCAN_REGEXP = '/^([A-Z]{3}-[0-9]{3})\t(.*)\t(.*)\t(.*)\t([0-9\,\.]+.?\%)\t(.*)/';
     private const COSMIC_DSCAN_REGEXP = '/^(\S*)\t([\S ]*)\t([\S ]*)\t(-|[0-9\.\,]+ [AEUkm]+)/';
@@ -272,10 +246,10 @@ class ScanManager
      */
     public static function isAnomaly($eve_groupID, $eve_typeID = 0)
     {
-        if ($eve_groupID == self::EVE_GROUP_COSMICANOMALY
-            || $eve_groupID == self::EVE_GROUP_COSMICSIGNATURE
-            || $eve_groupID == self::EVE_GROUP_WORMHOLE
-            || $eve_typeID == self::EVE_TYPE_UWORMHOLE
+        if ($eve_groupID == EveDataManager::EVE_GROUP_COSMICANOMALY
+            || $eve_groupID == EveDataManager::EVE_GROUP_COSMICSIGNATURE
+            || $eve_groupID == EveDataManager::EVE_GROUP_WORMHOLE
+            || $eve_typeID == EveDataManager::EVE_TYPE_UWORMHOLE
         ) {
             return (true);
         }
@@ -291,13 +265,13 @@ class ScanManager
      */
     public static function isStructure($eve_groupID, $eve_typeID = 0)
     {
-        if ($eve_groupID == self::EVE_GROUP_CONTROLTOWER
-            || $eve_groupID == self::EVE_GROUP_CITADEL
-            || $eve_groupID == self::EVE_GROUP_ENGINEERING_COMPLEX
-            || $eve_groupID == self::EVE_GROUP_REFINERY
-            || $eve_groupID == self::EVE_GROUP_UPWELL_JUMP_GATE
-            || $eve_groupID == self::EVE_GROUP_UPWELL_CYNO_JAMMER
-            || $eve_groupID == self::EVE_GROUP_UPWELL_CYNO_BEACON
+        if ($eve_groupID == EveDataManager::EVE_GROUP_CONTROLTOWER
+            || $eve_groupID == EveDataManager::EVE_GROUP_CITADEL
+            || $eve_groupID == EveDataManager::EVE_GROUP_ENGINEERING_COMPLEX
+            || $eve_groupID == EveDataManager::EVE_GROUP_REFINERY
+            || $eve_groupID == EveDataManager::EVE_GROUP_UPWELL_JUMP_GATE
+            || $eve_groupID == EveDataManager::EVE_GROUP_UPWELL_CYNO_JAMMER
+            || $eve_groupID == EveDataManager::EVE_GROUP_UPWELL_CYNO_BEACON
         ) {
             return (true);
         }
@@ -313,7 +287,7 @@ class ScanManager
      */
     public static function isRefinery($eve_groupID, $eve_typeID = 0)
     {
-        if ($eve_groupID == self::EVE_GROUP_REFINERY) {
+        if ($eve_groupID == EveDataManager::EVE_GROUP_REFINERY) {
             return (true);
         }
         return (false);
@@ -328,12 +302,12 @@ class ScanManager
      */
     public static function isCelestial($eve_groupID, $eve_typeID = 0)
     {
-        if ($eve_groupID == self::EVE_GROUP_SUN
-            || $eve_groupID == self::EVE_GROUP_PLANET
-            || $eve_groupID == self::EVE_GROUP_MOON
-            || $eve_groupID == self::EVE_GROUP_ASTEROIDBELT
-            || $eve_groupID == self::EVE_GROUP_STARGATE
-            || $eve_groupID == self::EVE_GROUP_STATION
+        if ($eve_groupID == EveDataManager::EVE_GROUP_SUN
+            || $eve_groupID == EveDataManager::EVE_GROUP_PLANET
+            || $eve_groupID == EveDataManager::EVE_GROUP_MOON
+            || $eve_groupID == EveDataManager::EVE_GROUP_ASTEROIDBELT
+            || $eve_groupID == EveDataManager::EVE_GROUP_STARGATE
+            || $eve_groupID == EveDataManager::EVE_GROUP_STATION
         ) {
             return (true);
         }

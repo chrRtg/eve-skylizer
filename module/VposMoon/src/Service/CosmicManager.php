@@ -4,6 +4,7 @@ namespace VposMoon\Service;
 
 use VposMoon\Entity\AtCosmicDetail;
 use VposMoon\Entity\AtStructure;
+use Application\Service\EveDataManager;
 
 /**
  * Description of CosmicManager
@@ -159,7 +160,7 @@ class CosmicManager
             // add relation to next celestial as well their distance to each other
             if ($next_celestial['match']) {
                 $celestial_id = (int) $next_celestial['match']['celestial_id'];
-                if ($next_celestial['match']['eve_groupid'] == \VposMoon\Service\ScanManager::EVE_GROUP_STARGATE) {
+                if ($next_celestial['match']['eve_groupid'] == EveDataManager::EVE_GROUP_STARGATE) {
                     $this->structure_collector[$key]['target_system_id'] = $celestial_id;
                 } else {
                     $this->structure_collector[$key]['celestial_id'] = $celestial_id;
@@ -180,7 +181,7 @@ class CosmicManager
             }
 
             // Ansiblex gate, link the destination like a WH
-            if ($struct['eve_typeid'] == 35841) {
+            if ($struct['eve_typeid'] == EveDataManager::EVE_TYPE_ANSIBLEX_JUMP_GATE) {
                 $this->structure_collector[$key]['target_system_id'] = $this->getSystemIDFromEveItemName(explode(' » ', $struct['eve_itemname'])[1]);
             }
 
@@ -359,7 +360,7 @@ class CosmicManager
             } else {
                 // let's inspect the item a little bit deeper:
                 $item = $this->eveDataManager->getItemByLocalizedName($this->data_collector[$key]['structure_name']);
-                if ($item && $item['categoryid'] == \VposMoon\Service\ScanManager::EVE_CATEGORY_STRUCTURE) {
+                if ($item && $item['categoryid'] == EveDataManager::EVE_CATEGORY_STRUCTURE) {
                     $this->structure_elem_collector[] = $this->data_collector[$key];
                 } else {
                     // anything else we have to check individually if categoryID == 23 for structure modules

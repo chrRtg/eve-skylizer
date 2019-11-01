@@ -21,6 +21,36 @@ use Application\Entity\Mapsolarsystemjumps;
  */
 class EveDataManager
 {
+    /*
+     * EVE constants
+     */
+
+    const EVE_CATEGORY_STRUCTURE = 23;
+    const EVE_CATEGORY_SHIP = 6;
+    // fixed position elements we may use as a reference point
+    const EVE_GROUP_SUN = 6;
+    const EVE_GROUP_PLANET = 7;
+    const EVE_GROUP_MOON = 8;
+    const EVE_GROUP_ASTEROIDBELT = 9;
+    const EVE_GROUP_STARGATE = 10;
+    const EVE_GROUP_STATION = 15;
+    // structures we may store individual
+    const EVE_GROUP_CONTROLTOWER = 365;
+    const EVE_GROUP_FORCEFIELD = 411;
+    const EVE_GROUP_COSMICSIGNATURE = 502;
+    const EVE_GROUP_COSMICANOMALY = 885;
+    const EVE_GROUP_WORMHOLE = 988;
+    const EVE_GROUP_ENGINEERING_COMPLEX = 1404;
+    const EVE_GROUP_REFINERY = 1406;
+    const EVE_GROUP_CITADEL = 1657;
+    const EVE_TYPE_UWORMHOLE = 26272;
+    // flex structures
+    const EVE_GROUP_UPWELL_JUMP_GATE = 1408;
+    const EVE_GROUP_UPWELL_CYNO_JAMMER = 2016;
+    const EVE_GROUP_UPWELL_CYNO_BEACON = 2017;
+    const EVE_TYPE_ANSIBLEX_JUMP_GATE = 35841;
+
+
     /**
      * Entity manager.
      *
