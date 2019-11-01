@@ -3,6 +3,7 @@
 namespace VposMoon\Service;
 
 use VposMoon\Entity\AtStructure;
+use Application\Service\EveDataManager;
 
 /**
  * The StructuresManager writes and changes the data in AtStructure like anomalies, structures and such
@@ -165,10 +166,9 @@ class StructureManager
             $structure_entity->setNaturalDecayTime($structure_data['natural_decay_time']);
         }
 
-
         $structure_entity->setLastseenDate(new \DateTime("now"));
         $structure_entity->setLastseenBy($this->eveSSOManager->getIdentityID());
- 
+
         $this->entityManager->persist($structure_entity);
         $this->entityManager->flush();
 
@@ -232,13 +232,53 @@ class StructureManager
         // $this->logger->debug('### removedate: '. $removedate);
 
         $parameter['cmpdate'] = $removedate;
-        $parameter['anogrouplist'] = array('885', '502', '988', '26272');
+        $parameter['anogrouplist'] = array(
+            EveDataManager::EVE_GROUP_COSMICANOMALY,
+            EveDataManager::EVE_GROUP_COSMICSIGNATURE,
+            EveDataManager::EVE_GROUP_WORMHOLE,
+            EveDataManager::EVE_TYPE_UWORMHOLE);
 
         $qb = $this->entityManager->createQueryBuilder();
         $qb->delete(\VposMoon\Entity\AtStructure::class, 'at')
             ->where('at.lastseenDate <= :cmpdate')
             ->setParameters($parameter)
             ->andWhere($qb->expr()->in('at.groupId', ':anogrouplist'));
+
+        return $qb->getQuery()->execute();
+    }
+
+    /**
+     * Delete all structures of a corporation not seen in the last hour.accordion
+     *
+     * To be used usually in conjunction with ESI based structure updater, removes all
+     * structures not longer provided by ESI for the corporation.
+     *
+     * @param integer $corporation_id
+     * @param string $expiry_period
+     * @return int amount of structures removed
+     */
+    private function removeOutdatedStructures(int $corporation_id, string $expiry_period = '-1 hour')
+    {
+        // remove all Upwell structures with groupID 1404,1406 and 1657 if lastseen_date < now - 1hr
+        $date = new \DateTime("now");
+        $date->modify($expiry_period);
+        $removedate = $date->format('Y-m-d H:i:s');
+
+        //$this->logger->debug('### removedate: '. $removedate);
+
+        $parameter['cmpdate'] = $removedate;
+        $parameter['corpid'] = $corporation_id;
+        $parameter['structgrouplist'] = array(
+            EveDataManager::EVE_GROUP_ENGINEERING_COMPLEX,
+            EveDataManager::EVE_GROUP_REFINERY,
+            EveDataManager::EVE_GROUP_CITADEL);
+
+        $qb = $this->entityManager->createQueryBuilder();
+        $qb->delete(\VposMoon\Entity\AtStructure::class, 's')
+            ->where('s.corporationId = :corpid')
+            ->andWhere('s.lastseenDate <= :cmpdate')
+            ->andWhere($qb->expr()->in('s.groupId', ':structgrouplist'))
+            ->setParameters($parameter);
 
         return $qb->getQuery()->execute();
     }
@@ -274,7 +314,7 @@ class StructureManager
         if (!$cli_user) {
             return 0;
         }
- 
+
         // if SSO token in user-cli entry has expired renew it
         if ($this->userManager->checkCliUserTokenExpiry($cli_user)) {
             $ac = unserialize($cli_user->getAuthContainer());
@@ -288,7 +328,7 @@ class StructureManager
         // Get all corporation structures
         $struct_arr = $this->esiGetAllCorpStructures($cli_user->getEveCorpid(), unserialize($cli_user->getAuthContainer()));
         if ($climode) {
-            echo "fetched " . count($struct_arr) . " structures for corporation ".$cli_user->getEveCorpid()." " . PHP_EOL;
+            echo "fetched " . count($struct_arr) . " structures for corporation " . $cli_user->getEveCorpid() . " " . PHP_EOL;
         }
 
         // enrich them with name, type and solar system
@@ -304,9 +344,15 @@ class StructureManager
         }
 
         //$this->logger->debug('### esiFetchCoprporationStructures :: after #1 :: ' . print_r($struct_arr, true));
-     
+
         // Write the result data object to DB
         $this->esiWriteStructure($struct_arr, $climode);
+
+        // remove structures from this corp no longer found
+        $res = $this->removeOutdatedStructures($cli_user->getEveCorpid());
+        if ($climode && $res != 0) {
+            echo "removed " . $res . " structures for corporation " . $cli_user->getEveCorpid() . " because they were no longer provided by ESI" . PHP_EOL;
+        }
 
         // reset CliUser for next usage
         $this->userManager->unsetCliUserInUse($cli_user);
@@ -496,7 +542,7 @@ class StructureManager
             'state_timer_end' => null,
             'chunk_arrival_time' => null,
             'extraction_start_time' => null,
-            'natural_decay_time' => null
+            'natural_decay_time' => null,
         ]);
     }
 
