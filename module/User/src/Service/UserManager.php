@@ -249,11 +249,45 @@ class UserManager
      */
     public function checkCliUserInUse()
     {
+        // wake sleeping in_use after a certain amount of time
+        $this->rouseCliUser();
+
         return $this->entityManager->getRepository(UserCli::class)->createQueryBuilder('uc')
             ->select('count(uc.eveUserid)')
             ->where('uc.inUse = 1')
             ->getQuery()
             ->getSingleScalarResult();
+    }
+
+    /**
+     * reset cli users after a certain amount of inactivity
+     *
+     * @return void
+     */
+    private function rouseCliUser()
+    {
+        $due = new \DateTime('now');
+        $due->sub(new \DateInterval('PT1H'));
+
+        $sleepy_cli_user = $this->entityManager->getRepository(UserCli::class)->createQueryBuilder('uc')
+            ->select('uc')
+            ->where('uc.inUse = 1')
+            ->andWhere('uc.fetchDue <= :date_due')
+            ->setParameter('date_due', $due)
+            ->getQuery()
+            ->getOneOrNullResult();
+            
+        if ($sleepy_cli_user) {
+            // $this->logger->debug('### rouseCliUSer - found one: ' . $sleepy_cli_user->getEveUserid());
+
+            $repo = $this->entityManager->getRepository(UserCli::class)->createQueryBuilder('uc')
+                ->update()
+                ->set('uc.inUse', '0')
+                ->set('uc.fetchDue', ':newdue')
+                ->setParameter('newdue', new \DateTime())
+                ->getQuery()
+                ->execute();
+        }
     }
 
     /**
