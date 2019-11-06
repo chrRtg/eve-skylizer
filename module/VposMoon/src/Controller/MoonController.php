@@ -175,6 +175,13 @@ class MoonController extends AbstractActionController
         return $this->eveDataManager->updateAllyCorp($force, $mode);
     }
 
+
+    public function moonGooExportConsole($value, $mode)
+    {
+        return $this->moonManager->exportMoonGoo($value, $mode);
+    }
+    
+
     /**
      * Export Moons and Moongoo as a CSV and offer a download link.
      *
@@ -228,9 +235,6 @@ class MoonController extends AbstractActionController
      *
      * A structure consist of the eve-type, a celestial (moon, planet, sun, gate, station) the structure is nearby,
      * the owning corporation and the player given name of the structure
-     *
-     * @todo support more structures than moons
-     * @todo support distance to celestial
      *
      * @return JsonModel
      */

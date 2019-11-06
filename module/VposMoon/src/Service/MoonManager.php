@@ -483,8 +483,96 @@ class MoonManager
         return true;
     }
 
-    public function ping($param = '')
+    /**
+     * Create MoonGoo Scan file and write it to disk
+     *
+     * @param integer id according to mode
+     * @param string mode to determine filter ('u' = userID, 's' = solarSystemID, 'c' = constellationID)
+     * @return string human readable message
+     */
+    public function exportMoonGoo(int $value, string $mode)
     {
-        return ('MoonManager-ping ' . $param);
+        $gooarr = $this->getMoonGooForExport($value, $mode);
+
+        if (empty($gooarr)) {
+            return 'MoonManagexportMoonGooer: nothing found to export';
+        }
+
+        $payload = $this->createMoonGooScanFile($gooarr);
+
+        // store result to text file
+        $filename = './data/storage/skylizerMoonGooExport_' . $mode . '-' . $value . '_' . date('ymd') . ".txt";
+        file_put_contents($filename, $payload);
+
+
+        return ('created file: ' . $filename);
     }
+
+    /**
+     * Creates a string identical to EVE moon scans out of a moongoo data array
+     *
+     * @param array $moongoo
+     * @return string Moon scan string
+     */
+    private function createMoonGooScanFile($moongoo)
+    {
+        if (empty($moongoo)) {
+            return false;
+        }
+
+        $moonid = 0;
+        $text = "Moon    Moon Product\tQuantity\tOre TypeID\tSolarSystemID\tPlanetID\tMoonID\r\n";
+
+        foreach ($moongoo as $r) {
+            if ($r['moonID'] != $moonid) {
+                $text .= $r['moonName']."\r\n";
+                $moonid = $r['moonID'];
+            }
+            $text .= "\t".$r['typename']."\t".$r['gooAmount']."\t".$r['typeID']."\t".$r['solarsystemid']."\t".$r['planetID']."\t".$r['moonID']."\r\n";
+        }
+
+        return $text;
+    }
+
+    /**
+     * Get a list of all MoonGoo which consist of the same information as a moon scan
+     * 
+     * This function is used by the moon-goo exporter.
+     *
+     * @param integer id according to mode
+     * @param string mode to determine filter ('u' = userID, 's' = solarSystemID, 'c' = constellationID)
+     * @return array list of result objects
+     */
+    private function getMoonGooForExport(int $value, string $mode)
+    {
+        $queryBuilder = $this->entityManager->createQueryBuilder();
+
+        $queryBuilder->select('md1.itemname as moonName, IDENTITY(am.eveMapdenormalizeItemid) moonID, md2.itemid as planetID, md1.solarsystemid, ag.gooAmount, IDENTITY(ag.eveInvtypesTypeid) as typeID, it.typename')
+            ->from(\VposMoon\Entity\AtMoon::class, 'am')
+            ->Join(\VposMoon\Entity\AtMoongoo::class, 'ag', 'WITH', 'ag.moon = am.moonId')
+            ->leftJoin(\Application\Entity\Mapdenormalize::class, 'md1', 'WITH', 'md1.itemid = am.eveMapdenormalizeItemid')
+            ->leftJoin(\Application\Entity\Mapdenormalize::class, 'md2', 'WITH', 'md2.solarsystemid = md1.solarsystemid AND md2.groupid = 7 and md2.celestialindex = md1.celestialindex')
+            ->leftJoin(\Application\Entity\Invtypes::class, 'it', 'WITH', 'it.typeid = ag.eveInvtypesTypeid')
+            ->orderBy('am.eveMapdenormalizeItemid');
+
+        
+        switch ($mode) {
+            case 'u':
+                $queryBuilder->where('ag.createdBy = :id')->setParameters(array('id' => intval($value)));
+                break;
+                case 's':
+                $queryBuilder->where('md1.solarsystemid = :id')->setParameters(array('id' => intval($value)));
+                break;
+            case 'c':
+                $queryBuilder->where('md1.constellationid = :id')->setParameters(array('id' => intval($value)));
+                break;
+            default:
+                $this->logger->info('ERROR MoonManager->exportMoonGoo: UNKNOWN mode: ' . $mode);
+                return(false);
+                break;
+        }
+
+        return ($queryBuilder->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_SCALAR));
+    }
+
 }

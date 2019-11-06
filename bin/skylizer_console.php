@@ -10,6 +10,8 @@ use Application\Console\AllyCorpUpdateCommand;
 use Application\Console\PriceUpdateCommand;
 use Application\Console\EpPriceUpdateCommand;
 use Application\Console\FetchCorporationStructures;
+use Application\Console\ExportMoongooCommand;
+
 use Symfony\Component\Console\Application;
 use Zend\Mvc\Application as ZendApplication;
 use Zend\Stdlib\ArrayUtils;
@@ -25,11 +27,12 @@ if (file_exists(__DIR__ . '/../config/development.config.php')) {
 $zendApplication = ZendApplication::init($appConfig);
 $serviceManager = $zendApplication->getServiceManager();
 
-$application = new Application('skylizer', '2.0.0');
+$application = new Application('skylizer', '2.2.3');
 $application->add(new PriceUpdateCommand($serviceManager));
 $application->add(new EpPriceUpdateCommand($serviceManager));
 $application->add(new AllyCorpUpdateCommand($serviceManager));
 $application->add(new FetchCorporationStructures($serviceManager));
+$application->add(new ExportMoongooCommand($serviceManager));
 
 //$application->setDefaultCommand($command->getName(), true);
 $application->run();
