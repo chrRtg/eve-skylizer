@@ -59,13 +59,14 @@ class UserManager
     public function getOrAddUser($eve_char_id, $eve_char, $eve_corporation, $force_admin = false)
     {
         $user = $this->entityManager->getRepository(User::class)->findOneByEveUserid($eve_char_id);
-
+		$new_user = false;
         if (!$user) {
+			$new_user = true;
             // Create new User entity.
             $user = new User();
             $user->setStatus(1);
             $user->setDateCreated(new \DateTime("now"));
-        }
+        } 
         
         $user->setEveCorpid($this->getOrAddCorporation($eve_char->corporation_id, $eve_corporation->name, $eve_corporation->ticker, (isset($eve_corporation->alliance_id) ? $eve_corporation->alliance_id : 0)));
         $user->setEveUserid($eve_char_id);
@@ -76,7 +77,9 @@ class UserManager
         if ($force_admin === true) {
             $this->assignRoles($user, ['1']); // Admin Role
         } else {
-            $this->assignRoles($user, ['4']); // 4 == Standard User
+			if ($new_user){
+				$this->assignRoles($user, ['4']); // 4 == Standard User
+			}
         }
 
         // Add the entity to the entity manager.
