@@ -472,7 +472,7 @@ class StructureManager
 
         do {
             $res = $this->eveESIManager->authedRequest('get', '/corporations/{corporation_id}/structures/', ['corporation_id' => $corp_id], $auth_container, $page);
-            if(!$res) {
+            if (!$res) {
                 return false;
             }
             $extractions = array_merge($extractions, (array) $res);
@@ -502,7 +502,7 @@ class StructureManager
     {
         foreach ($struct_arr as $k => $v) {
             $res = $this->eveESIManager->authedRequest('get', '/universe/structures/{structure_id}/', ['structure_id' => $k], $auth_container);
-            if(!$res) {
+            if (!$res) {
                 return false;
             }
             $struct_arr[$k]['name'] = $res->name;
@@ -531,7 +531,7 @@ class StructureManager
 
         do {
             $res = $this->eveESIManager->authedRequest('get', '/corporation/{corporation_id}/mining/extractions/', ['corporation_id' => $corp_id], $auth_container, $page);
-            if(!$res) {
+            if (!$res) {
                 return false;
             }
             $extractions = array_merge($extractions, (array) $res);

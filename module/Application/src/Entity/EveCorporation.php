@@ -133,6 +133,5 @@ class EveCorporation
     public function getAllianceId()
     {
         return $this->allianceId;
-    }    
-
+    }
 }
