@@ -158,7 +158,7 @@ class Menu extends AbstractHelper
             $result .= '</ul>';
             $result .= '</li>';
             
-        } else {        
+        } else {
             $link = isset($item['link']) ? $item['link'] : '#';
             
             $result .= $isActive?'<li class="active">':'<li>';

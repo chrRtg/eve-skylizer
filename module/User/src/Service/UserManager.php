@@ -260,6 +260,27 @@ class UserManager
     }
 
     /**
+     * Set in_use=9 for $usercli to indicate an erroneous entry
+     *
+     * @param Object UserCli
+     * @return boolean true on success
+     */
+    public function setCliUserDefective($usercli, $message = '')
+    {
+        if (!$usercli) {
+            return false;
+        }
+
+        $usercli->setInUse(9);
+        $usercli->setMessage($message);
+        $this->entityManager->persist($usercli);
+        $this->entityManager->flush();
+
+        return true;
+    }
+
+
+    /**
      * reset cli users after a certain amount of inactivity
      *
      * @return void
@@ -279,8 +300,7 @@ class UserManager
             
         if ($sleepy_cli_user) {
             // $this->logger->debug('### rouseCliUSer - found one: ' . $sleepy_cli_user->getEveUserid());
-
-            $repo = $this->entityManager->getRepository(UserCli::class)->createQueryBuilder('uc')
+            $this->entityManager->getRepository(UserCli::class)->createQueryBuilder('uc')
                 ->update()
                 ->set('uc.inUse', '0')
                 ->set('uc.fetchDue', ':newdue')
@@ -339,12 +359,8 @@ class UserManager
      */
     public function updateSsoCliUser($eve_userid, $token)
     {
-        $this->logger->debug('### UserManager - refreshSsoCliUser() ');
-
         $usercli = $this->entityManager->getRepository(UserCli::class)->findOneByEveUserid($eve_userid);
         if ($usercli) {
-            $this->logger->debug('### UserManager - refreshSsoCliUser() entry found for EveID: ' . $eve_userid);
-
             $date_expire = new \DateTime();
             $date_expire->setTimestamp($token->getExpires());
 

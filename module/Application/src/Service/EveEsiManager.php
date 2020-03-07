@@ -14,6 +14,8 @@ use Seat\Eseye\Eseye;
 class EveEsiManager
 {
 
+    private $err_code = 0;
+    private $err_msg = '';
     /**
      * Session manager.
      *
@@ -55,6 +57,8 @@ class EveEsiManager
     {
         $esi = new Eseye();
 
+        $this->resetError();
+
         // make a call
         //$res = $esi->invoke($method, $request, $params);
         $try_cnt = 0;
@@ -65,22 +69,15 @@ class EveEsiManager
                 $res = $esi->invoke($method, $request, $params);
             } catch (\Seat\Eseye\Exceptions\RequestFailedException $e) {
                 // ref: https://github.com/eveseat/eseye/wiki/Handling-Exceptions
-
-                $esirepsonse = $e->getEsiResponse();
-                $err_code = $e->getCode();
-
-                $this->logger->debug('publicRequest :: RequestFailedException (' . $err_code . '): ' . print_r($esirepsonse, true));
-
-                echo PHP_EOL . '#E(' . $err_code . ')[' . $esirepsonse->error_limit . '][' . $request . ']';
+                $err_msg = 'publicRequest :: RequestFailedException :: ' . $e->getEsiResponse()->error() . ' (' . $e->getEsiResponse()->getErrorCode() . ')';
+                $this->logger->debug($err_msg . print_r($e->getEsiResponse(), true));
 
                 switch ((int) $err_code) {
                     case 502:
                         break;
                     default:
-                        // @todo maybe implement a better error handling (message - re-login)
-                        // rethrow exception - to be handled by the global exception handling
-                        throw $e;
-                        break;
+                        $this->setError(6, $err_msg);
+                        return false;
                 }
 
                 $try_cnt++;
@@ -105,13 +102,15 @@ class EveEsiManager
      * @param object EsiAuthentication
      * @return type
      */
-    public function authedRequest($method, $request, $params, $authentication=null, $page=null)
+    public function authedRequest($method, $request, $params, $authentication = null, $page = null)
     {
+        $this->resetError();
 
         if(!$authentication) {
             // does the application is authed against Eve SSO?
             if (empty($this->sessionContainer->eveauth['eve_app']['client_id']) || empty($this->sessionContainer->eveauth['eve_user']['token'])) {
-                throw new \Exception('authedRequest to Eve ESI without having client_id and user-token');
+                $this->setErr(5, 'authedRequest to Eve ESI without having client_id and user-token');
+                return false;
             }
 
             // Prepare an authentication container for Eseye
@@ -130,7 +129,7 @@ class EveEsiManager
         // Instantiate a new Eseye instance.
         $esi = new Eseye($authentication);
 
-        if($page && \is_int($page)) {
+        if ($page && \is_int($page)) {
             $esi->page($page);
         }
 
@@ -139,17 +138,47 @@ class EveEsiManager
             $res = $esi->invoke($method, $request, $params);
         } catch (\Seat\Eseye\Exceptions\RequestFailedException $e) {
             // ref: https://github.com/eveseat/eseye/wiki/Handling-Exceptions
+            $err_msg = 'authedRequest :: RequestFailedException :: ' . $e->getEsiResponse()->error() . ' (' . $e->getEsiResponse()->getErrorCode() . ')';
+            $this->logger->debug($err_msg . print_r($e->getEsiResponse(), true));
 
-            $esirepsonse = $e->getEsiResponse();
-            $err_code = $e->getCode();
-
-            // @todo maybe implement a better error handling (message - re-login)
-            $this->logger->debug('authedRequest :: RequestFailedException (' . $err_code . '): ' . print_r($esirepsonse, true));
-
-            throw $e;
+            $this->setError(6, $err_msg);
+            return false;
         }
 
         return ($res);
     }
 
+
+    private function setCode($val = 0)
+    {
+        $this->err_code = $val;
+    }
+
+    public function getCode()
+    {
+        return $this->err_code;
+    }
+
+    private function setMessage($msg = '')
+    {
+        $this->err_msg = $msg;
+    }
+
+    public function getMessage()
+    {
+        return $this->err_msg;
+    }
+
+    private function setError($code, $msg)
+    {
+        $this->setCode($code);
+        $this->setMessage($msg);
+    }
+
+
+    private function resetError()
+    {
+        $this->setCode();
+        $this->setMessage();
+    }
 }

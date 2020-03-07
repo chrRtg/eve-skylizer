@@ -314,31 +314,58 @@ class StructureManager
         if (!$cli_user) {
             return 0;
         }
+        $corporation = $this->entityManager->getRepository(\Application\Entity\EveCorporation::class)->findOneByCorporationId($cli_user->getEveCorpid());
+        $corpname = $corporation->getCorporationName();
 
         // if SSO token in user-cli entry has expired renew it
         if ($this->userManager->checkCliUserTokenExpiry($cli_user)) {
             $ac = unserialize($cli_user->getAuthContainer());
             $new_token = $this->eveSSOManager->getFreshAccessToken($ac['refresh_token']);
+            if (!$new_token) {
+                $msg = 'ERROR : while esiFetchCoprporationStructures with Cliuser ID: ' . $cli_user->getEveUserid() . ' for corporation ' . $corpname . ' an error occured ('. $this->eveSSOManager->getMessage() . ')';
+                $this->userManager->setCliUserDefective($cli_user, $msg);
+                echo $msg . PHP_EOL;
+                return 0;
+            }
             $this->userManager->updateSsoCliUser($cli_user->getEveUserid(), $new_token);
         }
-
+        
         // ... and set in_use = 1
         $this->userManager->setCliUserInUse($cli_user);
 
         // Get all corporation structures
         $struct_arr = $this->esiGetAllCorpStructures($cli_user->getEveCorpid(), unserialize($cli_user->getAuthContainer()));
+        if (! $struct_arr) {
+            $msg = 'ERROR : while esiGetAllCorpStructures-esiGetAllCorpStructures with Cliuser ID: ' . $cli_user->getEveUserid() . ' for corporation ' . $corpname . ' an error occured ('. $this->eveESIManager->getMessage() . ')';
+            $this->userManager->setCliUserDefective($cli_user, $msg);
+            echo $msg . PHP_EOL;
+            return 0;
+        }
+        
         if ($climode) {
-            echo "fetched " . count($struct_arr) . " structures for corporation " . $cli_user->getEveCorpid() . " " . PHP_EOL;
+            echo "fetched " . count($struct_arr) . " structures for corporation " . $corpname . " " . PHP_EOL;
         }
 
         // enrich them with name, type and solar system
         $struct_arr = $this->esiGetCorpStructuresByStructures($struct_arr, unserialize($cli_user->getAuthContainer()));
+        if (! $struct_arr) {
+            $msg = 'ERROR : while esiGetAllCorpStructures-esiGetAllCorpStructures with Cliuser ID: ' . $cli_user->getEveUserid() . ' for corporation ' . $corpname . ' an error occured ('. $this->eveESIManager->getMessage() . ')';
+            $this->userManager->setCliUserDefective($cli_user, $msg);
+            echo $msg . PHP_EOL;
+            return 0;
+        }
         if ($climode) {
             echo "enriched them with detail information like name and type" . PHP_EOL;
         }
 
         // enrich them with their extractions if drilling plattforms
         $struct_arr = $this->esiGetCorpMinningExtractions($struct_arr, $cli_user->getEveCorpid(), unserialize($cli_user->getAuthContainer()));
+        if (! $struct_arr) {
+            $msg = 'ERROR : while esiGetAllCorpStructures-esiGetAllCorpStructures with Cliuser ID: ' . $cli_user->getEveUserid() . ' for corporation ' . $corpname . ' an error occured ('. $this->eveESIManager->getMessage() . ')';
+            $this->userManager->setCliUserDefective($cli_user, $msg);
+            echo $msg . PHP_EOL;
+            return 0;
+        }
         if ($climode) {
             echo "enriched them with some moon mining extractions" . PHP_EOL;
         }
@@ -401,9 +428,13 @@ class StructureManager
             $structure_data['structure_id'] = $v['structure_id'];
             $structure_data['state_timer_start'] = (!empty($v['state_timer_start']) ? self::eveDateToTimestamp($v['state_timer_start']) : null);
             $structure_data['state_timer_end'] = (!empty($v['state_timer_end']) ? self::eveDateToTimestamp($v['state_timer_end']) : null);
-            $structure_data['fuel_expires'] = self::eveDateToTimestamp($v['fuel_expires']);
+            if (isset($v['fuel_expires'])) {
+                $structure_data['fuel_expires'] = self::eveDateToTimestamp($v['fuel_expires']);
+            }
             $structure_data['reinforce_hour'] = $v['reinforce_hour'];
-            $structure_data['reinforce_weekday'] = $v['reinforce_weekday'];
+            if (isset($v['reinforce_weekday'])) {
+                $structure_data['reinforce_weekday'] = $v['reinforce_weekday'];
+            }
             $structure_data['structure_state'] = $v['state'];
 
             if (!empty($v['moon_id'])) {
@@ -441,6 +472,9 @@ class StructureManager
 
         do {
             $res = $this->eveESIManager->authedRequest('get', '/corporations/{corporation_id}/structures/', ['corporation_id' => $corp_id], $auth_container, $page);
+            if(!$res) {
+                return false;
+            }
             $extractions = array_merge($extractions, (array) $res);
             $xpages = $res->headers['X-Pages'];
         } while ($page++ < $xpages);
@@ -468,6 +502,9 @@ class StructureManager
     {
         foreach ($struct_arr as $k => $v) {
             $res = $this->eveESIManager->authedRequest('get', '/universe/structures/{structure_id}/', ['structure_id' => $k], $auth_container);
+            if(!$res) {
+                return false;
+            }
             $struct_arr[$k]['name'] = $res->name;
             $struct_arr[$k]['solar_system_id'] = $res->solar_system_id;
             $struct_arr[$k]['type_id'] = $res->type_id;
@@ -494,6 +531,9 @@ class StructureManager
 
         do {
             $res = $this->eveESIManager->authedRequest('get', '/corporation/{corporation_id}/mining/extractions/', ['corporation_id' => $corp_id], $auth_container, $page);
+            if(!$res) {
+                return false;
+            }
             $extractions = array_merge($extractions, (array) $res);
             $xpages = $res->headers['X-Pages'];
         } while ($page++ < $xpages);

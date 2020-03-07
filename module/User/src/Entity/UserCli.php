@@ -42,7 +42,7 @@ class UserCli
      */
     private $authcontainer;
 
-        /**
+    /**
      * @var string|null
      *
      * @ORM\Column(name="token", type="text", length=16777215, precision=0, scale=0, nullable=true, unique=false)
@@ -62,6 +62,13 @@ class UserCli
      * @ORM\Column(name="fetch_due", type="datetime", precision=0, scale=0, nullable=false, unique=false)
      */
     private $fetchDue;
+
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(name="message", type="text", length=16777215, precision=0, scale=0, nullable=true, unique=false)
+     */
+    private $message;
 
     /**
      * Set eveUserid.
@@ -228,5 +235,29 @@ class UserCli
     public function getFetchDue()
     {
         return $this->fetchDue;
+    }
+
+    /**
+     * Set message.
+     *
+     * @param string|null $message
+     *
+     * @return UserCli
+     */
+    public function setMessage($message = null)
+    {
+        $this->message = $message;
+
+        return $this;
+    }
+
+    /**
+     * Get message.
+     *
+     * @return string|null
+     */
+    public function getMessage()
+    {
+        return $this->message;
     }
 }

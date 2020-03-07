@@ -651,7 +651,6 @@ class EveSSOManager
      */
     private function refreshSsoToken()
     {
-
         if (!empty($this->sessionContainer->token) && $this->sessionContainer->token->hasExpired()) {
             $new_token = $this->getFreshAccessToken($this->sessionContainer->token->getRefreshToken());
             // Purge old access token and store new access token to your data store.
@@ -672,11 +671,17 @@ class EveSSOManager
      */
     public function getFreshAccessToken($refresh_token)
     {
-        // This is how you refresh your access token once you have it
-        return ($this->evesso_provider->getAccessToken(
-            'refresh_token',
-            ['refresh_token' => $refresh_token]
-        ));
+        try {
+            $new_token = $this->evesso_provider->getAccessToken(
+                'refresh_token',
+                ['refresh_token' => $refresh_token]
+            );
+        } catch (\League\OAuth2\Client\Provider\Exception\IdentityProviderException $e) {
+            // Failed to get the refresh token
+            $this->responseMessage = 'failed to fetch RefreshToken, errCode: ' . $e->getResponseBody()->getStatusCode() . ' with message: ' . $e->getResponseBody()->getReasonPhrase();
+            return false;
+        }
+        return ($new_token);
     }
 
     public function getMessage()
