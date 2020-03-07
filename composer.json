@@ -1,6 +1,6 @@
 {
-    "name": "skŸlizer",
-    "description": "The Eve-Online Scan Analyzer",
+    "name": "rtgquack/skylizer",
+    "description": "skŸlizer: the Eve-Online Scan Analyzer",
     "type": "project",
     "license": "BSD-3-Clause",
     "keywords": [
@@ -31,7 +31,7 @@
         "zendframework/zend-serializer": "^2.8",
         "zendframework/zend-permissions-rbac": "^2.5",
         "zendframework/zend-log": "^2.9",
-        "beberlei/DoctrineExtensions": "^1.0",
+        "beberlei/doctrineextensions": "^1.0",
         "evelabs/oauth2-eveonline": "^1.1",
         "eveseat/eseye": "^1.0.0",
         "illchuk/zf3-symfony-console": "^0.1.1",
