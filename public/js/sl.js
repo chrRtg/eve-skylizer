@@ -553,14 +553,19 @@ $(document).ready(function () {
                         results: data.items
                     };
                 },
-                cache: true
+                cache: false
             },
             placeholder: 'Search by name or ticker',
             allowClear: true,
             escapeMarkup: function (markup) {
                 return markup;
             },
-            minimumInputLength: 2,
+            minimumInputLength: 3,
+            language: {
+                inputTooShort: function() {
+                    return 'Please enter 3 or more characters, append + to your term for deepsearch';
+                }
+            },
             templateResult: formatCorpDropDown,
             templateSelection: formatCorpSelection
         });
@@ -728,7 +733,7 @@ function formatCorpDropDown(repo) {
     var markup = "<div class='select2-result-repository clearfix'>" +
         "<div class='select2-result-repository__title'>" + repo.corporationName + " [" + repo.ticker + "]</div>";
     if (repo.allianceName == null) {
-        markup += "<div class='select2-result-repository__description'>not affilated / no alliance</div>";
+        markup += "<div class='select2-result-repository__description' class='tertiary'>not affilated / no alliance</div>";
     } else {
         markup += "<div class='select2-result-repository__description'>Member of " + repo.allianceName + "</div>";
     }

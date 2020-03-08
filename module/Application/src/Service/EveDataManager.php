@@ -257,7 +257,7 @@ class EveDataManager
             ->leftJoin(EveAlly::class, 'a', 'WITH', 'c.allianceId = a.allianceId')
             ->where('c.corporationName LIKE :word')
             ->orWhere('c.ticker LIKE :word')
-            ->setParameter('word', '%'.addcslashes($partial, '%_').'%')
+            ->setParameter('word', addcslashes($partial, '%_').'%')
             ->setMaxResults($limit);
 
         return($queryBuilder->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_SCALAR));
@@ -498,14 +498,13 @@ class EveDataManager
                 $alliance_entity = new EveAlly;
             } elseif ($alliance_entity->getAllianceName() && !$force_update) {
                 // if alliance has a name and it's not Force-Mode skip this alliance (presuming it's already up to date)
-                echo'S';
+                echo's'; // skip entry
                 continue;
             }
 
-
             // fetch alliance details from ESI
             $ally_detail = $this->eveESIManager->publicRequest('get', '/alliances/{alliance_id}/', ['alliance_id' => $row]);
-            $this->logger->debug('ally_detail: ' . print_r($ally_detail, true));
+            //$this->logger->debug('ally_detail: ' . print_r($ally_detail, true));
 
             if (isset($ally_detail->name)) {
                 $alliance_entity->setAllianceName($ally_detail->name);
@@ -517,6 +516,7 @@ class EveDataManager
             $alliance_entity->setAllianceId($row);
             $this->entityManager->persist($alliance_entity);
 
+            // we collected enough to batch write and afterwards to free ressources for the next batch
             if (($i % $batch_size) === 0) {
                 $this->entityManager->flush();
                 $this->entityManager->clear(); // Detaches all objects from Doctrine!
@@ -530,7 +530,7 @@ class EveDataManager
                     echo ':';
                 }
             } else {
-                echo '.';
+                echo 'N'; // new entry
             }
             ++$i;
         }
@@ -543,7 +543,7 @@ class EveDataManager
     }
 
     /**
-     * Fetch all Corporations and their name and ticker from ESI.
+     * Fetch all Corporations from ESI by the known Alliances
      *
      * Name and ticker are writen if the corporationID is not found in the local database or
      * if the alliance assignment has been changed.
@@ -567,13 +567,12 @@ class EveDataManager
         if ($force_update) {
             $q = $this->entityManager->createQuery('SELECT a FROM Application\Entity\EveAlly a');
         } else {
-            // fetch only empty alliances (without corporations)
+            // fetch only alliances without corporations yet
             $queryBuilder = $this->entityManager->createQueryBuilder();
             $q = $queryBuilder->select('a')
                 ->from(EveAlly::class, 'a')
                 ->leftJoin(EveCorporation::class, 'c', 'WITH', 'c.allianceId = a.allianceId')
                 ->where('c.corporationId IS NULL')
-            //->setMaxResults(8)
                 ->getQuery();
         }
 
@@ -617,7 +616,7 @@ class EveDataManager
             }
             $this->entityManager->flush(); //Persist objects that did not make up an entire batch
             $this->entityManager->clear();
-            echo 'W#';
+            echo 'W';
 
             // detach from Doctrine, so that it can be Garbage-Collected immediately
             $this->entityManager->detach($row[0]);
@@ -663,10 +662,38 @@ class EveDataManager
             $corporation_entity->setAllianceId($corporation_detail->alliance_id);
         }
 
-
         $this->entityManager->persist($corporation_entity);
+        $this->entityManager->flush();
 
         return(true);
+    }
+
+    /**
+     * Search for corporation in ESI with a partial using the /search endpoint
+     *
+     * Any corp found will get added to the local database or updated if existing.accordion
+     *
+     * @param string search tearm
+     */
+    public function searchCorporationESI($query)
+    {
+        //$this->logger->debug('searchCorporationESI with term: ' . print_r($query, true));
+
+        // search for all corporations who contain the term
+        $corporation_list = $this->eveESIManager->search('corporation', $query);
+
+        $corporation_list_arr = (array) $corporation_list;
+
+        $num_res = count($corporation_list_arr['corporation']);
+        if (!$num_res) {
+            return 0;
+        }
+
+        // iterate through all corporation ESI gave us for this term
+        foreach ($corporation_list_arr['corporation'] as $corporation) {
+            $this->updateCorporation($corporation);
+        }
+        return($num_res);
     }
 
     public function ping($param = '')

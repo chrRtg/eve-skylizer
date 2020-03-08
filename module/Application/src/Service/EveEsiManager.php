@@ -72,7 +72,7 @@ class EveEsiManager
                 $err_msg = 'publicRequest :: RequestFailedException :: ' . $e->getEsiResponse()->error() . ' (' . $e->getEsiResponse()->getErrorCode() . ')';
                 $this->logger->debug($err_msg . print_r($e->getEsiResponse(), true));
 
-                switch ((int) $err_code) {
+                switch ((int) $e->getEsiResponse()->getErrorCode()) {
                     case 502:
                         break;
                     default:
@@ -91,6 +91,39 @@ class EveEsiManager
 
         // If we reach this point we found a exception to be handled by the global exception handling
         throw $e;
+    }
+
+
+    /**
+     * Search Eve ESI /search endpoint
+     *
+     * @param string category, type of entitiy to search for
+     * @param string search term
+     * @return type
+     */
+    public function search($category, $term)
+    {
+        $esi = new Eseye();
+
+        $this->resetError();
+
+        $query = [
+            'categories' => [$category],
+            'strict' => 'false',
+            'search' => $term
+        ];
+
+        try {
+            $res = $esi->setQueryString($query)->invoke('get', '/search/');
+        } catch (\Seat\Eseye\Exceptions\RequestFailedException $e) {
+            $err_msg = 'search :: RequestFailedException :: ' . $e->getEsiResponse()->error() . ' (' . $e->getEsiResponse()->getErrorCode() . ')';
+            $this->logger->debug($err_msg . print_r($e->getEsiResponse(), true));
+
+            $this->setError(6, $err_msg);
+            return false;
+        }
+        // if not caught return the result
+        return ($res);
     }
 
     /**

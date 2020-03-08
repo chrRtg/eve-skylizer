@@ -364,10 +364,15 @@ class MoonController extends AbstractActionController
      */
     public function getCorporationsJsonAction()
     {
-        $limit = 25;
         $query = $this->params()->fromQuery('q');
 
         if (!empty($query)) {
+            if(substr($query, -1) == "+") {
+                // if last char is a plus sign the term is searched first in ESI. Results found get added to the local DB
+                $query = substr($query, 0, -1);
+                $this->eveDataManager->searchCorporationESI($query);
+            }
+
             $res = $this->eveDataManager->getCorporationByPartial($query);
 
             if (!empty($res)) {
