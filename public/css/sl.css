@@ -136,9 +136,22 @@ i.glyphicon.passive:hover {
 	color: #df691a;
 }
 
+.badge {
+   border-radius: 5px;
+}
+
 .badge-warning {
 	background-color: #df691a;
-  }
+}
+
+.badge-danger {
+	background-color: #ff0000;
+}
+
+.badge-info {
+	background-color: #3c9887;
+	color: #fff;
+}
 
 .alert.alert-warning {
 	color: #304559;

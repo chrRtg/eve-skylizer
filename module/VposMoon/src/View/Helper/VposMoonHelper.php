@@ -488,8 +488,10 @@ class VposMoonHelper extends AbstractHelper
      * @param string $differenceFormat [days. hours:minutes]
      * @return string human readable date difference
      */
-    public function dateDifference($date_to, $date_from=null, $warndays=5, $differenceFormat = '%ad.%H:%i')
+    public function dateUntil($title, $date_to, $warndays=5, $warnclass='badge  badge-warning')
     {
+        $differenceFormat = '%ad %hh %im';
+
         if(empty($date_from)) {
             $date_from = new \DateTime('NOW');
         }
@@ -506,13 +508,14 @@ class VposMoonHelper extends AbstractHelper
         
 
         $interval = date_diff($date_from, $date_to);
+        $class='';
 
         $diff_days = (int) $interval->format('%a');
         if ($diff_days <= $warndays) {
-            return $interval->format('<span class="badge  badge-warning">'.$differenceFormat.'</span>');
+            $class=$warnclass;
         }
 
-        return $interval->format($differenceFormat);
+        return $interval->format('<span class="' . $class . '" title="due: '.date_format($date_to,'Y/m/d H:i').'">' . $title . ': '.$differenceFormat.'</span>');
     }
 
     /**
