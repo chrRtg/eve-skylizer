@@ -3,6 +3,7 @@
 namespace VposMoon\Service;
 
 use VposMoon\Entity\AtStructure;
+use VposMoon\Entity\AtStructureServices;
 use Application\Service\EveDataManager;
 
 /**
@@ -63,7 +64,7 @@ class StructureManager
      */
     public function writeStructure($structure_data)
     {
-        //$this->logger->debug('### writeStructure :: write:' . print_r($structure_data, true));
+        // $this->logger->debug('### writeStructure :: write:' . print_r($structure_data, true));
 
         $mode_update = 'u';
         $structure_entity = null;
@@ -175,6 +176,7 @@ class StructureManager
         return (array('id' => $structure_entity->getId(), 'mod' => $mode_update));
     }
 
+
     /**
      * Removes a structure from the database
      *
@@ -188,6 +190,40 @@ class StructureManager
             $this->entityManager->remove($structure_entity);
             $this->entityManager->flush();
         }
+    }
+
+
+    private function writeStructureServices($struct_id, $services)
+    {
+        // remove the existing services
+        $this->removeStructureService($struct_id);
+
+        // and write each service afterwards from scratch
+        foreach ($services as $s) {
+            $this->logger->debug('### writeStructureServices :: (' . $struct_id . ') :: ' . print_r($s, true));
+            $service_entity = new AtStructureServices();
+
+            $service_entity->setStructureId($struct_id);
+            if ($s->name) {
+                $service_entity->setService($s->name);
+            }
+            if ($s->state) {
+                $service_entity->setState($s->state);
+            }
+            $this->entityManager->persist($service_entity);
+            $this->entityManager->flush();
+        }
+    }
+
+    private function removeStructureService($struct_id)
+    {
+        $queryBuilder = $this->entityManager->createQueryBuilder();
+
+        $queryBuilder->delete(AtStructureServices::class, 'ats')
+            ->where('ats.structureId = :id')
+            ->setParameter('id', $struct_id);
+
+        $queryBuilder->getQuery()->execute();
     }
 
     /**
@@ -370,7 +406,7 @@ class StructureManager
             echo "enriched them with some moon mining extractions" . PHP_EOL;
         }
 
-        //$this->logger->debug('### esiFetchCoprporationStructures :: after #1 :: ' . print_r($struct_arr, true));
+        // $this->logger->debug('### esiFetchCoprporationStructures :: after #1 :: ' . print_r($struct_arr, true));
 
         // Write the result data object to DB
         $this->esiWriteStructure($struct_arr, $climode);
@@ -453,7 +489,11 @@ class StructureManager
                 echo "\twrite structure : " . $structure_data['structure_name'] . PHP_EOL;
             }
 
-            $this->writeStructure($structure_data);
+            $writeres = $this->writeStructure($structure_data);
+
+            if (isset($v['services'])) {
+                $this->writeStructureServices($writeres['id'], $v['services']);
+            }
         }
     }
 

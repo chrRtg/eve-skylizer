@@ -32,7 +32,7 @@ class VposMoonHelper extends AbstractHelper
     {
         $type = ['cat' => 'unknown', 'type' => 'unscanned', 'name' => 'unscanned'];
 
-         switch ($vpos_elem['at_groupId']) {
+        switch ($vpos_elem['at_groupId']) {
             case '365':
                 $type = ['cat' => 'structure', 'type' => 'pos', 'name' => 'Pos'];
                 break;
@@ -53,7 +53,7 @@ class VposMoonHelper extends AbstractHelper
                 break;
             case '2017':
                 $type = ['cat' => 'structure', 'type' => 'flex', 'name' => 'Flex'];
-                break;                
+                break;
             case '988':
                 $type = ['cat' => 'celestial', 'type' => 'wh', 'name' => 'Wormhole'];
                 break;
@@ -152,7 +152,6 @@ class VposMoonHelper extends AbstractHelper
     public function renderMoonMateriallist($input)
     {
         $res = '';
-        $val = 0;
 
         $data = $this->calculateMoonMateriallist($input);
 
@@ -477,22 +476,22 @@ class VposMoonHelper extends AbstractHelper
     }
 
     /**
-     * Human readable difference between two dates. 
+     * Human readable difference between two dates.
      * If the amount of remaining days is equal or less than $warndays the result is formated as a badge.scanname
      *
      * The method accept date strings and DateTime objects for both date parameters
      *
+     * @param string Label
      * @param string-DateTime $date_to
-     * @param string-DateTime $date_from [now]
      * @param integer $warndays [5]
-     * @param string $differenceFormat [days. hours:minutes]
+     * @param string css class if warning
      * @return string human readable date difference
      */
-    public function dateUntil($title, $date_to, $warndays=5, $warnclass='badge  badge-warning')
+    public function dateUntil($title, $date_to, $warndays = 5, $warnclass = 'badge  badge-warning')
     {
         $differenceFormat = '%ad %hh %im';
 
-        if(empty($date_from)) {
+        if (empty($date_from)) {
             $date_from = new \DateTime('NOW');
         }
 
@@ -515,7 +514,7 @@ class VposMoonHelper extends AbstractHelper
             $class=$warnclass;
         }
 
-        return $interval->format('<span class="' . $class . '" title="due: '.date_format($date_to,'Y/m/d H:i').'">' . $title . ': '.$differenceFormat.'</span>');
+        return $interval->format('<span class="' . $class . '" title="due: '.date_format($date_to, 'Y/m/d H:i').'">' . $title . ': '.$differenceFormat.'</span>');
     }
 
     /**
