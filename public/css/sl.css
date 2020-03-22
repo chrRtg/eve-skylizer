@@ -85,11 +85,12 @@ a.unobtrusive:hover {
 /* less room for forms */
 .form-control,
 .form-control[disabled], 
-.form-control[readonly] {
+.form-control[readonly],
+.select2-search__field {
 	padding: 2px 4px;
 	font-family: "Roboto Mono", Monaco, monospace;
 	height: auto;
-	font-size: 11px;
+	font-size: 10pt;
 }
 
 .form-control[disabled], 
