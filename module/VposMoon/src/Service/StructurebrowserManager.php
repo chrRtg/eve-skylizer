@@ -89,6 +89,8 @@ class StructurebrowserManager
                 break;
             case 'moongoo':
                 $queryBuilder->andWhere('at.chunkArrivalTime IS NOT NULL');
+                $parameter['datenow'] =  new \DateTime('NOW');
+                $queryBuilder->andWhere('at.naturalDecayTime >= :datenow');
                 $queryBuilder->orderBy('at.chunkArrivalTime', 'ASC');
                 break;
             case 'timers':
@@ -96,6 +98,9 @@ class StructurebrowserManager
                 $parameter['timerexclude'] = 'shield_vulnerable';
                 $queryBuilder->andWhere('at.structureState != :timerexclude');
                 $queryBuilder->orderBy('at.stateTimerStart', 'ASC');
+                // @todo if we have timer data review this solution
+                // state_timer_end string: Date at which the structure will move to it's next state
+                // state_timer_start string: Date at which the structure entered it's current state
                 break;
             default:
                 return(false);

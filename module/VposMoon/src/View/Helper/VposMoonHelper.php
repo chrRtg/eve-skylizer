@@ -476,8 +476,7 @@ class VposMoonHelper extends AbstractHelper
     }
 
     /**
-     * Human readable difference between two dates.
-     * If the amount of remaining days is equal or less than $warndays the result is formated as a badge.scanname
+     * Format date to "nnd nnh nnm" format and set classes depending on the distance to today.
      *
      * The method accept date strings and DateTime objects for both date parameters
      *
@@ -492,32 +491,29 @@ class VposMoonHelper extends AbstractHelper
     {
         $differenceFormat = '%ad %hh %im';
 
-        if (empty($date_from)) {
-            $date_from = new \DateTime('NOW');
-        }
+        $now = new \DateTime('NOW');
 
         if (is_string($date_to)) {
             $tmp_t = new \DateTime($date_to);
             $date_to = $tmp_t;
         }
 
-        if (is_string($date_from)) {
-            $tmp_f = new \DateTime($date_from);
-            $date_from = $tmp_f;
-        }
-        
-
-        $interval = date_diff($date_from, $date_to);
+        $interval = date_diff($now, $date_to);
 
         $diff_days = (int) $interval->format('%a');
         if ($diff_days <= $warndays) {
             $class=$warnclass;
         }
 
-        if($title) {
+        if ($title) {
             $title .= ': ';
         }
- 
+
+        if($date_to < $now) {
+            $class=$warnclass;
+            $differenceFormat = '- %ad %hh %im';
+        }
+
         return $interval->format('<span class="' . $class . '" title="due: '.date_format($date_to, 'Y/m/d H:i').'">' . $title . $differenceFormat.'</span>');
     }
 
