@@ -76,6 +76,13 @@ class NavManager
             'link'  => $url('vpos')
             ];
         }
+        if ($this->authService->hasIdentity()) {
+            $items[] = [
+            'id' => 'struct',
+            'label' => 'Structures',
+            'link'  => $url('struct')
+            ];
+        }
         
         // Display "Login" menu item for not authorized user only. On the other hand,
         // display "Admin" and "Logout" menu items only for authorized users.
