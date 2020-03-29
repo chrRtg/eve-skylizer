@@ -1,0 +1,147 @@
+<?php
+$this->headTitle('Struct');
+
+$this->mainMenu()->setActiveItemId('struct');
+
+$current_route = $this->currentRoute()->getRoute();
+
+//echo '<pre>';
+//ini_set('xdebug.var_display_max_depth', 3); var_dump($this->currentRoute()->getRoute());
+//ini_set('xdebug.var_display_max_depth', 3); var_dump($this->url());
+//ini_set('xdebug.var_display_max_depth', 3); var_dump($filters);
+//ini_set('xdebug.var_display_max_depth', 3); var_dump($message);
+//ini_set('xdebug.var_display_max_depth', 3); var_dump($message['scanres']);
+//echo '</pre>';
+
+if (empty($filters['info_system']['constellation'])) {
+    $location_string = $filters['info_system']['itemname'] . ' (Constellation in ' . $filters['info_system']['region'] . ')';
+} else {
+    $location_string = $filters['info_system']['itemname'] . ' (' . $filters['info_system']['region'] . ')';
+}
+?>
+<script>
+	var sl_messages = <?=json_encode($message['message']);?>;
+	var filters_json = <?=json_encode($filters_json);?>;
+	var current_route = <?=json_encode($current_route);?>;
+</script>
+
+<?=$this->flashMessenger()->render('error', ['alert', 'alert-warning']);?>
+<?=$this->flashMessenger()->render('success', ['alert', 'alert-success']);?>
+<?=$this->flashMessenger()->render('info', ['alert', 'alert-info']);?>
+
+<div class="row">
+	<div class="col-md-12 col-sm-12">
+		<div class="row">
+			<div class="col-md-5">
+				<!-- start system name -->
+				<div class="form-group form-group-lg addpaddingtop20">
+					<select class="form-control select2-typeahead-system" name="selectsystem" id="selectsystem">
+						<option value="<?=$this->escapeHtml($filters['info_system']['itemid']);?>" selected><?=$this->escapeHtml($location_string);?></option>
+					</select>
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-sm-4">
+				<div class="card">
+					<div class="card-header" data-structcard-id="moongoo" data-structcard-action="<?= $this->url('struct', ['action' => 'index'], array('query' => array('cardaction' => 'moongoo', 'filters' => $filters))); ?>">next Moons</div>
+					<div class="card-body">
+						<div class="row card-row">
+							<div class="col-sm-12 text-center">
+								<img src="img/sl_loading.gif" alt="loading">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-4">
+				<div class="card">
+					<div class="card-header" data-structcard-id="fuel" data-structcard-action="<?= $this->url('struct', ['action' => 'index'], array('query' => array('cardaction' => 'fuel', 'filters' => $filters))); ?>">Fuel due</div>
+					<div class="card-body">
+						<div class="row card-row">
+							<div class="col-sm-12 text-center">
+								<img src="img/sl_loading.gif" alt="loading">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-4">
+				<div class="card">
+				<div class="card-header" data-structcard-id="timers" data-structcard-action="<?= $this->url('struct', ['action' => 'index'], array('query' => array('cardaction' => 'timers', 'filters' => $filters))); ?>">Timers</div>
+					<div class="card-body">
+						<div class="row card-row">
+							<div class="col-sm-12 text-center">
+								<img src="img/sl_loading.gif" alt="loading">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+</div>
+
+<!-- Help Modal -->
+<div class="modal fade" id="helpModal" role="dialog" aria-labelledby="myModalLabel">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<ul class="nav nav-tabs" id="tabContent">
+					<li class="active"><a href="#help_scan" data-toggle="tab">Probe Scanner</a></li>
+					<li><a href="#help_dscan" data-toggle="tab">Directional Scanner</a></li>
+			</ul>
+			</div>
+			<div class="tab-content">
+				<div class="tab-pane active modal-body" id="help_scan">
+					<div class="row">
+						<div class="col-md-6">
+							<img src="img/eve_scan_window.jpg" alt=""/>
+						</div>
+						<div class="col-md-6">
+							<p>Open your &laquo;Probe Scanner&raquo; window. Please take care your view is <strong>not filtered</strong>.						</p>
+							<p>Click inside the Probe Scanne window, select all entries (CTRL-A) and copy them to the clipboard (CTRL-C).</p>
+							<p>Now navigate to <span class="skylizer">Syklizer - (D)Scan</span> and paste the result into the big area to the right.</p>
+							<p>Then press the button &laquo;submit your scan&raquo; below the area and hold a sec. The table to the left will get updated soon and show your
+								scan results.</p>
+							<p><strong>Please always copy all entries to ensure the best possible result!</strong></p>
+						</div>
+					</div>
+				</div>
+				<div class="tab-pane modal-body" id="help_dscan">
+					<div class="row">
+						<div class="col-md-6">
+							<img src="img/eve_dscan_window.png" alt=""/>
+						</div>
+						<div class="col-md-6">
+							<p>Open your &laquo;Directional Scanner&raquo; window. Please take care your view is <strong>not filtered</strong> and you had set the Range and Angle sliders to their max value.</p>
+							<p>Click inside the Probe Scanne window, select all entries (CTRL-A) and copy them to the clipboard (CTRL-C).</p>
+							<p>Now navigate to <span class="skylizer">Syklizer - (D)Scan</span> and paste the result into the big area to the right.</p>
+							<p>Then press the button &laquo;submit your scan&raquo; below the area and hold a sec. The table to the left will get updated soon and show your
+								scan results.</p>
+							<p class="skylizer">Please always copy all entries and disable all filters to ensure the best possible result!</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Nope Modal -->
+<div class="modal fade" id="nopeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="myModalLabel">Nope?!</h4>
+			</div>
+			<div class="modal-body">
+				Sorry folks, this function is not supported yet.
+			</div>
+		</div>
+	</div>
+</div>

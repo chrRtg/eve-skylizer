@@ -1,0 +1,16 @@
+<?php foreach ($struct_list as $key => $struct): ?>
+<div class="row card-row">
+    <div class="col-sm-2 text-right">
+        <img src="https://images.evetech.net/types/<?=$struct['at_typeId'];?>/render?size=32" alt="img of EveType" title="<?=$this->escapeHtml($struct['it_typename']);?>">
+    </div>
+    <div class="col-sm-6">
+        <span class="">
+            <?=$this->escapeHtml($struct['at_structureName']);?></span>
+            (<?=$this->escapeHtml($struct['own_corpticker']);?>)<br/>
+            <span class="secondarytext"><?=($struct['celest_name'] ? $struct['celest_name'] : $struct['map_name'])?></span>
+    </div>
+    <div class="col-sm-4 text-center">
+        <?=$this->vpViewTool()->dateUntil('', $struct['at_chunkArrivalTime'], 1, 'badge  badge-info', 'badge badge-normal');?>
+    </div>
+</div>
+<?php endforeach;?>

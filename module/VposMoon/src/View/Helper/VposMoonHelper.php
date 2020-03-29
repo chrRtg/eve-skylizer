@@ -484,10 +484,11 @@ class VposMoonHelper extends AbstractHelper
      * @param string Label
      * @param string-DateTime $date_to
      * @param integer $warndays [5]
-     * @param string css class if warning
+     * @param string css class if warning  (default "badge badge-warning")
+     * @param string css class if all fine (default "badge")
      * @return string human readable date difference
      */
-    public function dateUntil($title, $date_to, $warndays = 5, $warnclass = 'badge  badge-warning')
+    public function dateUntil($title, $date_to, $warndays = 5, $warnclass = 'badge  badge-warning',  $class='badge')
     {
         $differenceFormat = '%ad %hh %im';
 
@@ -507,14 +508,79 @@ class VposMoonHelper extends AbstractHelper
         
 
         $interval = date_diff($date_from, $date_to);
-        $class='';
 
         $diff_days = (int) $interval->format('%a');
         if ($diff_days <= $warndays) {
             $class=$warnclass;
         }
 
-        return $interval->format('<span class="' . $class . '" title="due: '.date_format($date_to, 'Y/m/d H:i').'">' . $title . ': '.$differenceFormat.'</span>');
+        if($title) {
+            $title .= ': ';
+        }
+ 
+        return $interval->format('<span class="' . $class . '" title="due: '.date_format($date_to, 'Y/m/d H:i').'">' . $title . $differenceFormat.'</span>');
+    }
+
+    /**
+     * Create human readable reinforce timer.
+     *
+     * @param integer day 	ReinforceWeekday: Monday is 0 and Sunday is 6 
+     * @param integer hour  ReinforceHour: The structure will become vulnerable at a random time that is +/- 2 hours centered on the value of this property
+     * @param string css class if warning  (default "badge badge-warning")
+     * @param string css class if all fine (default "badge")
+     * @return void
+     */
+    public function formatReinforceDate($reinforce_day, $reinforce_hour = 0, $warnclass = 'badge  badge-warning',  $class = 'badge badge-normal')
+    {
+        $today = (int) date('w'); // 0 for Sunday, 6 for Saturday
+        $today = ($today-1 >= 1 ? $today-1 : 6); // format to eve style
+
+        if ($reinforce_day == $today) {
+            $class= $warnclass;
+        }
+
+        return('<span class="' . $class . '" title="timer">' . sprintf("%s %02d:00", $this->getDayByInt($reinforce_day), $reinforce_hour) . ' +/-2h</span>');
+    }
+
+    /**
+     * Get abbrevated weekday by eve-weekday integer
+     *
+     * Monday is 0 and Sunday is 6
+     *
+     * @param int $day
+     * @return string   abbrevated weekday
+     */
+    private function getDayByInt($day)
+    {
+        $dtxt = '';
+        switch((int) $day) {
+            case 0:
+                $dtxt = 'Mon';
+                break;
+            case 1:
+                $dtxt = 'Tue';
+                break;
+            case 2:
+                $dtxt = 'Wed';
+                break;
+            case 3:
+                $dtxt = 'Thu';
+                break;
+            case 4:
+                $dtxt = 'Fri';
+                break;
+            case 5:
+                $dtxt = 'Sat';
+                break;
+            case 6:
+            case -1:
+                $dtxt = 'Sun';
+                break;
+            default:
+                $dtxt = '??';
+                break;
+        }
+        return ($dtxt);
     }
 
     /**

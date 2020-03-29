@@ -89,7 +89,7 @@ class MoonController extends AbstractActionController
                 // Get filtered and validated data
                 $data = $form->getData();
                 // store input to text file, one file per user per day
-                file_put_contents('./data/storage/' . date('ymd') . '_' . $this->currentUser()->getEveUserid() . '.txt', escapeshellcmd ($data['scan']) . PHP_EOL, FILE_APPEND);
+                file_put_contents('./data/storage/' . date('ymd') . '_' . $this->currentUser()->getEveUserid() . '.txt', escapeshellcmd($data['scan']) . PHP_EOL, FILE_APPEND);
 
                 // process the scan
                 $pc_res = $this->scanManager->processScan($data['scan'], $this->currentUser()->getEveUserid());

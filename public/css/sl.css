@@ -154,6 +154,11 @@ i.glyphicon.passive:hover {
 	color: #fff;
 }
 
+.badge-normal {
+	border: 1px solid #3c9887;
+	background: rgba(0, 0, 0, 0.1);
+}
+
 .alert.alert-warning {
 	color: #304559;
 }
@@ -239,6 +244,29 @@ hr {
     margin-top: 4px;
     margin-bottom: 4px;
     border-top: 1px solid #666;
+}
+
+/* cards */
+.card { 
+	background-color: #304559;
+	border: 5px solid #2b3e50; 
+	border-radius: 6px; 
+}
+
+.card-body {
+	margin: 5px 5px;
+}
+
+.card-header {
+	background-color: #344b61;
+	padding: 5px 10px;
+	font-size: 1.7rem;
+	margin-bottom: 10px;
+}
+
+.card-row {
+	padding: 7px 0px;
+	border-bottom: 1px solid #2b3e50; 
 }
 
 /* */

@@ -56,10 +56,10 @@ class VposController extends AbstractActionController
     /**
      * Constructor. Its purpose is to inject dependencies into the controller.
      */
-    public function __construct($entityManager, $moonManager, $structureManager, $scanManager, $eveDataManager, $logger)
+    public function __construct($entityManager, $vposManager, $structureManager, $scanManager, $eveDataManager, $logger)
     {
         $this->entityManager = $entityManager;
-        $this->vposManager = $moonManager;
+        $this->vposManager = $vposManager;
         $this->structureManager = $structureManager;
         $this->scanManager = $scanManager;
         $this->eveDataManager = $eveDataManager;
