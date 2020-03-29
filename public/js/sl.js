@@ -7,22 +7,22 @@ $(document).ready(function () {
     $("#scanarea").on("paste", function (evt) {
 
         // encapsulate with timeout to get the value
-        setTimeout(function() {
-            var formval =  $("#scanarea").val();
+        setTimeout(function () {
+            var formval = $("#scanarea").val();
 
-            if(formval.length <= 15) {
+            if (formval.length <= 15) {
                 return;
             }
 
             var check_scan = formval.match(/^([A-Z]{3}-[0-9]{3})\t(.*)\t(.*)\t(.*)\t([0-9\,\.]+.?\%)\t(.*)/);
             var check_dscan = formval.match(/^(\S*)\t([\S ]*)\t([\S ]*)\t(-|[0-9\.\,]+ [AEUkm]+)/);
-            
-            if(check_scan || check_dscan) {
-                setTimeout(function() {
+
+            if (check_scan || check_dscan) {
+                setTimeout(function () {
                     $.blockUI({
                         message: "<h1 class=\"block-overlay\">autosubmit your scan - processing...</h1>"
                     });
-                     $('#scanform').trigger('submit')
+                    $('#scanform').trigger('submit')
                 });
             }
         });
@@ -82,7 +82,10 @@ $(document).ready(function () {
     //datatable for admin views
     var admin_table = $('#admintable').DataTable({
         fixedHeader: true,
-        "lengthMenu": [ [25, 50, 100, -1], [25, 50, 100, "All"] ]
+        "lengthMenu": [
+            [25, 50, 100, -1],
+            [25, 50, 100, "All"]
+        ]
     });
     admin_table.fixedHeader.headerOffset($('#skylizer_navbar').height());
 
@@ -90,7 +93,10 @@ $(document).ready(function () {
     var moon_table = $('#moontable').DataTable({
         fixedHeader: true,
         responsive: true,
-        "lengthMenu": [ [25, 50, 100, -1], [25, 50, 100, "All"] ]
+        "lengthMenu": [
+            [25, 50, 100, -1],
+            [25, 50, 100, "All"]
+        ]
     });
     moon_table.fixedHeader.headerOffset($('#skylizer_navbar').height());
 
@@ -274,33 +280,33 @@ $(document).ready(function () {
     // Checkbox all    
     $('#vpos_showall').click(function () {
         buildFilterQuery([{
-            type: "vpos_filter_structures",
-            id: "1"
-        },
-        {
-            type: "vpos_filter_gasore",
-            id: "1"
-        },
-        {
-            type: "vpos_filter_wormhole",
-            id: "1"
-        },
-        {
-            type: "vpos_filter_exploration",
-            id: "1"
-        },
-        {
-            type: "vpos_filter_faction",
-            id: "1"
-        },
-        {
-            type: "vpos_filter_combat",
-            id: "1"
-        },
-        {
-            type: "vpos_filter_unscanned",
-            id: "1"
-        }
+                type: "vpos_filter_structures",
+                id: "1"
+            },
+            {
+                type: "vpos_filter_gasore",
+                id: "1"
+            },
+            {
+                type: "vpos_filter_wormhole",
+                id: "1"
+            },
+            {
+                type: "vpos_filter_exploration",
+                id: "1"
+            },
+            {
+                type: "vpos_filter_faction",
+                id: "1"
+            },
+            {
+                type: "vpos_filter_combat",
+                id: "1"
+            },
+            {
+                type: "vpos_filter_unscanned",
+                id: "1"
+            }
         ]);
         return false;
     });
@@ -308,33 +314,33 @@ $(document).ready(function () {
     // checkbox none
     $('#vpos_shownone').click(function () {
         buildFilterQuery([{
-            type: "vpos_filter_structures",
-            id: "-1"
-        },
-        {
-            type: "vpos_filter_gasore",
-            id: "-1"
-        },
-        {
-            type: "vpos_filter_wormhole",
-            id: "-1"
-        },
-        {
-            type: "vpos_filter_exploration",
-            id: "-1"
-        },
-        {
-            type: "vpos_filter_faction",
-            id: "-1"
-        },
-        {
-            type: "vpos_filter_combat",
-            id: "-1"
-        },
-        {
-            type: "vpos_filter_unscanned",
-            id: "-1"
-        }
+                type: "vpos_filter_structures",
+                id: "-1"
+            },
+            {
+                type: "vpos_filter_gasore",
+                id: "-1"
+            },
+            {
+                type: "vpos_filter_wormhole",
+                id: "-1"
+            },
+            {
+                type: "vpos_filter_exploration",
+                id: "-1"
+            },
+            {
+                type: "vpos_filter_faction",
+                id: "-1"
+            },
+            {
+                type: "vpos_filter_combat",
+                id: "-1"
+            },
+            {
+                type: "vpos_filter_unscanned",
+                id: "-1"
+            }
         ]);
         return false;
     });
@@ -402,12 +408,52 @@ $(document).ready(function () {
 
     /*
      * Typeahead fetcher for System selector
-    */
-   var systemtypedata = [
-    { id: "-7", itemid: "-7", itemname: "High", constellation: "", constellationid: "", region: "", regionid: "", classidH: null, classidL: "7" },
-    { id: "-8", itemid: "-8", itemname: "Low", constellation: "", constellationid: "", region: "", regionid: "", classidH: null, classidL: "8" },
-    { id: "-9", itemid: "-9", itemname: "Null", constellation: "", constellationid: "", region: "", regionid: "", classidH: null, classidL: "9" },
-    { id: "-10", itemid: "-10", itemname: "Wormhole", constellation: "", constellationid: "", region: "", regionid: "", classidH: null, classidL: "10" }];
+     */
+    var systemtypedata = [{
+            id: "-7",
+            itemid: "-7",
+            itemname: "High",
+            constellation: "",
+            constellationid: "",
+            region: "",
+            regionid: "",
+            classidH: null,
+            classidL: "7"
+        },
+        {
+            id: "-8",
+            itemid: "-8",
+            itemname: "Low",
+            constellation: "",
+            constellationid: "",
+            region: "",
+            regionid: "",
+            classidH: null,
+            classidL: "8"
+        },
+        {
+            id: "-9",
+            itemid: "-9",
+            itemname: "Null",
+            constellation: "",
+            constellationid: "",
+            region: "",
+            regionid: "",
+            classidH: null,
+            classidL: "9"
+        },
+        {
+            id: "-10",
+            itemid: "-10",
+            itemname: "Wormhole",
+            constellation: "",
+            constellationid: "",
+            region: "",
+            regionid: "",
+            classidH: null,
+            classidL: "10"
+        }
+    ];
 
     var fetchSystemsSuggestion = new Bloodhound({
         datumTokenizer: function (datum) {
@@ -428,8 +474,7 @@ $(document).ready(function () {
     function dispatchSystemsSuggestion(q, sync, async) {
         if (q.length <= 1) {
             sync(systemtypedata);
-        }
-        else {
+        } else {
             fetchSystemsSuggestion.search(q, sync, async);
         }
     }
@@ -440,34 +485,34 @@ $(document).ready(function () {
         highlight: true,
         minLength: 0,
     }, {
-            name: 'itemname',
-            display: 'itemname',
-            source: dispatchSystemsSuggestion,
-            templates: {
-                suggestion: function (data) {
-                    return '<p><strong>' + data.itemname + '</strong> <span class="secondarytext">(' + formatClassid(data.classidH, data.classidL) + ')</span><br>' + data.region + '</p>';
-                }
+        name: 'itemname',
+        display: 'itemname',
+        source: dispatchSystemsSuggestion,
+        templates: {
+            suggestion: function (data) {
+                return '<p><strong>' + data.itemname + '</strong> <span class="secondarytext">(' + formatClassid(data.classidH, data.classidL) + ')</span><br>' + data.region + '</p>';
             }
-        }).on('typeahead:close', function (ev, suggestion) {
-            // on typeahead close -> no selection done -> empty value
-            ev.currentTarget.value = '';
-        }).on('typeahead:selected', function (ev, suggestion) {
-            // on selection create the connection
-            ev.stopPropagation();
+        }
+    }).on('typeahead:close', function (ev, suggestion) {
+        // on typeahead close -> no selection done -> empty value
+        ev.currentTarget.value = '';
+    }).on('typeahead:selected', function (ev, suggestion) {
+        // on selection create the connection
+        ev.stopPropagation();
 
-            var structid = ev.currentTarget.attributes.getNamedItem('data-pk').value;
-            var targetid = suggestion.id;
+        var structid = ev.currentTarget.attributes.getNamedItem('data-pk').value;
+        var targetid = suggestion.id;
 
-            if (!structid || !targetid) {
-                return null;
-            }
+        if (!structid || !targetid) {
+            return null;
+        }
 
-            $.blockUI({
-                message: "<h1 class=\"block-overlay\">store connection and update page...</h1>"
-            });
-            location.href = '/vpos/addSystemConnection?structid=' + structid + '&targetid=' + targetid;
-            return false;
+        $.blockUI({
+            message: "<h1 class=\"block-overlay\">store connection and update page...</h1>"
         });
+        location.href = '/vpos/addSystemConnection?structid=' + structid + '&targetid=' + targetid;
+        return false;
+    });
 
 
     /*
@@ -562,7 +607,7 @@ $(document).ready(function () {
             },
             minimumInputLength: 3,
             language: {
-                inputTooShort: function() {
+                inputTooShort: function () {
                     return 'Please enter 3 or more characters, append + to your term for deepsearch';
                 }
             },
@@ -716,7 +761,14 @@ $(document).ready(function () {
         }
     }
 
+
+    loadStructcards();
+
 });
+
+/* ################################## end of onReady() #####################################################
+
+
 
 /*
  * Format Select2 dropdown selector element for Corporation Selector
@@ -811,6 +863,7 @@ function setLocationFilter(loc_id) {
     });
 }
 
+
 /**
  * Takes the filter params as well a request.
  *
@@ -870,6 +923,37 @@ function buildFilterQuery(filter_param) {
     // console.log('MEGA oerks - well stay - do nothing');
     return false;
 }
+
+/***
+ * Load a Structures-Card asycronous 
+ */
+function loadStructcards() {
+    $('[data-structcard-action]').each(function(){
+        let elem = $(this);
+        let url = elem.attr('data-structcard-action');
+        let eid = elem.attr('data-structcard-id');
+        $.ajax({
+            url: url,
+            type: 'get',
+            async: true,
+            success: function (data, status) {
+                $('[data-structcard-id="'+eid+'"]').next(".card-body").html(data);
+            },
+            error: function (xhr) {
+                $.toast({
+                    text: "An AJAX error occured: " + xhr.status + " " + xhr.statusText,
+                    heading: 'ERROR',
+                    icon: 'error',
+                    hideAfter: 5000,
+                    position: 'top-right',
+                    loader: true,
+                    loaderBg: '#4e433c'
+                });
+            }
+        });
+    }); 
+}
+
 
 function addUrlParam(url_param, filter_param) {
 
