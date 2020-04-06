@@ -12,7 +12,7 @@
         </div>
         <div class="col-md-4 text-center">
             <?=$this->vpViewTool()->dateUntil('', $struct['at_stateTimerEnd'], 0, 'badge  badge-warning', 'badge badge-normal');?><br/>
-            <span class="tertiary"><?=$struct['at_stateTimerEnd']->format('D d.m.y\<\b\r\/\>H:i');?></span>
+            <span class="tertiary"><?=$this->vpViewTool()->formatDateTime($struct['at_stateTimerEnd']);?></span>
         </div>
     </div>
     <?php endforeach;?>

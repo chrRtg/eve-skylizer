@@ -496,6 +496,8 @@ class VposMoonHelper extends AbstractHelper
         if (is_string($date_to)) {
             $tmp_t = new \DateTime($date_to);
             $date_to = $tmp_t;
+        } else if (!is_a($date_to, 'DateTime')) {
+            return '';
         }
 
         $interval = date_diff($now, $date_to);
@@ -515,6 +517,22 @@ class VposMoonHelper extends AbstractHelper
         }
 
         return $interval->format('<span class="' . $class . '" title="due: '.date_format($date_to, 'D d.m.Y H:i').'">' . $title . $differenceFormat . '</span>');
+    }
+
+    /**
+     * Format a datetime according to Skylizer date format
+     * Checks if var exists and if it's a datetime object
+     *
+     * @param dateTime datetime
+     * @return string   formated date and time
+     */
+    public function formatDateTime($datetime)
+    {
+        if (!isset($datetime) || !is_a($datetime, 'DateTime')) {
+            return '';
+        }
+
+        return $datetime->format('D d.m.y\<\b\r\/\>H:i');
     }
 
     /**
