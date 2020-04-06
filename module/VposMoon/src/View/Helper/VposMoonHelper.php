@@ -514,7 +514,7 @@ class VposMoonHelper extends AbstractHelper
             $differenceFormat = '- %ad %hh %im';
         }
 
-        return $interval->format('<span class="' . $class . '" title="due: '.date_format($date_to, 'Y/m/d H:i').'">' . $title . $differenceFormat.'</span>');
+        return $interval->format('<span class="' . $class . '" title="due: '.date_format($date_to, 'D d.m.Y H:i').'">' . $title . $differenceFormat . '</span>');
     }
 
     /**
@@ -536,6 +536,39 @@ class VposMoonHelper extends AbstractHelper
         }
 
         return('<span class="' . $class . '" title="timer">' . sprintf("%s %02d:00", $this->getDayByInt($reinforce_day), $reinforce_hour) . ' +/-2h</span>');
+    }
+
+
+    /**
+     * Translates a ESI structure state to a human readable text
+     *
+     * @param [type] structure state from ESI
+     * @return string Human readable State
+     */
+    public function getHumanReadableStructureState($state)
+    {
+        // list taken from  revenantal / eve-structures
+
+        $states = [
+            "anchor_vulnerable" => "Anchoring - Vulnerable",
+            "anchoring" => "Anchoring",
+            "armor_reinforce" => "Armor - Reinforced",
+            "armor_vulnerable" => "Armor - Vulnerable",
+            "fitting_invulnerable" => "Fitting - Vulnerable",
+            "hull_reinforce" => "Hull - Reinforced",
+            "hull_vulnerable" => "Hull - Vulnerable",
+            "online_deprecated" => "Online",
+            "onlining_vulnerable" => "Onlining",
+            "shield_vulnerable" => "Online",
+            "unanchored" => "Unanchored",
+            "unknown" => "unknown"
+        ];
+
+        if (!isset($states[$state])) {
+            return('unknown state');
+        }
+
+        return($states[$state]);
     }
 
     /**

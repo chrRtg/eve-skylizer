@@ -97,7 +97,7 @@ class StructurebrowserManager
                 $queryBuilder->andWhere('at.structureState IS NOT NULL');
                 $parameter['timerexclude'] = 'shield_vulnerable';
                 $queryBuilder->andWhere('at.structureState != :timerexclude');
-                $queryBuilder->orderBy('at.stateTimerStart', 'ASC');
+                $queryBuilder->orderBy('at.stateTimerEnd', 'ASC');
                 // @todo if we have timer data review this solution
                 // state_timer_end string: Date at which the structure will move to it's next state
                 // state_timer_start string: Date at which the structure entered it's current state

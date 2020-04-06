@@ -415,7 +415,7 @@ class StructureManager
             echo "enriched them with some moon mining extractions" . PHP_EOL;
         }
 
-    $this->logger->debug('### esiFetchCoprporationStructures :: before write #1 :: ' . print_r($struct_arr, true));
+        // $this->logger->debug('### esiFetchCoprporationStructures :: before write #1 :: ' . print_r($struct_arr, true));
 
         // Write the result data object to DB
         $this->esiWriteStructure($struct_arr, $climode);

@@ -139,6 +139,7 @@ i.glyphicon.passive:hover {
 
 .badge {
    border-radius: 5px;
+   margin-bottom: 5px;
 }
 
 .badge-warning {
@@ -269,9 +270,11 @@ hr {
 	border-bottom: 1px solid #2b3e50; 
 }
 
+
 /* */
 .gooname,
-.scanname {
+.scanname, 
+.warnstate {
 	color: #df691a;
 }
 .gooval {
