@@ -265,19 +265,30 @@ class UserManager
     }
 
     /**
-     * Set in_use=9 for $usercli to indicate an erroneous entry
+     * Set a error message for $usercli
+     * If the error code is between 200 and 399 or between 500 and 599
+     * we treat the problem as recoverable. For any further error code
+     * we set in_use=9 for $usercli to indicate an erroneous entry.
+     * With a in_use=9 the entry will no longer taken by the queue.
      *
      * @param Object UserCli
+     * @param string Message
+     * @param int error errorcode (default 0)
      * @return boolean true on success
      */
-    public function setCliUserDefective($usercli, $message = '')
+    public function setCliUserDefective($usercli, $message = '', $errorcode = 0)
     {
         if (!$usercli) {
             return false;
         }
 
-        $usercli->setInUse(9);
         $usercli->setMessage($message);
+
+        if (($errorcode >= 200 && $errorcode < 400) || ($errorcode >= 500 && $errorcode < 599)) {
+            return ($this->unsetCliUserInUse($usercli));
+        }
+
+        $usercli->setInUse(9);
         $this->entityManager->persist($usercli);
         $this->entityManager->flush();
 

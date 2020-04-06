@@ -119,7 +119,7 @@ class EveEsiManager
             $err_msg = 'search :: RequestFailedException :: ' . $e->getEsiResponse()->error() . ' (' . $e->getEsiResponse()->getErrorCode() . ')';
             $this->logger->debug($err_msg . print_r($e->getEsiResponse(), true));
 
-            $this->setError(6, $err_msg);
+            $this->setError($e->getEsiResponse()->getErrorCode(), $err_msg);
             return false;
         }
         // if not caught return the result
@@ -142,7 +142,7 @@ class EveEsiManager
         if(!$authentication) {
             // does the application is authed against Eve SSO?
             if (empty($this->sessionContainer->eveauth['eve_app']['client_id']) || empty($this->sessionContainer->eveauth['eve_user']['token'])) {
-                $this->setErr(5, 'authedRequest to Eve ESI without having client_id and user-token');
+                $this->setErr(903, 'authedRequest to Eve ESI without having client_id and user-token');
                 return false;
             }
 
@@ -174,7 +174,7 @@ class EveEsiManager
             $err_msg = 'authedRequest :: RequestFailedException :: ' . $e->getEsiResponse()->error() . ' (' . $e->getEsiResponse()->getErrorCode() . ')';
             $this->logger->debug($err_msg . print_r($e->getEsiResponse(), true));
 
-            $this->setError(6, $err_msg);
+            $this->setError($e->getEsiResponse()->getErrorCode(), $err_msg);
             return false;
         }
 

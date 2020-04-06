@@ -155,6 +155,14 @@ class StructureManager
             $structure_entity->setStructureState($structure_data['structure_state']);
         }
 
+        if ($structure_data['state_timer_end']) {
+            $structure_entity->setStateTimerEnd($structure_data['state_timer_end']);
+        }
+
+        if ($structure_data['state_timer_start']) {
+            $structure_entity->setStateTimerStart($structure_data['state_timer_start']);
+        }
+
         if ($structure_data['chunk_arrival_time']) {
             $structure_entity->setChunkArrivalTime($structure_data['chunk_arrival_time']);
         }
@@ -359,7 +367,7 @@ class StructureManager
             $new_token = $this->eveSSOManager->getFreshAccessToken($ac['refresh_token']);
             if (!$new_token) {
                 $msg = 'ERROR : while esiFetchCoprporationStructures with Cliuser ID: ' . $cli_user->getEveUserid() . ' for corporation ' . $corpname . ' an error occured ('. $this->eveSSOManager->getMessage() . ')';
-                $this->userManager->setCliUserDefective($cli_user, $msg);
+                $this->userManager->setCliUserDefective($cli_user, $msg, $this->eveSSOManager->getCode());
                 echo $msg . PHP_EOL;
                 return 0;
             }
@@ -373,10 +381,11 @@ class StructureManager
         $struct_arr = $this->esiGetAllCorpStructures($cli_user->getEveCorpid(), unserialize($cli_user->getAuthContainer()));
         if (! $struct_arr) {
             $msg = 'ERROR : while esiGetAllCorpStructures-esiGetAllCorpStructures with Cliuser ID: ' . $cli_user->getEveUserid() . ' for corporation ' . $corpname . ' an error occured ('. $this->eveESIManager->getMessage() . ')';
-            $this->userManager->setCliUserDefective($cli_user, $msg);
+            $this->userManager->setCliUserDefective($cli_user, $msg, $this->eveSSOManager->getCode());
             echo $msg . PHP_EOL;
             return 0;
         }
+
         
         if ($climode) {
             echo "fetched " . count($struct_arr) . " structures for corporation " . $corpname . " " . PHP_EOL;
@@ -385,8 +394,8 @@ class StructureManager
         // enrich them with name, type and solar system
         $struct_arr = $this->esiGetCorpStructuresByStructures($struct_arr, unserialize($cli_user->getAuthContainer()));
         if (! $struct_arr) {
-            $msg = 'ERROR : while esiGetAllCorpStructures-esiGetAllCorpStructures with Cliuser ID: ' . $cli_user->getEveUserid() . ' for corporation ' . $corpname . ' an error occured ('. $this->eveESIManager->getMessage() . ')';
-            $this->userManager->setCliUserDefective($cli_user, $msg);
+            $msg = 'ERROR : while esiGetAllCorpStructures-esiGetCorpStructuresByStructures with Cliuser ID: ' . $cli_user->getEveUserid() . ' for corporation ' . $corpname . ' an error occured ('. $this->eveESIManager->getMessage() . ')';
+            $this->userManager->setCliUserDefective($cli_user, $msg, $this->eveSSOManager->getCode());
             echo $msg . PHP_EOL;
             return 0;
         }
@@ -397,8 +406,8 @@ class StructureManager
         // enrich them with their extractions if drilling plattforms
         $struct_arr = $this->esiGetCorpMinningExtractions($struct_arr, $cli_user->getEveCorpid(), unserialize($cli_user->getAuthContainer()));
         if (! $struct_arr) {
-            $msg = 'ERROR : while esiGetAllCorpStructures-esiGetAllCorpStructures with Cliuser ID: ' . $cli_user->getEveUserid() . ' for corporation ' . $corpname . ' an error occured ('. $this->eveESIManager->getMessage() . ')';
-            $this->userManager->setCliUserDefective($cli_user, $msg);
+            $msg = 'ERROR : while esiGetAllCorpStructures-esiGetCorpMinningExtractions with Cliuser ID: ' . $cli_user->getEveUserid() . ' for corporation ' . $corpname . ' an error occured ('. $this->eveESIManager->getMessage() . ')';
+            $this->userManager->setCliUserDefective($cli_user, $msg, $this->eveSSOManager->getCode());
             echo $msg . PHP_EOL;
             return 0;
         }
@@ -406,7 +415,7 @@ class StructureManager
             echo "enriched them with some moon mining extractions" . PHP_EOL;
         }
 
-        // $this->logger->debug('### esiFetchCoprporationStructures :: after #1 :: ' . print_r($struct_arr, true));
+    $this->logger->debug('### esiFetchCoprporationStructures :: before write #1 :: ' . print_r($struct_arr, true));
 
         // Write the result data object to DB
         $this->esiWriteStructure($struct_arr, $climode);
