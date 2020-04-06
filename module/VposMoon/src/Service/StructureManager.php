@@ -367,7 +367,7 @@ class StructureManager
             $new_token = $this->eveSSOManager->getFreshAccessToken($ac['refresh_token']);
             if (!$new_token) {
                 $msg = 'ERROR : while esiFetchCoprporationStructures with Cliuser ID: ' . $cli_user->getEveUserid() . ' for corporation ' . $corpname . ' an error occured ('. $this->eveSSOManager->getMessage() . ')';
-                $this->userManager->setCliUserDefective($cli_user, $msg, $this->eveSSOManager->getCode());
+                $this->userManager->setCliUserDefective($cli_user, $msg, 901);
                 echo $msg . PHP_EOL;
                 return 0;
             }
