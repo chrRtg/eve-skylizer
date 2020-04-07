@@ -128,6 +128,7 @@ class MoonManager
     {
         $moon_cnt = array();
         $goo_cnt = array();
+        $res_arr = array();
 
         if (!empty($this->data_collector)) {
             foreach ($this->data_collector as $moon => $goo) {
@@ -196,6 +197,8 @@ class MoonManager
      */
     private function persistMoonGoo($moon_id, $moon, $goo_data)
     {
+        $this->deleteGoo($moon_id);
+
         foreach ($goo_data as $goo_id => $qty) {
             $this->writeMoonGoo($moon_id, $goo_id, $qty);
         }
