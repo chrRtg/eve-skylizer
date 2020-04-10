@@ -491,7 +491,7 @@ class VposMoonHelper extends AbstractHelper
     {
         $differenceFormat = '%ad %hh %im';
 
-        $now = new \DateTime('NOW');
+        $now = new \DateTime('NOW', new \DateTimeZone('Atlantic/Reykjavik'));
 
         if (is_string($date_to)) {
             $tmp_t = new \DateTime($date_to);
