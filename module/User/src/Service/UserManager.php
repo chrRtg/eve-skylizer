@@ -315,7 +315,7 @@ class UserManager
             ->getOneOrNullResult();
             
         if ($sleepy_cli_user) {
-            // $this->logger->debug('### rouseCliUSer - found one: ' . $sleepy_cli_user->getEveUserid());
+            $this->logger->info('### rouseCliUSer - found sleeping cli-user: ' . $sleepy_cli_user->getEveUserid());
             $this->entityManager->getRepository(UserCli::class)->createQueryBuilder('uc')
                 ->update()
                 ->set('uc.inUse', '0')
