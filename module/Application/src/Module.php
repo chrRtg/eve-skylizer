@@ -32,9 +32,8 @@ class Module
         // session manager as a dependency to other models.
         $sessionManager = $serviceManager->get(SessionManager::class);
 
-        error_log('boostrap TZ: ' . \date_default_timezone_get() . PHP_EOL, 3 , '/tmp/php.log');
+        // for Eve Online set TZ to UTC, same as EVE-ESI uses on his own
         \date_default_timezone_set('UTC');
-        error_log('boostrap TZ2: ' . \date_default_timezone_get() . PHP_EOL, 3 , '/tmp/php.log');
     }
 }
 
