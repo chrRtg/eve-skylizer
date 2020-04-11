@@ -31,6 +31,10 @@ class Module
         // makes the SessionManager the 'default' one to avoid passing the 
         // session manager as a dependency to other models.
         $sessionManager = $serviceManager->get(SessionManager::class);
+
+        error_log('boostrap TZ: ' . \date_default_timezone_get() . PHP_EOL, 3 , '/tmp/php.log');
+        \date_default_timezone_set('UTC');
+        error_log('boostrap TZ2: ' . \date_default_timezone_get() . PHP_EOL, 3 , '/tmp/php.log');
     }
 }
 
