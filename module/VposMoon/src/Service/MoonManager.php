@@ -261,7 +261,7 @@ class MoonManager
             ->addSelect("SUM(itmt.baseprice * itm.quantity) as oreval")
             ->addSelect("GROUP_CONCAT(DISTINCT itmt.typename) as hasmaterial")
             ->addSelect("GROUP_CONCAT(IDENTITY(mg.eveInvtypesTypeid), '|', mg.gooAmount, '|', it.typename, '|',  itmt.typeid, '|', itm.quantity, '|', itmt.typename, '|', itmt.baseprice SEPARATOR '#') as materiallist")
-            ->addSelect("GROUP_CONCAT(DISTINCT atstruct.id) as structid, GROUP_CONCAT(DISTINCT atstruct.typeId) as structtype, GROUP_CONCAT(DISTINCT itmt2.typename) as structname, GROUP_CONCAT(DISTINCT atstruct.structureName) as structgivename, GROUP_CONCAT(DISTINCT atstruct.naturalDecayTime) as at_naturalDecayTime, GROUP_CONCAT(DISTINCT atstruct.extractionStartTime) as at_extractionStartTime, GROUP_CONCAT(DISTINCT atstruct.fuelExpires) as at_fuelExpires")
+            ->addSelect("GROUP_CONCAT(DISTINCT atstruct.id) as structid, GROUP_CONCAT(DISTINCT atstruct.typeId) as structtype, GROUP_CONCAT(DISTINCT itmt2.typename) as structname, GROUP_CONCAT(DISTINCT atstruct.structureName) as structgivename, GROUP_CONCAT(DISTINCT atstruct.naturalDecayTime) as at_naturalDecayTime, GROUP_CONCAT(DISTINCT atstruct.extractionStartTime) as at_extractionStartTime, GROUP_CONCAT(DISTINCT atstruct.chunkArrivalTime) as at_chunkArrivalTime, GROUP_CONCAT(DISTINCT atstruct.fuelExpires) as at_fuelExpires")
             ->addSelect("GROUP_CONCAT(DISTINCT atstruct.corporationId) as structcorpid, GROUP_CONCAT(DISTINCT ec.corporationName) as structcorpname, GROUP_CONCAT(DISTINCT ec.ticker) as structcorpticker")
             ->addSelect("mds.itemname as map_name")
             ->from(\Application\Entity\Mapdenormalize::class, 'md')

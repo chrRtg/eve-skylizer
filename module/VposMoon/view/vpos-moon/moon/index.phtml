@@ -13,7 +13,7 @@ $form->get('scan')->setAttributes([
 
 $current_route = $this->currentRoute()->getRoute();
 
-//echo "<pre>"; ini_set('xdebug.var_display_max_depth', 3); var_dump($moon_list); echo "</pre>";
+// echo "<pre>"; ini_set('xdebug.var_display_max_depth', 3); var_dump($moon_list); echo "</pre>";
 //ini_set('xdebug.var_display_max_depth', 3); var_dump($filters);
 
 if (empty($filters['info_system']['constellation'])) {
@@ -100,6 +100,7 @@ if (empty($filters['info_system']['constellation'])) {
 					</thead>
 					<tbody>
 						<?php foreach ($moon_list as $key => $moon): ?>
+						<?php // var_export($moon); ?>
 							<tr>
 								<td>
 									<a href="<?= $this->vpViewTool()->createExternalSystemURL($moon['map_name']); ?>" class="unobtrusive" target="_blank"><?= $this->escapeHtml($moon['moonname']) ?>
@@ -123,7 +124,7 @@ if (empty($filters['info_system']['constellation'])) {
 								<td>
 									<a href="#" class="structlink" data-toggle="modal" data-structid="<?= $moon['structid']; ?>" data-structtype="<?= $moon['structtype']; ?>" data-structgivename="<?= $moon['structgivename']; ?>" data-scorpid="<?= $moon['structcorpid']; ?>" data-scorpname="<?= $moon['structcorpname']; ?>"  data-scorpticker="<?= $moon['structcorpticker']; ?>" data-moonid="<?= $moon['moonid']; ?>" data-target="#structureEditModal">
 										<?= ($moon['structname'] ? $moon['structname'] : '<i class="glyphicon glyphicon-plus passive"></i>'); ?></a><br /><span class="secondarytext"><?= $moon['structgivename']; ?></span>
-										<?=($moon['at_extractionStartTime'] ? '<hr><span class="tertiary small">' . $this->vpViewTool()->dateUntil('Chunk', $moon['at_extractionStartTime'], 2, 'badge  badge-info') . '</span>' : '')?>
+										<?=($moon['at_extractionStartTime'] ? '<hr><span class="tertiary small">' . $this->vpViewTool()->dateUntil('Chunk', $moon['at_chunkArrivalTime'], 2, 'badge  badge-info') . '</span>' : '')?>
 										<?=($moon['at_fuelExpires'] ? '<br><span class="tertiary small">' . $this->vpViewTool()->dateUntil('Fuel', $moon['at_fuelExpires'], 5, 'badge  badge-warning') . '</span>' : '')?>&nbsp;
 
 								</td>

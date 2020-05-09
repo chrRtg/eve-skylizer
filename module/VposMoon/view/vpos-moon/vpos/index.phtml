@@ -109,6 +109,7 @@ if (empty($filters['info_system']['constellation'])) {
 					</thead>
 					<tbody>
 						<?php foreach ($vpos_list as $key => $struct): ?>
+						<?php // var_export($struct); ?>
 						<?php $vptype = $this->vpViewTool()->determineVposType($struct); ?>
 							<tr class="<?=(isset($message['scanres'][$struct['at_id']])  ? $message['scanres'][$struct['at_id']] : '')?>">
 								<td>
@@ -117,7 +118,7 @@ if (empty($filters['info_system']['constellation'])) {
 								</td>
 								<td>
 									<div class="vpos-<?=$vptype['type'];?>">&nbsp;<?=$vptype['name'];?>
-										<?=($struct['at_extractionStartTime'] ? '<hr><span class="tertiary small">&nbsp;' . $this->vpViewTool()->dateUntil('Chunk', $struct['at_extractionStartTime'], 2, 'badge  badge-info') . '</span>' : '')?>
+										<?=($struct['at_extractionStartTime'] ? '<hr><span class="tertiary small">&nbsp;' . $this->vpViewTool()->dateUntil('Chunk', $struct['at_chunkArrivalTime'], 2, 'badge  badge-info') . '</span>' : '')?>
 										<?=($struct['at_fuelExpires'] ? '<br><span class="tertiary small">&nbsp;' . $this->vpViewTool()->dateUntil('Fuel', $struct['at_fuelExpires'], 5, 'badge  badge-warning') . '</span>' : '')?>&nbsp;
 										</div>
 									<?=($struct['acd_class'] ? '<br><span class="vpos-' . $vptype['type'] . '">&nbsp;' . $this->escapeHtml($struct['acd_class']) . '</span>' : '')?>
