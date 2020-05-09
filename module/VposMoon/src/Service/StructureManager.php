@@ -208,7 +208,7 @@ class StructureManager
 
         // and write each service afterwards from scratch
         foreach ($services as $s) {
-            $this->logger->debug('### writeStructureServices :: (' . $struct_id . ') :: ' . print_r($s, true));
+            //$this->logger->debug('### writeStructureServices :: (' . $struct_id . ') :: ' . print_r($s, true));
             $service_entity = new AtStructureServices();
 
             $service_entity->setStructureId($struct_id);
@@ -367,7 +367,7 @@ class StructureManager
             $new_token = $this->eveSSOManager->getFreshAccessToken($ac['refresh_token']);
             if (!$new_token) {
                 $msg = 'Disable Corp Director : while esiFetchCoprporationStructures with Cliuser ID: ' . $cli_user->getEveUserid() . ' for corporation ' . $corpname . ' an error occured ('. $this->eveSSOManager->getMessage() . ')';
-                $this->userManager->setCliUserDefective($cli_user, $msg, 901);
+                $this->userManager->setCliUserDefective($cli_user, $msg, $this->eveSSOManager->getCode());
                 echo $msg . PHP_EOL;
                 return 0;
             }
