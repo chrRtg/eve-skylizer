@@ -84,6 +84,12 @@ class EveSSOManager
 
     /**
      *
+     * @var string
+     */
+    private $responseCode = 0;
+
+    /**
+     *
      * @var array
      */
     private $config;
@@ -679,6 +685,7 @@ class EveSSOManager
         } catch (\League\OAuth2\Client\Provider\Exception\IdentityProviderException $e) {
             // Failed to get the refresh token
             $this->responseMessage = 'failed to fetch RefreshToken, errCode: ' . $e->getResponseBody()->getStatusCode() . ' with message: ' . $e->getResponseBody()->getReasonPhrase();
+            $this->responseCode = $e->getResponseBody()->getStatusCode();
             return false;
         }
         return ($new_token);
@@ -687,5 +694,10 @@ class EveSSOManager
     public function getMessage()
     {
         return ($this->responseMessage);
+    }
+
+    public function getCode()
+    {
+        return ($this->responseCode);
     }
 }

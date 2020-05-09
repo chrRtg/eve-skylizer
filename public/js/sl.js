@@ -954,6 +954,16 @@ function loadStructcards() {
     }); 
 }
 
+/***
+ * 
+ */
+function structCardReady(par) {
+    $('.collapse').on('show.bs.collapse', function (elem) {
+        console.log('collapsibles', elem.target.dataset.slType,elem.target.dataset.slId, elem.target.id, elem)
+    })
+}
+
+
 
 function addUrlParam(url_param, filter_param) {
 

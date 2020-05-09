@@ -79,7 +79,6 @@ class StructbrowseController extends AbstractActionController
         $filters = $this->vposManager->manageFilters($this->params()->fromQuery(), $this->eveDataManager, $goto_currentsystem);
 
         if (!empty($action) && $request->isXmlHttpRequest()) {
-            $this->logger->info('StructbrowserIndex got action: __' . $action . '__');
             $template = null;
 
             switch ($action) {

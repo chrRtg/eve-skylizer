@@ -5,12 +5,19 @@
     </div>
     <div class="col-sm-6">
         <span class="">
-            <?=$this->escapeHtml($struct['at_structureName']);?></span>
+        <a data-toggle="collapse" href="#collapsemoon<?= $struct['at_id'];?>" aria-expanded="false"><?=$this->escapeHtml($struct['at_structureName']);?></span></a>
             (<?=$this->escapeHtml($struct['own_corpticker']);?>)<br/>
             <span class="secondarytext"><?=($struct['celest_name'] ? $struct['celest_name'] : $struct['map_name'])?></span>
     </div>
     <div class="col-sm-4 text-center">
         <?=$this->vpViewTool()->dateUntil('', $struct['at_fuelExpires'], 5, 'badge  badge-warning', 'badge badge-normal');?>
     </div>
+    <div class="col-sm-12 collapse" id="collapsemoon<?= $struct['at_id'];?>" data-sl-type="moon" data-sl-id="<?= $struct['at_id'];?>">
+        area to show more
+    </div>
 </div>
 <?php endforeach; ?>
+<script>
+//at_id
+    structCardReady('moon');
+</script>
