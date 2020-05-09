@@ -89,7 +89,7 @@ class StructurebrowserManager
                 break;
             case 'moongoo':
                 $queryBuilder->andWhere('at.chunkArrivalTime IS NOT NULL');
-                $parameter['datenow'] =  new \DateTime('NOW');
+                $parameter['datenow'] =  new \DateTime('-3 days');
                 $queryBuilder->andWhere('at.naturalDecayTime >= :datenow');
                 $queryBuilder->orderBy('at.chunkArrivalTime', 'ASC');
                 break;
