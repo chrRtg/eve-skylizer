@@ -262,9 +262,9 @@ class EveSSOManager
         $this->logger->debug('EveSSO, checkCredentials for user: __' . $sso_user->getCharacterName() . '__  belongs to: __' . ($corporation->name ? $corporation->name : 'ERR:corp not-resolved') . '__ [__' . ($alliance ? $alliance->name : 'no alliance') . '__]');
 
         // check if user is allowed to log in (by player name or because of his corporation
-        if (isset($corporation->name) && !$this->checkEveCredentials($sso_user->getCharacterName(), $corporation->name, ($alliance ? $alliance->name : false))) {
+        if (isset($corporation->name) && !$this->checkEveCredentials($sso_user->getCharacterName(), $corporation->name, ($alliance ? $alliance->name : null))) {
             $this->responseMessage = 'This user is not allowed to use this tool.';
-            return (false);
+            return false;
         }
 
         $appuser = $this->userManager->getOrAddUser($sso_user->getCharacterId(), $character, $corporation, $this->isAdmin);
@@ -272,7 +272,7 @@ class EveSSOManager
 
         if (empty($appuser)) {
             $this->responseMessage = 'Can not fetch local User. This is most probably an error you should report to the administrator';
-            return (false);
+            return false;
         }
 
         // store users details and character to session

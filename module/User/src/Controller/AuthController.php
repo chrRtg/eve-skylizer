@@ -64,7 +64,7 @@ class AuthController extends AbstractActionController
             default:
                 $msg = 'SSO error: undefined action';
                 break;
-    }
+        }
 
         // if we reach this point, no auth is possible or allowed. Therefore properly set back the session
         $this->eveSsoManager->clearIdentity();

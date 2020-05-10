@@ -105,7 +105,7 @@ class CosmicManager
         // check current scan against all signatures in DB of type SCAN in current system
         $res_arr['del_anom'] = $this->evaluateAnomalyScan();
 
-        $bla = $this->evaluateStructureScan();
+        $this->evaluateStructureScan();
         
         //$this->logger->debug('### DATA Collector: '.print_r($this->data_collector, true));
         //$this->logger->debug('### Structure Collector: '.print_r($this->structure_collector, true));
@@ -114,8 +114,8 @@ class CosmicManager
 
         // persist scan
         if ($this->structure_collector && count($this->structure_collector)) {
-            foreach ($this->structure_collector as $key => $value) {
-                if(!(isset($value['ignore']) && $value['ignore'] == 1 )) {
+            foreach ($this->structure_collector as $value) {
+                if (!(isset($value['ignore']) && $value['ignore'] == 1 )) {
                     $writeres = $this->structureManager->writeStructure($value);
                     $res_arr['scan_anom'][$writeres['id']] = $writeres['mod'];
                 }
@@ -136,8 +136,7 @@ class CosmicManager
             return false; // nothing to do
         }
 
-        foreach ($this->structure_collector as $key => $struct)
-        {
+        foreach ($this->structure_collector as $key => $struct) {
             // skip non structure entries
             if ($struct['scantype'] != 'STRUCT') {
                 continue;
@@ -147,11 +146,7 @@ class CosmicManager
 
             $next_celestial = null;
             // get next celestial, moon for refineries, any for all others
-            if (\VposMoon\Service\ScanManager::isRefinery($struct['eve_groupid'])) {
-                $next_celestial = $this->getNextCelestial($struct['distance'], true);
-            } else {
-                $next_celestial = $this->getNextCelestial($struct['distance'], false);
-            }
+            $next_celestial = $this->getNextCelestial($struct['distance']);
 
             // we use both later below
             $celestial_id = null;
@@ -238,7 +233,7 @@ class CosmicManager
         $siglist = $this->getlocalSignatures($current_solarsystem);
 
         // iterate through the signature in DB
-        foreach ($siglist as $key => $value) {
+        foreach ($siglist as $value) {
             // are all signatures in DB are also in the scan? If not remove the anomaly from DB
             $sigmatch = array_search($value['signature'], array_column($this->structure_collector, 'signature'));
             if ($sigmatch === false) {
@@ -271,7 +266,7 @@ class CosmicManager
      */
     public function parseScan()
     {
-        // @todo split method, it's to complex
+        // @consider split method, it's to complex
 
         $current_solarsystem = $this->eveSSOManager->getUserLocationAsSystemID();
         if (!$current_solarsystem) {
@@ -311,8 +306,7 @@ class CosmicManager
 
 
             // check typename it it's a cosmic_detail (scannable anomaly)
-            if ($scan_elem['eve_typename']) 
-            {
+            if ($scan_elem['eve_typename']) {
                 $cosmicdetail = $this->getCosmicDetailByName($scan_elem['eve_typename']);
                 if ($cosmicdetail) {
                     $this->data_collector[$key]['at_cosmic_detail_id'] = $cosmicdetail->getCosmicDetailId();
@@ -453,7 +447,7 @@ class CosmicManager
      */
     private function getSystemIDFromEveItemName(string $itemname)
     {
-        if(empty($itemname)) {
+        if (empty($itemname)) {
             return null;
         }
 
@@ -483,10 +477,9 @@ class CosmicManager
      * Find the nearest celestial from the internal data collector to a given distance
      *
      * @param int distance
-     * @param boolean true to consider only moons
      * @return array 'dist' for relative distance and 'match' for the celestial itself
      */
-    private function getNextCelestial($dist, $only_moon=false)
+    private function getNextCelestial($dist)
     {
         $res = array('match' => false, 'dist' => null);
         $celstial_dist_collector = array();
@@ -496,7 +489,6 @@ class CosmicManager
         }
 
         foreach ($this->celestial_collector as $ckey => $celestial) {
-    
             $celstial_dist_collector[$ckey] = abs($celestial['distance'] - $dist);
         }
 
@@ -553,7 +545,7 @@ class CosmicManager
         $cnt = 0;
 
         if ($this->structure_collector && count($this->structure_collector)) {
-            foreach ($this->structure_collector as $key => $value) {
+            foreach ($this->structure_collector as $value) {
                 if ($value['scantype'] == $scantype) {
                     $cnt++;
                 }

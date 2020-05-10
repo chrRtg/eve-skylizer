@@ -21,10 +21,10 @@ $form->prepare();
 <div class="row">
     <div class="col-md-8">
         <?= $this->form()->openTag($form); ?>
-        <table class="table table-striped table-bordered">
+        <table class="table table-striped table-bordered" aria-describedby="Permissions view">
             <tr>
-                <th>Name</th>
-                <th>Description</th>
+                <th scope="col">Name</th>
+                <th scope="col">Description</th>
             </tr>
             <?php foreach ($allPermissions as $permission):
                 $element = $form->get('permissions')->get($permission->getName());

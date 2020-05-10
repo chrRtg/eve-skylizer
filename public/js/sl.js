@@ -1,6 +1,6 @@
 $(document).ready(function () {
     if (typeof current_route === 'undefined') {
-        var current_route = 'vposmoon';
+        let current_route = 'vposmoon';
     }
 
     // form autosubmit on paste data
@@ -358,7 +358,6 @@ $(document).ready(function () {
     });
 
     $('#selectore').on('select2:select', function (e) {
-        var data = e.params.data;
         buildFilterQuery({
             type: "ore",
             id: e.params.data.id
@@ -370,7 +369,7 @@ $(document).ready(function () {
      * Select2 typeahead to select a system or constellation
      */
     $('#selectsystem').on('select2:select', function (e) {
-        var data = e.params.data;
+        // var data = e.params.data;
         // console.log(data);
         //location.href = '/'+current_route+'?system=' + data.id;
         buildFilterQuery({
@@ -676,12 +675,12 @@ $(document).ready(function () {
             url: $(this).attr('action'),
             type: "post",
             data: $(this).serializeArray(),
-            beforeSend: function (e) {
+            beforeSend: function (ebs) {
                 $("#structureEditModal").block({
                     message: '<h1>update structure...</h1>'
                 });
             },
-            complete: function (e) {
+            complete: function (ec) {
                 //location.reload(); // no complex auto update page yet
                 location.href = location.href; // reload without re-posting
                 //$('#structureEditModal').modal('hide');

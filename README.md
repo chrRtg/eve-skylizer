@@ -4,6 +4,8 @@ skŸlizer is a tool for Eve Online to handle any kind of scans and to gather as 
 
 At the moment scanning moons, anomalies and citadels is supported.
 
+For up to date information please have a look into the [Changelog](https://github.com/chrRtg/eve-skylizer/wiki/Changelog).
+
 ## Features
 
 1. **Scan something in EVE**

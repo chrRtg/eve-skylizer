@@ -12,15 +12,13 @@ use Zend\Session\SessionManager;
 
 class Module
 {
-    const VERSION = '3.0.0dev';
-
     public function getConfig()
     {
         return include __DIR__ . '/../config/module.config.php';
     }
     
     /**
-     * This method is called once the MVC bootstrapping is complete. 
+     * This method is called once the MVC bootstrapping is complete.
      */
     public function onBootstrap(MvcEvent $event)
     {
@@ -28,12 +26,11 @@ class Module
         $serviceManager = $application->getServiceManager();
         
         // The following line instantiates the SessionManager and automatically
-        // makes the SessionManager the 'default' one to avoid passing the 
+        // makes the SessionManager the 'default' one to avoid passing the
         // session manager as a dependency to other models.
-        $sessionManager = $serviceManager->get(SessionManager::class);
+        $serviceManager->get(SessionManager::class);
 
         // for Eve Online set TZ to UTC, same as EVE-ESI uses on his own
         \date_default_timezone_set('UTC');
     }
 }
-

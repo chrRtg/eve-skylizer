@@ -45,7 +45,7 @@ class StructurebrowserManager
     {
         $limit = 10;
 
-        $query = $this->entityManager->getConnection()->exec('SET @@group_concat_max_len = 8000;');
+        $this->entityManager->getConnection()->exec('SET @@group_concat_max_len = 8000;');
 
         $queryBuilder = $this->entityManager->createQueryBuilder();
 
@@ -82,7 +82,7 @@ class StructurebrowserManager
         $parameter['filtergid'] = $filter_gid;
         $queryBuilder->andWhere('at.groupId IN (:filtergid)');
 
-        switch($mode) {
+        switch ($mode) {
             case 'fuel':
                 $queryBuilder->andWhere('at.fuelExpires IS NOT NULL');
                 $queryBuilder->orderBy('at.fuelExpires', 'ASC');
@@ -98,7 +98,6 @@ class StructurebrowserManager
                 $parameter['timerexclude'] = 'shield_vulnerable';
                 $queryBuilder->andWhere('at.structureState != :timerexclude');
                 $queryBuilder->orderBy('at.stateTimerEnd', 'ASC');
-                // @todo if we have timer data review this solution
                 // state_timer_end string: Date at which the structure will move to it's next state
                 // state_timer_start string: Date at which the structure entered it's current state
                 break;

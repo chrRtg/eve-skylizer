@@ -96,15 +96,15 @@ if (empty($filters['info_system']['constellation'])) {
 		</div>
 		<div class="row">
 			<div class="col-sm-12">
-				<table id="moontable" class="table table-hover table-striped table-responsive" cellspacing="0" width="100%">
+				<table id="moontable" class="table table-hover table-striped table-responsive" aria-describedby="table of signatures">
 					<thead>
 					<tr>
-						<th>Sig</th>
-						<th>Type</th>
-						<th>Name</th>
-						<th>Detail</th>
-						<th>Location / nearby</th>
-						<th>Date last seen</th>
+						<th scope="col">Sig</th>
+						<th scope="col">Type</th>
+						<th scope="col">Name</th>
+						<th scope="col">Detail</th>
+						<th scope="col">Location / nearby</th>
+						<th scope="col">Date last seen</th>
 					</tr>
 					</thead>
 					<tbody>
@@ -132,10 +132,10 @@ if (empty($filters['info_system']['constellation'])) {
 								<?php else: ?>
 									<?=($struct['at_structureName'] ? '<span class="scanname">' . $this->escapeHtml($struct['at_structureName']) . '</span>' : "")?>
 									<?php if ($struct['acd_urlEn']): ?>
-										<a href="<?=$this->escapeHtml($struct['acd_urlEn']);?>" target="_blank" title="open description of signature in an external page" class="flag tdview"><span class="flag-icon flag-icon-en"></span></a>
+										<a href="<?=$this->escapeHtml($struct['acd_urlEn']);?>" target="_blank" rel="noopener noreferrer"  title="open description of signature in an external page" class="flag tdview"><span class="flag-icon flag-icon-en"></span></a>
 									<?php endif;?>
 									<?php if ($struct['acd_urlDe']): ?>
-										<a href="<?=$this->escapeHtml($struct['acd_urlDe']);?>" target="_blank" title="Öffne eine Beschreibung der Signatur ein einem neuen Fenster" class="flag tdview"><span class="flag-icon flag-icon-de"></span></a>
+										<a href="<?=$this->escapeHtml($struct['acd_urlDe']);?>" target="_blank" rel="noopener noreferrer"  title="Öffne eine Beschreibung der Signatur ein einem neuen Fenster" class="flag tdview"><span class="flag-icon flag-icon-de"></span></a>
 									<?php endif;?>
 									<?=($struct['acd_comment'] ? '</br><mark>' . $this->escapeHtml($struct['acd_comment']) : "") . '</mark>'?>
 								<?php endif;?>
@@ -145,7 +145,7 @@ if (empty($filters['info_system']['constellation'])) {
 										<!-- WH / JumpGate management -->
 										<?php if ($struct['target_name']): ?>
 											<a href="<?= $this->url('vpos', [], array('query' => array('system' => $struct['at_targetSystemId']))); ?>" title="jump to system in skYlizer" class="unobtrusive"><i class="glyphicon glyphicon-new-window passive"></i></a>
-											<a href="<?=$this->vpViewTool()->createExternalSystemURL($struct['target_name']);?>" title="open system information in new window" class="unobtrusive" target="_blank"><?=$this->escapeHtml($struct['target_name']);?></a>
+											<a href="<?=$this->vpViewTool()->createExternalSystemURL($struct['target_name']);?>" title="open system information in new window" class="unobtrusive" target="_blank" rel="noopener noreferrer" ><?=$this->escapeHtml($struct['target_name']);?></a>
 											&nbsp;<span class="secondarytext"><?=$this->vpViewTool()->formatClassid($struct['target_classidH'], $struct['target_classidL']); ?></span>
 											<span class="tdview"><a href="<?= $this->url('vpos', ['action' => 'removeSystemConnection'], array('query' => array('structid' => $struct['at_id']))); ?>" class="btn btn-xs btn-danger"><i class="glyphicon glyphicon-remove tdview"></i></a></span>
 										<?php else: ?>
@@ -170,7 +170,7 @@ if (empty($filters['info_system']['constellation'])) {
 									<?php if (isset($struct['target_name'])): ?>
 										<?=$this->escapeHtml($struct['target_name']);?> - Gate
 									<?php elseif (isset($struct['map_name'])): ?>
-										<a href="<?=$this->vpViewTool()->createExternalSystemURL($struct['map_name']);?>" title="open system information in new window" class="unobtrusive" target="_blank">
+										<a href="<?=$this->vpViewTool()->createExternalSystemURL($struct['map_name']);?>" title="open system information in new window" class="unobtrusive" target="_blank" rel="noopener noreferrer" >
 											<?=($struct['celest_name'] ? $struct['celest_name'] : $struct['map_name'])?></a>
 									<?php else: ?>
 										<?=$this->escapeHtml($struct['celest_name']);?>

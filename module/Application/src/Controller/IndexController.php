@@ -82,7 +82,7 @@ class IndexController extends AbstractActionController
 
         if ($user == null) {
             $this->getResponse()->setStatusCode(404);
-            return;
+            return false;
         }
         if (!$this->access('profile.any.view')
             && !$this->access('profile.own.view', ['user' => $user])

@@ -77,7 +77,7 @@ class VposController extends AbstractActionController
         $message = null;
         $goto_currentsystem = false;
 
-        // Delete all anomalies older than 3 days, in the future @todo move to shell script
+        // Delete all anomalies older than 3 days
         $this->structureManager->removeOutdatedAnomalies();
 
         // Create scan input form

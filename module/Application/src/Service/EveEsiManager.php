@@ -69,24 +69,20 @@ class EveEsiManager
                 $res = $esi->invoke($method, $request, $params);
             } catch (\Seat\Eseye\Exceptions\RequestFailedException $e) {
                 // ref: https://github.com/eveseat/eseye/wiki/Handling-Exceptions
-                $err_msg = 'publicRequest :: RequestFailedException :: ' . $e->getEsiResponse()->error() . ' (' . $e->getEsiResponse()->getErrorCode() . ')';
-                $this->logger->debug($err_msg . print_r($e->getEsiResponse(), true));
+                $error_msg = 'publicRequest :: RequestFailedException :: ' . $e->getEsiResponse()->error() . ' (' . $e->getEsiResponse()->getErrorCode() . ')';
+                $this->logger->debug($error_msg . print_r($e->getEsiResponse(), true));
 
-                switch ((int) $e->getEsiResponse()->getErrorCode()) {
-                    case 502:
-                        break;
-                    default:
-                        $this->setError(6, $err_msg);
-                        return false;
+                if ((int) $e->getEsiResponse()->getErrorCode() != 502) {
+                    $this->setError(6, $error_msg);
+                    return false;
                 }
-
+    
                 $try_cnt++;
                 usleep(1000000);
                 continue;
             }
             // if not caught return the result
             return ($res);
-
         } while ($try_cnt < $max_tries);
 
         // If we reach this point we found a exception to be handled by the global exception handling
@@ -116,10 +112,10 @@ class EveEsiManager
         try {
             $res = $esi->setQueryString($query)->invoke('get', '/search/');
         } catch (\Seat\Eseye\Exceptions\RequestFailedException $e) {
-            $err_msg = 'search :: RequestFailedException :: ' . $e->getEsiResponse()->error() . ' (' . $e->getEsiResponse()->getErrorCode() . ')';
-            $this->logger->debug($err_msg . print_r($e->getEsiResponse(), true));
+            $error_msg = 'search :: RequestFailedException :: ' . $e->getEsiResponse()->error() . ' (' . $e->getEsiResponse()->getErrorCode() . ')';
+            $this->logger->debug($error_msg . print_r($e->getEsiResponse(), true));
 
-            $this->setError($e->getEsiResponse()->getErrorCode(), $err_msg);
+            $this->setError($e->getEsiResponse()->getErrorCode(), $error_msg);
             return false;
         }
         // if not caught return the result
@@ -139,7 +135,7 @@ class EveEsiManager
     {
         $this->resetError();
 
-        if(!$authentication) {
+        if (!$authentication) {
             // does the application is authed against Eve SSO?
             if (empty($this->sessionContainer->eveauth['eve_app']['client_id']) || empty($this->sessionContainer->eveauth['eve_user']['token'])) {
                 $this->setErr(903, 'authedRequest to Eve ESI without having client_id and user-token');
@@ -171,10 +167,10 @@ class EveEsiManager
             $res = $esi->invoke($method, $request, $params);
         } catch (\Seat\Eseye\Exceptions\RequestFailedException $e) {
             // ref: https://github.com/eveseat/eseye/wiki/Handling-Exceptions
-            $err_msg = 'authedRequest :: RequestFailedException :: ' . $e->getEsiResponse()->error() . ' (' . $e->getEsiResponse()->getErrorCode() . ')';
-            $this->logger->debug($err_msg . print_r($e->getEsiResponse(), true));
+            $error_msg = 'authedRequest :: RequestFailedException :: ' . $e->getEsiResponse()->error() . ' (' . $e->getEsiResponse()->getErrorCode() . ')';
+            $this->logger->debug($error_msg . print_r($e->getEsiResponse(), true));
 
-            $this->setError($e->getEsiResponse()->getErrorCode(), $err_msg);
+            $this->setError($e->getEsiResponse()->getErrorCode(), $error_msg);
             return false;
         }
 

@@ -290,10 +290,15 @@ class EveDataManager
     }
 
 
+    /**
+     * get a celestial by his name
+     *
+     * @param string $eve_itemname
+     * @param integer $solarsystem_id
+     * @return object Mapdenormalize entity
+     */
     public function getCelestialByName($eve_itemname, $solarsystem_id = 0)
     {
-        // @todo, not supported yet are translated names
-
         if ($solarsystem_id) {
             $mapdenom_entity = $this->entityManager->getRepository(Mapdenormalize::class)->findOneBy(array('solarsystemid' => $solarsystem_id, 'itemname' => $eve_itemname));
         } else {
@@ -326,7 +331,8 @@ class EveDataManager
 
         // transform prices into a associative array with the typeID as key
         foreach ($prices_data as $price) {
-            $price_arr[$price->type_id] = (!empty($price->average_price) ? $price->average_price : (!empty($price->adjusted_price) ? $price->adjusted_price : 0.0));
+            $adjusted_price = (!empty($price->adjusted_price) ? $price->adjusted_price : 0.0);
+            $price_arr[$price->type_id] = (!empty($price->average_price) ? $price->average_price : $adjusted_price);
         }
 
         $upd_cnt = $this->writeEveItemPrices($price_arr);
@@ -362,16 +368,16 @@ class EveDataManager
 
         $result = json_decode($response->getBody(), true);
 
-        if(empty($result)) {
+        if (empty($result)) {
             return false;
         }
 
         $price_arr = [];
         foreach ($result as $k => $v) {
-            if($v['sell']['weightedAverage']) {
-                $price_arr[$k] = floatval ($v['sell']['weightedAverage']);
-            } else if($v['buy']['weightedAverage']) {
-                $price_arr[$k] = floatval ($v['buy']['weightedAverage']);
+            if ($v['sell']['weightedAverage']) {
+                $price_arr[$k] = floatval($v['sell']['weightedAverage']);
+            } elseif ($v['buy']['weightedAverage']) {
+                $price_arr[$k] = floatval($v['buy']['weightedAverage']);
             }
         }
 
@@ -392,8 +398,8 @@ class EveDataManager
      * @param array $price_arr
      * @return int  count of prices updated
      */
-    private function writeEveItemPrices($price_arr) {
-
+    private function writeEveItemPrices($price_arr)
+    {
         // no prices, no need to persist
         if (!$price_arr || !is_array($price_arr) || !count($price_arr)) {
             return 0;
@@ -523,15 +529,8 @@ class EveDataManager
                 echo '-W' . PHP_EOL;
             }
 
-            if (($i % 5) === 0) {
-                if (($i % 10) === 0) {
-                    echo $i;
-                } else {
-                    echo ':';
-                }
-            } else {
-                echo 'N'; // new entry
-            }
+            // show progress
+            $this->showProgress($i);
             ++$i;
         }
 
@@ -603,15 +602,8 @@ class EveDataManager
                     echo '-W';
                 }
 
-                if (($i % 5) === 0) {
-                    if (($i % 10) === 0) {
-                         echo $i;
-                    } else {
-                         echo ':';
-                    }
-                } else {
-                    echo '.';
-                }
+                // show progress
+                $this->showProgress($i);
                 ++$i;
             }
             $this->entityManager->flush(); //Persist objects that did not make up an entire batch
@@ -694,6 +686,26 @@ class EveDataManager
             $this->updateCorporation($corporation);
         }
         return($num_res);
+    }
+
+
+    /**
+     * show progress in the shell
+     *
+     * @param int $i
+     * @return void
+     */
+    private function showProgress($i)
+    {
+        if (($i % 5) === 0) {
+            if (($i % 10) === 0) {
+                 echo $i;
+            } else {
+                 echo ':';
+            }
+        } else {
+            echo '.';
+        }
     }
 
     public function ping($param = '')

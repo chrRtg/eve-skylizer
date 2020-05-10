@@ -26,21 +26,21 @@ $this->pageBreadcrumbs()->setItems([
     
 <div class="row">
     <div class="col-md-8">
-        <table class="table table-striped table-bordered">
+        <table class="table table-striped table-bordered" aria-describedby="User view">
              <tr>
-                <th>ID:</th>
+                <th scope="col" scope="col">ID:</th>
                 <td><?= $this->escapeHtml($role->getId()) ?></th>
             </tr>
             <tr>
-                <th>Name:</th>
+                <th scope="col" scope="col">Name:</th>
                 <td><?= $this->escapeHtml($role->getName()) ?></th>
             </tr>
             <tr>
-                <th>Description:</th>
+                <th scope="col" scope="col">Description:</th>
                 <td><?= $this->escapeHtml($role->getDescription()) ?></th>
             </tr>
             <tr>
-                <th>Date Created:</th>
+                <th scope="col" scope="col">Date Created:</th>
                 <td><?= $this->escapeHtml($role->getDateCreated()) ?></th>
             </tr>
         </table>
@@ -57,10 +57,10 @@ $this->pageBreadcrumbs()->setItems([
 
 <div class="row">
     <div class="col-md-8">
-        <table class="table table-striped table-bordered">
+        <table class="table table-striped table-bordered" aria-describedby="Role Edit">
             <tr>
-                <th>Name</th>
-                <th>Description</th>
+                <th scope="col" scope="col">Name</th>
+                <th scope="col" scope="col">Description</th>
             </tr>
             <?php foreach($allPermissions as $permission): ?>
             <tr>

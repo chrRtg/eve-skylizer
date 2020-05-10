@@ -251,8 +251,8 @@ class MoonController extends AbstractActionController
 
         $params = $this->params()->fromPost();
 
-        // @ todo : introduce input sanitization
-        // @ todo : add/edit spec for any kind of structure
+        // @ consider : introduce input sanitization
+        // @ consider : add/edit spec for any kind of structure
         // $this->logger->debug('editStructureAction() ' . print_r($params, true));
 
         if (isset($params['structureid'])) {
@@ -339,7 +339,7 @@ class MoonController extends AbstractActionController
         $query = $this->params()->fromQuery('id');
 
         if (!empty($query)) {
-            $res = $this->structureManager->removeStructure($query);
+            $this->structureManager->removeStructure($query);
 
             return new JsonModel(
                 [
@@ -367,7 +367,7 @@ class MoonController extends AbstractActionController
         $query = $this->params()->fromQuery('q');
 
         if (!empty($query)) {
-            if(substr($query, -1) == "+") {
+            if (substr($query, -1) == "+") {
                 // if last char is a plus sign the term is searched first in ESI. Results found get added to the local DB
                 $query = substr($query, 0, -1);
                 $this->eveDataManager->searchCorporationESI($query);
@@ -407,7 +407,6 @@ class MoonController extends AbstractActionController
      */
     public function getSystemsJsonAction()
     {
-        $limit = 10;
         $query = $this->params()->fromQuery('q');
 
         // $this->logger->debug('fetch System (' . $query . ')');

@@ -44,12 +44,6 @@ class VposManager
 
 
     /**
-     *
-     * @var int
-     */
-    private $eve_userid = 0;
-
-    /**
      * Constructs the service.
      */
     public function __construct($sessionContainer, $entityManager, $eveSSOManager, $eveESIManager, $logger)
@@ -69,7 +63,7 @@ class VposManager
      */
     public function vposList($filters)
     {
-        $query = $this->entityManager->getConnection()->exec('SET @@group_concat_max_len = 8000;');
+        $this->entityManager->getConnection()->exec('SET @@group_concat_max_len = 8000;');
 
 
         $queryBuilder = $this->entityManager->createQueryBuilder();

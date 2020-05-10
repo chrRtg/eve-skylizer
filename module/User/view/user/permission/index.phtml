@@ -22,14 +22,14 @@ $this->pageBreadcrumbs()->setItems([
 </a>
 </p>
 
-<table class="table table-striped">
+<table class="table table-striped" aria-describedby="Permissions overview">
 
    <tr>
-        <th>ID</th>
-        <th>Name</th>
-        <th>Description</th>
-        <th>Date Created</th>
-        <th>Actions</th>        
+        <th scope="col">ID</th>
+        <th scope="col">Name</th>
+        <th scope="col">Description</th>
+        <th scope="col">Date Created</th>
+        <th scope="col">Actions</th>        
     </tr>
     
     <?php foreach ($permissions as $permission): ?>

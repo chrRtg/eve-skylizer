@@ -22,33 +22,33 @@ $this->mainMenu()->setActiveItemId('admin');
 
 <div class="row">
     <div class="col-md-6">
-        <table class="table table-striped table-bordered">
+        <table class="table table-striped table-bordered" aria-describedby="User view">
              <tr>
-                <th>ID:</th>
+                <th scope="col">ID:</th>
                 <td><?= $this->escapeHtml($user->getId()); ?></td>
             </tr>
             <tr>
-                <th>Eve-ID:</th>
+                <th scope="col">Eve-ID:</th>
                 <td><?= $this->escapeHtml($user->getEveUserid()); ?></td>
             </tr>
             <tr>
-                <th>Eve Name:</th>
+                <th scope="col">Eve Name:</th>
                 <td><?= $this->escapeHtml($user->getEveUsername()); ?></td>
             </tr>
             <tr>
-                <th>Eve Corporation:</th>
+                <th scope="col">Eve Corporation:</th>
                 <td><?= $this->escapeHtml($user->getEveCorpid()->getCorporationName()); ?></td>
             </tr>
             <tr>
-                <th>Date Created:</th>
+                <th scope="col">Date Created:</th>
                 <td><?= $this->escapeHtml($user->getDateCreated()->format('d.m.Y H:i:s')) ?></td>
             </tr>
             <tr>
-                <th>Status:</th>
+                <th scope="col">Status:</th>
                 <td><?= $this->escapeHtml($user->getStatusAsString()) ?></td>
             </tr>
             <tr>
-                <th>Roles:</th>
+                <th scope="col">Roles:</th>
                 <td><?= $this->escapeHtml($user->getRolesAsString()) ?></td>
             </tr>
         </table>

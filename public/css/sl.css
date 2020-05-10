@@ -241,6 +241,10 @@ td > mark {
 	color: #ddd;
 }
 
+#moontable {
+	width: 100% !important;
+}
+
 hr {
     margin-top: 4px;
     margin-bottom: 4px;
@@ -271,7 +275,7 @@ hr {
 }
 
 
-/* */
+/* syklizer colors*/
 .gooname,
 .scanname, 
 .warnstate {
@@ -567,9 +571,6 @@ styling for typeahead
 .tt-suggestion {
 	padding: 4px 6px;
 	font-size: 12px;
-}
-p.tt-suggestion {
-	margin: 0 0;
 }
 
 .tt-suggestion:hover,

@@ -134,7 +134,7 @@ class MoonManager
             foreach ($this->data_collector as $moon => $goo) {
                 // assure the AtMoon entry exist to add goo to him
                 $moon_id = $this->writeMoon($moon);
-                $this->persistMoonGoo($moon_id, $moon, $goo);
+                $this->persistMoonGoo($moon_id, $goo);
 
                 $moon_cnt[] = $moon_id;
                 $goo_cnt = $goo_cnt + $goo;
@@ -195,7 +195,7 @@ class MoonManager
      * @param int   $moon_id
      * @param array $goo_data
      */
-    private function persistMoonGoo($moon_id, $moon, $goo_data)
+    private function persistMoonGoo($moon_id, $goo_data)
     {
         $this->deleteGoo($moon_id);
 
@@ -250,8 +250,7 @@ class MoonManager
      */
     public function moonList($filters)
     {
-        $query = $this->entityManager->getConnection()->exec('SET @@group_concat_max_len = 8000;');
-
+        $this->entityManager->getConnection()->exec('SET @@group_concat_max_len = 8000;');
 
         $queryBuilder = $this->entityManager->createQueryBuilder();
 
