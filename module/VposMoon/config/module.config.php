@@ -97,6 +97,7 @@ return [
             Service\VposManager::class => Service\Factory\VposManagerFactory::class,
             Service\ScanManager::class => Service\Factory\ScanManagerFactory::class,
             Service\CosmicManager::class => Service\Factory\CosmicManagerFactory::class,
+            Service\MiningManager::class => Service\Factory\MiningManagerFactory::class,
             Service\StructureManager::class => Service\Factory\StructureManagerFactory::class,
             Service\StructurebrowserManager::class => Service\Factory\StructurebrowserManagerFactory::class,
         ],

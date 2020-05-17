@@ -39,6 +39,13 @@ class StructureManager
     private $eveSSOManager;
 
     /**
+     * Undocumented variable
+     *
+     * @var \VposMoon\Service\MiningManager
+     */
+    private $miningManager;
+
+    /**
      *
      * @var \Application\Controller\Plugin\LoggerPlugin
      */
@@ -47,12 +54,13 @@ class StructureManager
     /**
      * Constructs the service.
      */
-    public function __construct($entityManager, $userManager, $eveESIManager, $eveSSOManager, $logger)
+    public function __construct($entityManager, $userManager, $eveESIManager, $eveSSOManager, $miningManager, $logger)
     {
         $this->entityManager = $entityManager;
         $this->userManager = $userManager;
         $this->eveESIManager = $eveESIManager;
         $this->eveSSOManager = $eveSSOManager;
+        $this->MiningManager = $miningManager;
         $this->logger = $logger;
     }
 
@@ -341,7 +349,7 @@ class StructureManager
      * @param boolean $climode if run from shell / cli set to true
      * @return void
      */
-    public function esiFetchCoprporationStructures($climode = false)
+    public function esiFetchCoprporationStructures($climode = false, $getledger = false)
     {
         // any cli user already in progress?
         $running = $this->userManager->checkCliUserInUse();
@@ -418,7 +426,7 @@ class StructureManager
         // $this->logger->debug('### esiFetchCoprporationStructures :: before write #1 :: ' . print_r($struct_arr, true));
 
         // Write the result data object to DB
-        $this->esiWriteStructure($struct_arr, $climode);
+        $cnt = $this->esiWriteStructure($struct_arr, $climode);
 
         // remove structures from this corp no longer found
         $res = $this->removeOutdatedStructures($cli_user->getEveCorpid());
@@ -426,8 +434,15 @@ class StructureManager
             echo "removed " . $res . " structures for corporation " . $cli_user->getEveCorpid() . " because they were no longer provided by ESI" . PHP_EOL;
         }
 
+        if ($getledger) {
+            // get mining ledger
+            $this->MiningManager->esiFetchCorporationMiningData($cli_user->getEveCorpid(), unserialize($cli_user->getAuthContainer()), $climode);
+        }
+
         // reset CliUser for next usage
         $this->userManager->unsetCliUserInUse($cli_user);
+
+        return($cnt);
     }
 
     /**
@@ -444,6 +459,8 @@ class StructureManager
      */
     private function esiWriteStructure($struct_arr, $climode = false)
     {
+        $cnt = 0;
+
         foreach ($struct_arr as $v) {
             $structure_data = $this->getStructureArray();
 
@@ -503,7 +520,9 @@ class StructureManager
             if (isset($v['services'])) {
                 $this->writeStructureServices($writeres['id'], $v['services']);
             }
+            $cnt++;
         }
+        return ($cnt);
     }
 
     /**
@@ -641,7 +660,7 @@ class StructureManager
      * @param string $evedate
      * @return DateTime converted date
      */
-    private static function eveDateToTimestamp($evedate)
+    public static function eveDateToTimestamp($evedate)
     {
         return new \DateTime($evedate);
     }

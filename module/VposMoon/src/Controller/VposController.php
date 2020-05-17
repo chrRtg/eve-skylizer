@@ -171,8 +171,8 @@ class VposController extends AbstractActionController
      *
      * @return void
      */
-    public function fetchCoprporationStructuresConsole()
+    public function fetchCoprporationStructuresConsole($getledger=false)
     {
-        return $this->structureManager->esiFetchCoprporationStructures(true);
+        return $this->structureManager->esiFetchCoprporationStructures(true, $getledger);
     }    
 }

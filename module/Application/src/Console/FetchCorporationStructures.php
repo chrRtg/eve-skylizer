@@ -40,7 +40,13 @@ class FetchCorporationStructures extends Command
     {
         $this
             ->setName('update:structures')
-            ->setDescription('Fetch all corporation structures and their mining activity');
+            ->setDescription('Fetch all corporation structures and their mining activity')
+            ->addOption(
+                'all',
+                null,
+                InputOption::VALUE_NONE,
+                'standard mode is to fetch only structures, with \'all\' also the mining ledger is fetched (may take some time)'
+            );
     }
 
     /**
@@ -51,7 +57,12 @@ class FetchCorporationStructures extends Command
         $output->writeln("Running skylizer Corporation Structures updater");
         $output->writeln("please wait, may take a while ...");
 
-        $cnt = $this->vposController->fetchCoprporationStructuresConsole();
+        if ($input->getOption('all')) {
+            $cnt = $this->vposController->fetchCoprporationStructuresConsole(true);
+        } else {
+            $cnt = $this->vposController->fetchCoprporationStructuresConsole(false);
+        }
+                
         $output->writeln($cnt . " structures found");
     }
 }

@@ -4,14 +4,14 @@ namespace VposMoon\Service\Factory;
 
 use Interop\Container\ContainerInterface;
 use Zend\ServiceManager\Factory\FactoryInterface;
-use VposMoon\Service\StructureManager;
+use VposMoon\Service\MiningManager;
 
 /**
- * Description of StructureManagerFactory
+ * Description of MiningManagerFactory
  *
  * @author chr
  */
-class StructureManagerFactory
+class MiningManagerFactory
 {
 
     /**
@@ -19,12 +19,9 @@ class StructureManagerFactory
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        return new StructureManager(
+        return new MiningManager(
             $container->get('doctrine.entitymanager.orm_default'),
-            $container->get(\User\Service\UserManager::class),
             $container->get(\Application\Service\EveEsiManager::class),
-            $container->get(\User\Service\EveSSOManager::class),
-            $container->get(\VposMoon\Service\MiningManager::class),
             $container->get('MyLogger')
         );
     }
