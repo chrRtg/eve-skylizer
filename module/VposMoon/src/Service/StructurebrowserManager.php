@@ -101,6 +101,20 @@ class StructurebrowserManager
                 // state_timer_end string: Date at which the structure will move to it's next state
                 // state_timer_start string: Date at which the structure entered it's current state
                 break;
+            case 'nodrill':
+                // structure_id is not null and  group_id = 1406 and ((chunk_arrival_time is null and celestial_id is not null) OR chunk_arrival_time < DATE_SUB(curdate(), INTERVAL 2 DAY));                
+                $parameter['outdated'] =  new \DateTime('-2 days');
+                $queryBuilder->andWhere('at.structureId IS NOT NULL');
+                $queryBuilder->andWhere('at.groupId = 1406');
+                $queryBuilder->andWhere($queryBuilder->expr()->orX(
+                    $queryBuilder->expr()->andX(
+                        $queryBuilder->expr()->isNull('at.chunkArrivalTime'),
+                        $queryBuilder->expr()->isNotNull('at.celestialId')
+                    ),
+                    $queryBuilder->expr()->lt('at.chunkArrivalTime', ':outdated')
+                ));
+                $queryBuilder->orderBy('at.structureName', 'ASC');
+                break;
             default:
                 return(false);
                 break;

@@ -256,6 +256,7 @@ hr {
 	background-color: #304559;
 	border: 5px solid #2b3e50; 
 	border-radius: 6px; 
+	margin-bottom: 16px;
 }
 
 .card-body {
