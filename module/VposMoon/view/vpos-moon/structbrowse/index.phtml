@@ -45,6 +45,31 @@ if (empty($filters['info_system']['constellation'])) {
 		<div class="row">
 			<div class="col-sm-4">
 				<div class="card">
+				<div class="card-header" data-structcard-id="timers" data-structcard-action="<?= $this->url('struct', ['action' => 'index'], array('query' => array('cardaction' => 'timers', 'filters' => $filters))); ?>">Timers</div>
+					<div class="card-body">
+						<div class="row card-row">
+							<div class="col-sm-12 text-center">
+								<img src="img/sl_loading.gif" alt="loading">
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="card">
+					<div class="card-header" data-structcard-id="nodrill" data-structcard-action="<?= $this->url('struct', ['action' => 'index'], array('query' => array('cardaction' => 'nodrill', 'filters' => $filters))); ?>">inactive Drill</div>
+					<div class="card-body">
+						<div class="row card-row">
+							<div class="col-sm-12 text-center">
+								<img src="img/sl_loading.gif" alt="loading">
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+
+			<div class="col-sm-4">
+				<div class="card">
 					<div class="card-header" data-structcard-id="moongoo" data-structcard-action="<?= $this->url('struct', ['action' => 'index'], array('query' => array('cardaction' => 'moongoo', 'filters' => $filters))); ?>">next Moons</div>
 					<div class="card-body">
 						<div class="row card-row">
@@ -55,6 +80,7 @@ if (empty($filters['info_system']['constellation'])) {
 					</div>
 				</div>
 			</div>
+
 			<div class="col-sm-4">
 				<div class="card">
 					<div class="card-header" data-structcard-id="fuel" data-structcard-action="<?= $this->url('struct', ['action' => 'index'], array('query' => array('cardaction' => 'fuel', 'filters' => $filters))); ?>">Fuel due</div>
@@ -67,20 +93,8 @@ if (empty($filters['info_system']['constellation'])) {
 					</div>
 				</div>
 			</div>
-			<div class="col-sm-4">
-				<div class="card">
-				<div class="card-header" data-structcard-id="timers" data-structcard-action="<?= $this->url('struct', ['action' => 'index'], array('query' => array('cardaction' => 'timers', 'filters' => $filters))); ?>">Timers</div>
-					<div class="card-body">
-						<div class="row card-row">
-							<div class="col-sm-12 text-center">
-								<img src="img/sl_loading.gif" alt="loading">
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
 		</div>
-
+		
 	</div>
 </div>
 

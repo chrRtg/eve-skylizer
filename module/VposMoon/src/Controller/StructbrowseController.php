@@ -91,6 +91,9 @@ class StructbrowseController extends AbstractActionController
                 case 'timers':
                     $template = 'vpos-moon/structbrowse/partial/timers';
                     break;
+                case 'nodrill':
+                    $template = 'vpos-moon/structbrowse/partial/nodrill';
+                    break;
                 default:
                     return('action not know');
                     break;
