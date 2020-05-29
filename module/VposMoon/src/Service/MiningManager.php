@@ -5,6 +5,7 @@ namespace VposMoon\Service;
 use VposMoon\Entity\AtStructure;
 use VposMoon\Entity\AtMiningObserver;
 use VposMoon\Entity\AtMiningLedger;
+use VposMoon\Entity\AtMiningPeriod;
 use Application\Service\EveDataManager;
 
 /**
@@ -58,9 +59,136 @@ class MiningManager
             echo "fetch MiningLedger" .  PHP_EOL;
         }
 
+        // get all mining observers
         $observers = $this->esiGetCorpStructuresObservers($corp_id, $auth_container);
+        // get the coresponding Ledgers
         $this->esiGetCorpMiningLedger($observers, $corp_id, $auth_container, $climode);
+        // prepare the results
+        $this->calculateMiningPeriods();
 
+        return true;
+    }
+
+
+    /**
+     * Takes all mining ledgers, calculates the active days the moon has been mined and writes
+     * the periods to AtMiningPeriod
+     *
+     * @return void
+     */
+    private function calculateMiningPeriods()
+    {
+        $periods = $this->getMiningPeriodsRaw();
+
+        //$this->logger->debug('### calculateMiningPeriods :: periods got from DB :: ' . print_r(count($periods), true));
+
+        if (!$periods) {
+            return false;
+        }
+        
+        // iterate through the results
+        $last_struct = null;
+        $last_start = null;
+        $last_end = null;
+        $force_write = false;
+
+        $pdata = array();
+
+        foreach ($periods as $val) {
+
+            if (($last_struct &&  $last_struct != $val['structureId']) || $force_write) {
+                // write
+                $pdata['structure_id'] = $last_struct;
+                $pdata['date_start'] = $last_start;
+                $pdata['date_end'] = $last_end;
+                $this->writeMiningPeriod($pdata);
+
+                // reinit
+                $last_struct = null;
+                $last_start = null;
+                $last_end = null;
+                $force_write = null;
+                $pdata = array();
+            }
+
+            $last_struct = $val['structureId'];
+
+            if (!$last_start) {
+                $last_start = $val['lastUpdated'];
+            }
+
+            // is next entry is about the next period ?
+            $interval = date_diff($last_start, $val['lastUpdated']);
+            $diff_days = (int) $interval->format('%a');
+            if ($diff_days <= 3) {
+                $last_end = $val['lastUpdated'];
+            } else {
+                // next period but current one has only one day
+                if (!$last_end) {
+                    $last_end = $val['lastUpdated'];
+                }
+                $force_write = true;
+            }
+        }
+
+        // after the foreach write the last entry
+        $pdata['structure_id'] = $last_struct;
+        $pdata['date_start'] = $last_start;
+        $pdata['date_end'] = $val['lastUpdated'];
+        $this->writeMiningPeriod($pdata);
+    }
+
+
+    /**
+     * Get all Mining Ledgers grouped by structure and date
+     *
+     * @return array    array of results or null
+     */
+    private function getMiningPeriodsRaw()
+    {
+        // select structure_id, last_updated from at_mining_ledger group by structure_id, last_updated order by structure_id, last_updated ;
+        $queryBuilder = $this->entityManager->createQueryBuilder();
+
+        $queryBuilder->select('amp.structureId, amp.lastUpdated')
+            ->from(\VposMoon\Entity\AtMiningLedger::class, 'amp')
+            ->groupBy('amp.structureId, amp.lastUpdated')
+            ->orderBy('amp.structureId, amp.lastUpdated');
+    
+        $res = $queryBuilder->getQuery()->getResult();
+        return ($res);
+    }
+
+
+    /**
+     * create and persist a mining period, update an existing with same structure and start date
+     *
+     * @param array a single mining period
+     * @return bool true if a entry has been created
+     */
+    public function writeMiningPeriod($period)
+    {
+        $period_entity = $this->entityManager->getRepository(AtMiningPeriod::class)->findOneBy(array('structureId' => $period['structure_id'], 'dateStart' => $period['date_start']));
+
+        if (!$period_entity) {
+            // new entity
+            $period_entity = new AtMiningPeriod();
+        }
+
+
+        if ($period['structure_id']) {
+            $period_entity->setStructureId($period['structure_id']);
+        }
+
+        if ($period['date_start']) {
+            $period_entity->setDateStart($period['date_start']);
+        }
+
+        if ($period['date_end']) {
+            $period_entity->setDateEnd($period['date_end']);
+        }
+
+        $this->entityManager->persist($period_entity);
+        $this->entityManager->flush();
         return true;
     }
 

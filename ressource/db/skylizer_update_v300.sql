@@ -23,5 +23,12 @@ CREATE TABLE `at_mining_observer` (
   PRIMARY KEY (`emo_id`),
   INDEX `idx_struct` (`structure_id` ASC));
 
+CREATE TABLE `skylizer`.`at_mining_period` (
+  `amp_id` INT NOT NULL AUTO_INCREMENT,
+  `structure_id` BIGINT(20) NOT NULL,
+  `date_start` DATETIME NOT NULL,
+  `date_end` DATETIME NULL,
+  PRIMARY KEY (`amp_id`),
+  UNIQUE INDEX `idx_uniq` (`structure_id` ASC, `date_start` ASC, `date_end` ASC));
 
 SET FOREIGN_KEY_CHECKS = 1;
