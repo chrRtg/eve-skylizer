@@ -182,7 +182,7 @@ class VposMoonHelper extends AbstractHelper
      */
     private function sortWorthForRenderMoonMateriallist($a, $b)
     {
-        return $a["worth"] <= $b["worth"];
+        return optional($a["worth"]) <= optional($b["worth"]);
     }
 
     /**
