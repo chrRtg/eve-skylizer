@@ -283,7 +283,7 @@ hr {
 	color: #df691a;
 }
 .gooval {
-	font-weight: bold;
+	color: #3c9887;
 }
 .secondarytext,
 .gooprice {
@@ -349,6 +349,7 @@ hr {
 /*
  * Select 2 Styling
  */
+ 
 .select2-dropdown {
 	background-color: #4e433c;
 	border: 1px solid #5e534c
@@ -364,7 +365,7 @@ hr {
 
 .select2-container--default .select2-selection--single {
     background-color: #3e332c; 
-    border: 1px solid #4e433c;
+    border: 1px solid #8d4311;
     border-radius: 1px;
 }
 
@@ -379,69 +380,15 @@ hr {
 	font-weight: bold;
 }
 
-/*
- *
- */
-.addpaddingtop20 {
-	padding-top: 20px;
-}
-.addpaddingtop10 {
-	padding-top: 10px;
+select[data-selected='1'] ~ .select2-container--default .select2-selection--single .select2-selection__rendered {
+	background-color: #57290a;
+	border: 1px solid #df691a;
 }
 
-.addfontsize1 {
-	font-size: 1.25rem;
-}
-.addfontsize2 {
-	font-size: 1.5rem;
-}
-.addfontsize3 {
-	font-size: 1.75rem;
-}
-
-
-/*
- * from https://github.com/lipis/flag-icon-css
- */
-.flag-icon-background {
-	background-size: contain;
-	background-position: 50%;
-	background-repeat: no-repeat;
-}
-.flag-icon {
-	background-size: contain;
-	background-position: 50%;
-	background-repeat: no-repeat;
-	position: relative;
-	display: inline-block;
-	width: 1.33333333em;
-	line-height: 1em;
-}
-.flag-icon:before {
-	content: "\00a0";
-}
-.flag-icon.flag-icon-squared {
-	width: 1em;
-}
-.flag-icon-en {
-	background-image: url(../../img/flags/en.svg);
-}
-.flag-icon-de {
-	background-image: url(../../img/flags/de.svg);
-}
-.flag-icon-fr {
-	background-image: url(../../img/flags/fr.svg);
-}
-.flag-icon-ru {
-	background-image: url(../../img/flags/ru.svg);
-}
-
-a.flag {
-	filter: grayscale(50%);
-	padding: 5px 2px;
-}
-a.flag:hover {
-	filter: none;
+input[type=text], input[type=search] {
+    background-color: #3e332c; 
+    border: 1px solid #8d4311;
+    border-radius: 1px;
 }
 
 
@@ -527,6 +474,74 @@ a.flag:hover {
   border-radius: 2px;
 }
 
+
+
+/*
+ * some specific font sizes
+ */
+ .addpaddingtop20 {
+	padding-top: 20px;
+}
+.addpaddingtop10 {
+	padding-top: 10px;
+}
+
+.addfontsize1 {
+	font-size: 1.25rem;
+}
+.addfontsize2 {
+	font-size: 1.5rem;
+}
+.addfontsize3 {
+	font-size: 1.75rem;
+}
+
+
+/*
+ * from https://github.com/lipis/flag-icon-css
+ */
+.flag-icon-background {
+	background-size: contain;
+	background-position: 50%;
+	background-repeat: no-repeat;
+}
+.flag-icon {
+	background-size: contain;
+	background-position: 50%;
+	background-repeat: no-repeat;
+	position: relative;
+	display: inline-block;
+	width: 1.33333333em;
+	line-height: 1em;
+}
+.flag-icon:before {
+	content: "\00a0";
+}
+.flag-icon.flag-icon-squared {
+	width: 1em;
+}
+.flag-icon-en {
+	background-image: url(../../img/flags/en.svg);
+}
+.flag-icon-de {
+	background-image: url(../../img/flags/de.svg);
+}
+.flag-icon-fr {
+	background-image: url(../../img/flags/fr.svg);
+}
+.flag-icon-ru {
+	background-image: url(../../img/flags/ru.svg);
+}
+
+a.flag {
+	filter: grayscale(50%);
+	padding: 5px 2px;
+}
+a.flag:hover {
+	filter: none;
+}
+
+
 /**********************************
 styling for typeahead
  **********************************/
@@ -601,3 +616,4 @@ p.tt-suggestion {
 	max-height: 150px;
 	overflow-y: auto;
 }
+

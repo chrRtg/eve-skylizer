@@ -39,9 +39,9 @@ if (empty($filters['info_system']['constellation'])) {
 <?=$this->flashMessenger()->render('info', ['alert', 'alert-info']);?>
 
 <div class="row">
-	<div class="col-md-9 col-sm-10">
+	<div class="col-md-9 col-sm-12">
 		<div class="row">
-			<div class="col-md-5">
+			<div class="col-md-5 col-sm-12">
 				<!-- start system name -->
 				<div class="form-group form-group-lg addpaddingtop20">
 					<select class="form-control select2-typeahead-system" name="selectsystem" id="selectsystem">
@@ -52,15 +52,15 @@ if (empty($filters['info_system']['constellation'])) {
 					<?=$this->vpViewTool()->createNeighboursNavigation($filters['info_system'], $current_route);?>
 				</div>
 			</div>
-			<div class="col-md-3">
+			<div class="col-md-3  col-sm-12">
 				&nbsp;
 			</div>
 			<!-- start filter area -->
-			<div class="col-md-4" id="checkfilter">
+			<div class="col-md-4 col-sm-12" id="checkfilter">
 				<h4>Show what?  &nbsp;
 						<a href="/" id="vpos_showall" style="font-size:13px;">show-all</a> &nbsp;/&nbsp;
 						<a href="/" id="vpos_shownone" style="font-size:13px;">hide-all</a></h4>
-				<div class="col-md-6">
+				<div class="col-md-6 col-sm-6 col-xs-6">
 					<div class="checkbox">
 						<input type="checkbox" id="vpos_filter_structures" <?=(!empty($filters['vpos_filter_structures']) && $filters['vpos_filter_structures'] == "1" ? 'checked' : '')?>>
 						<label for="vpos_filter_structures">Structures</label>
@@ -74,7 +74,7 @@ if (empty($filters['info_system']['constellation'])) {
 						<label for="vpos_filter_wormhole">Wormhole</label>
 					</div>
 				</div>
-				<div class="col-md-6">
+				<div class="col-md-6 col-sm-6 col-xs-6">
 					<div class="checkbox">
 						<input type="checkbox" id="vpos_filter_exploration" <?=(!empty($filters['vpos_filter_exploration']) && $filters['vpos_filter_exploration'] == "1" ? 'checked' : '')?>>
 						<label for="vpos_filter_exploration">Exploration</label>
@@ -197,7 +197,7 @@ if (empty($filters['info_system']['constellation'])) {
 		</div>
 	</div>
 	<!-- start scan area -->
-	<div class="col-md-3 col-sm-2">
+	<div class="col-md-3 col-sm-12">
 		<div class="row">
 			<button type="button" class="btn btn-info btn-sm pull-right" data-toggle="modal" data-target="#helpModal">
 				<span class="glyphicon glyphicons-question-sign"></span> Help

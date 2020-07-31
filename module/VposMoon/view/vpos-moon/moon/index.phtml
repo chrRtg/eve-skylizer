@@ -32,9 +32,9 @@ if (empty($filters['info_system']['constellation'])) {
 <?= $this->flashMessenger()->render('info', ['alert', 'alert-info']); ?>
 
 <div class="row">
-	<div class="col-md-9 col-sm-10">
+	<div class="col-md-9 col-sm-12">
 		<div class="row">
-			<div class="col-md-5">
+			<div class="col-md-5 col-sm-12">
 				<!-- start system name -->
 				<div class="form-group form-group-lg addpaddingtop20">
 					<select class="form-control select2-typeahead-system" name="selectsystem" id="selectsystem">
@@ -46,7 +46,7 @@ if (empty($filters['info_system']['constellation'])) {
 				</div>
 			</div>
 			<!-- start filter area -->
-			<div class="col-md-3">
+			<div class="col-md-3 col-sm-12">
 			<h4>Show Moons:</h4>
 				<div class="form-group form-group-sm checkbox">
 					<input type="checkbox" id="filter_gooonly" <?= (!empty($filters['filter_gooonly']) && $filters['filter_gooonly'] == "-1" ? 'checked' : '' ) ?>>
@@ -57,13 +57,13 @@ if (empty($filters['info_system']['constellation'])) {
 					<label for="filter_citaonly">with drilling platform</label>
 				</div>
 			</div>
-			<div class="col-md-4">
+			<div class="col-md-4 col-sm-12">
 				<!-- facette filter Composition -->
 				<div class="form-group form-group-sm checkbox">
 					<input type="checkbox" id="detail_filter_composition" <?= (!empty($filters['detail_filter_composition']) && $filters['detail_filter_composition'] == "1" ? 'checked' : '' ) ?>>
 					<label for="detail_filter_composition">
 						Composition - Filter</label>
-					<select class="form-control" name="selectcomposition" id="selectcomposition">
+					<select class="form-control" name="selectcomposition" id="selectcomposition" data-selected="<?= (empty($filters['composition']) ? 0 : 1); ?>">
 						<option value="0">please select to filter by Composition</option>
 						<?= $this->vpViewTool()->getCompositionListAsOptions($filters['info_system']['id'], (!empty($filters['composition']) ? $filters['composition'] : 0)); ?>
 					</select>
@@ -72,7 +72,7 @@ if (empty($filters['info_system']['constellation'])) {
 				<div class="form-group form-group-sm checkbox">
 					<input type="checkbox" id="detail_filter_ore" <?= (!empty($filters['detail_filter_ore']) && $filters['detail_filter_ore'] == "1" ? 'checked' : '' ) ?>>
 					<label for="detail_filter_ore">Ore - Filter</label>
-					<select class="form-control" name="selectore" id="selectore">
+					<select class="form-control" name="selectore" id="selectore" data-selected="<?= (empty($filters['ore']) ? 0 : 1); ?>">
 						<option value="0">please select to filter by Ore</option>
 						<?= $this->vpViewTool()->getOreListAsOptions($filters['info_system']['id'], (!empty($filters['ore']) ? $filters['ore'] : 0)); ?>
 					</select>
@@ -86,13 +86,12 @@ if (empty($filters['info_system']['constellation'])) {
 						<tr>
 							<th data-priority="1" scope="col">Planet / Moon</th>
 							<?php if (!empty($filters['detail_filter_composition']) && $filters['detail_filter_composition'] == "1"): ?>
-								<th data-priority="3" scope="col">Composition<div class="sub">(<span class="gooval">amount</span> / <span class="gooname">name</span> / <span class="gooprice">ISK</span>)</div></th>
+								<th data-priority="3" scope="col">Composition</div></th>
 							<?php endif; ?>
-							<th data-priority="2" scope="col">Value</th>
+							<th data-priority="2" scope="col">refined Value / 1000 m2</th>
 							<?php if (!empty($filters['detail_filter_ore']) && $filters['detail_filter_ore'] == "1"): ?>
-								<th data-priority="3" scope="col">Ore<div class="sub">(<span class="gooval">amount</span> / <span class="gooname">name</span> / <span class="gooprice">ISK</span>)</div></th>
+								<th data-priority="3" scope="col">Ore</div></th>
 							<?php endif; ?>
-							<th data-priority="2" scope="col">Ore-Value</th>
 							<th scope="col">Structure</th>
 							<th scope="col">Owner</th>
 							<th scope="col">Scanned</th>
@@ -105,22 +104,17 @@ if (empty($filters['info_system']['constellation'])) {
 								<td>
 									<a href="<?= $this->vpViewTool()->createExternalSystemURL($moon['map_name']); ?>" class="unobtrusive" target="_blank" rel="noopener noreferrer" ><?= $this->escapeHtml($moon['moonname']) ?>
 									[<?= $this->vpViewTool()->convertMoonToShortform($moon['moonname']); ?>]</a></td>
-									<?php if (!empty($filters['detail_filter_composition']) && $filters['detail_filter_composition'] == "1"): ?>
-								<td><?= $this->vpViewTool()->renderMoonComposition($moon['goo']); ?></td>
+								<?php if (!empty($filters['detail_filter_composition']) && $filters['detail_filter_composition'] == "1"): ?>
+									<td><?= $this->vpViewTool()->renderMoonComposition($moon['goo']); ?></td>
 								<?php endif; ?>
-								<td>
-								<?php if($moon['atmoonid']): ?>
-									<?= $this->vpViewTool()->calculateMoonComposition($moon['goo']); ?>
-								<?php endif; ?>
-								</td>
-								<?php if (!empty($filters['detail_filter_ore']) && $filters['detail_filter_ore'] == "1"): ?>
-									<td><?= $this->vpViewTool()->renderMoonMateriallist($moon['materiallist']); ?></td>
-								<?php endif; ?>
-								<td>
-								<?php if($moon['atmoonid']): ?>
-									<?= number_format(round(intval($this->vpViewTool()->renderMoonMaterialValue($moon['materiallist'])) / 1000), 0); ?> k
-								<?php endif; ?>
-								</td>
+									<td>
+										<?php if($moon['atmoonid']): ?>
+										<?= number_format(round(intval($this->vpViewTool()->renderMoonMaterialValue($moon['materiallist'])) / 1000), 0); ?> k
+										<?php endif; ?>
+									</td>								
+							<?php if (!empty($filters['detail_filter_ore']) && $filters['detail_filter_ore'] == "1"): ?>
+								<td><?= $this->vpViewTool()->renderMoonMateriallist($moon['materiallist']); ?></td>
+							<?php endif; ?>
 								<td>
 									<a href="#" class="structlink" data-toggle="modal" data-structid="<?= $moon['structid']; ?>" data-structtype="<?= $moon['structtype']; ?>" data-structgivename="<?= $moon['structgivename']; ?>" data-scorpid="<?= $moon['structcorpid']; ?>" data-scorpname="<?= $moon['structcorpname']; ?>"  data-scorpticker="<?= $moon['structcorpticker']; ?>" data-moonid="<?= $moon['moonid']; ?>" data-target="#structureEditModal">
 										<?= ($moon['structname'] ? $moon['structname'] : '<i class="glyphicon glyphicon-plus passive"></i>'); ?></a><br /><span class="secondarytext"><?= $moon['structgivename']; ?></span>
@@ -155,7 +149,7 @@ if (empty($filters['info_system']['constellation'])) {
 		</div>
 	</div>
 	<!-- start scan area -->
-	<div class="col-md-3 col-sm-2">
+	<div class="col-md-3 col-sm-12">
 		<div class="row">
 			<button type="button" class="btn btn-info btn-sm pull-right" data-toggle="modal" data-target="#helpModal">
 				<span class="glyphicon glyphicons-question-sign"></span> Help
