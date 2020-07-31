@@ -105,9 +105,9 @@ class VposMoonHelper extends AbstractHelper
                 if (!empty($moon)) {
                     $goo = explode('|', $moon);
                     if (!empty($goo)) {
-                        $res .= '<span class="gooval">' . round(((float) $goo[0] * 100), 0) . '%</span>&nbsp;';
                         $res .= '<span class="gooname">' . $goo[1] . '</span>&nbsp;';
-                        $res .= '<span class="gooprice">' . number_format(floatval($goo[2]), 0) . '</span><br />';
+                        $res .= '<span class="gooval">' . round(((float) $goo[0] * 100), 0) . '%</span><br />';
+                        //$res .= '<span class="gooprice">' . number_format(floatval($goo[2]), 0) . '</span><br />';
                     }
                 }
             }
@@ -155,16 +155,16 @@ class VposMoonHelper extends AbstractHelper
 
         $data = $this->calculateMoonMateriallist($input);
 
-        // sort ore by baseprice
+        // sort ore by ammount
         uasort($data, array($this, 'sortWorthForRenderMoonMateriallist'));
 
         // second step, create view
         if (!empty($data)) {
             foreach ($data as $k => $row) {
                 if (!empty($row) && $k != 'val') {
-                    $res .= '<span class="gooval">' . number_format(round(((float) $row['qty'] * 100), 0)) . '</span>&nbsp;';
                     $res .= '<span class="gooname">' . $row['name'] . '</span>&nbsp;';
-                    $res .= '<span class="gooprice">' . number_format(floatval($row['worth']), 0) . '</span><br />';
+                    $res .= '<span class="gooval">' . number_format(round(((float) $row['qty'] * 100), 0)) . '</span><br />';
+                    //$res .= '<span class="gooprice">' . number_format(floatval($row['worth']), 0) . '</span><br />';
                 }
             }
         }
@@ -174,7 +174,7 @@ class VposMoonHelper extends AbstractHelper
 
     /**
      * Utility function for @see renderMoonMateriallist()
-     * Sort array by worth, used by uasort()
+     * Sort array by quantity, used by uasort()
      *
      * @param  type $a
      * @param  type $b
@@ -182,7 +182,7 @@ class VposMoonHelper extends AbstractHelper
      */
     private function sortWorthForRenderMoonMateriallist($a, $b)
     {
-        return $a["worth"] <= $b["worth"];
+        return $a["qty"] <= $b["qty"];
     }
 
     /**
