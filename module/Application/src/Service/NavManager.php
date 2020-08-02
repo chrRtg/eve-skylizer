@@ -48,18 +48,15 @@ class NavManager
     {
         $url = $this->urlHelper;
         $items = [];
+
+        if ($this->authService->hasIdentity()) {
+            $items[] = [
+            'id' => 'struct',
+            'label' => 'Dashboard',
+            'link'  => $url('struct')
+            ];
+        }
         
-        $items[] = [
-            'id' => 'home',
-            'label' => 'Home',
-            'link'  => $url('home')
-        ];
-        
-        $items[] = [
-            'id' => 'about',
-            'label' => 'About',
-            'link'  => $url('about')
-        ];
         
         if ($this->authService->hasIdentity()) {
             $items[] = [
@@ -76,13 +73,12 @@ class NavManager
             'link'  => $url('vpos')
             ];
         }
-        if ($this->authService->hasIdentity()) {
-            $items[] = [
-            'id' => 'struct',
-            'label' => 'Structures',
-            'link'  => $url('struct')
-            ];
-        }
+
+        $items[] = [
+            'id' => 'about',
+            'label' => 'About',
+            'link'  => $url('about')
+        ];
         
         // Display "Login" menu item for not authorized user only. On the other hand,
         // display "Admin" and "Logout" menu items only for authorized users.

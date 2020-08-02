@@ -72,7 +72,7 @@ class MiningManager
 
     /**
      * Takes all mining ledgers, calculates the active days the moon has been mined and writes
-     * the periods to AtMiningPeriod
+     * the periods to AtMiningPeriods
      *
      * @return void
      */
@@ -95,7 +95,6 @@ class MiningManager
         $pdata = array();
 
         foreach ($periods as $val) {
-
             if (($last_struct &&  $last_struct != $val['structureId']) || $force_write) {
                 // write
                 $pdata['structure_id'] = $last_struct;
