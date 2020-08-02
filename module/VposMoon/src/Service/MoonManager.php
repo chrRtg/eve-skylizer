@@ -359,7 +359,7 @@ class MoonManager
             $filters['detail_filter_composition'] = "1";
         }
         if (empty($filters['detail_filter_ore'])) {
-            $filters['detail_filter_ore'] = "1";
+            $filters['detail_filter_ore'] = "-1";
         }
         if (empty($filters['filter_gooonly'])) {
             $filters['filter_gooonly'] = "-1";
