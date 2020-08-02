@@ -144,7 +144,8 @@ class VposMoonHelper extends AbstractHelper
     }
 
     /**
-     * Takes 'goo' string from MoonController Index action and calculates the normalilzed base price
+     * Takes 'goo' string from MoonController Index action and calculates the ammount of ore
+     * per day. Refining is not taken into consideration.
      *
      * @param  string $input
      * @return string rendered HTML
@@ -163,7 +164,7 @@ class VposMoonHelper extends AbstractHelper
             foreach ($data as $k => $row) {
                 if (!empty($row) && $k != 'val') {
                     $res .= '<span class="gooname">' . $row['name'] . '</span>&nbsp;';
-                    $res .= '<span class="gooval">' . number_format(round(((float) $row['qty'] * 100), 0)) . '</span><br />';
+                    $res .= '<span class="gooval">' . number_format(round(((float) $row['qty'] * 480), 0)) . '</span><br />';
                     //$res .= '<span class="gooprice">' . number_format(floatval($row['worth']), 0) . '</span><br />';
                 }
             }
@@ -186,6 +187,8 @@ class VposMoonHelper extends AbstractHelper
     }
 
     /**
+     * Calculate the value of all Ore in a composition per day.
+     * Refining is not taken into consideration.
      *
      * @param  type $input
      * @return type
@@ -197,7 +200,7 @@ class VposMoonHelper extends AbstractHelper
         $data = $this->calculateMoonMateriallist($input);
 
         if (!empty($data)) {
-            $res = $data['val'];
+            $res = floatval($data['val']) * 480;
         }
 
         return ($res);
@@ -487,7 +490,7 @@ class VposMoonHelper extends AbstractHelper
      * @param string css class if all fine (default "badge")
      * @return string human readable date difference
      */
-    public function dateUntil($title, $date_to, $warndays = 5, $warnclass = 'badge  badge-warning',  $class='badge')
+    public function dateUntil($title, $date_to, $warndays = 5, $warnclass = 'badge  badge-warning', $class='badge')
     {
         $differenceFormat = '%ad %hh %im';
 
@@ -511,7 +514,7 @@ class VposMoonHelper extends AbstractHelper
             $title .= ': ';
         }
 
-        if($date_to < $now) {
+        if ($date_to < $now) {
             $class=$warnclass;
             $differenceFormat = '- %ad %hh %im';
         }
@@ -538,13 +541,13 @@ class VposMoonHelper extends AbstractHelper
     /**
      * Create human readable reinforce timer.
      *
-     * @param integer day 	ReinforceWeekday: Monday is 0 and Sunday is 6 
+     * @param integer day   ReinforceWeekday: Monday is 0 and Sunday is 6
      * @param integer hour  ReinforceHour: The structure will become vulnerable at a random time that is +/- 2 hours centered on the value of this property
      * @param string css class if warning  (default "badge badge-warning")
      * @param string css class if all fine (default "badge")
      * @return void
      */
-    public function formatReinforceDate($reinforce_day, $reinforce_hour = 0, $warnclass = 'badge  badge-warning',  $class = 'badge badge-normal')
+    public function formatReinforceDate($reinforce_day, $reinforce_hour = 0, $warnclass = 'badge  badge-warning', $class = 'badge badge-normal')
     {
         $today = (int) date('w'); // 0 for Sunday, 6 for Saturday
         $today = ($today-1 >= 1 ? $today-1 : 6); // format to eve style
@@ -600,7 +603,7 @@ class VposMoonHelper extends AbstractHelper
     private function getDayByInt($day)
     {
         $dtxt = '';
-        switch((int) $day) {
+        switch ((int) $day) {
             case 0:
                 $dtxt = 'Mon';
                 break;
