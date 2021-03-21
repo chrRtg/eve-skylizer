@@ -1,8 +1,8 @@
 <?php
 namespace User\Service;
 
-use Zend\Authentication\Adapter\AdapterInterface;
-use Zend\Authentication\Result;
+use Laminas\Authentication\Adapter\AdapterInterface;
+use Laminas\Authentication\Result;
 use User\Entity\User;
 
 /**

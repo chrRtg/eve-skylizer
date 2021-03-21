@@ -1,7 +1,7 @@
 <?php
 namespace Application\Service;
 
-use Zend\Permissions\Rbac\Rbac;
+use Laminas\Permissions\Rbac\Rbac;
 use User\Entity\User;
 
 /**
@@ -19,7 +19,7 @@ class RbacAssertionManager
     /**
      * Auth service.
      *
-     * @var Zend\Authentication\AuthenticationService 
+     * @var Laminas\Authentication\AuthenticationService 
      */
     private $authService;
     

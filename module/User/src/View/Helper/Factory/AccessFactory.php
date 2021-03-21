@@ -2,7 +2,7 @@
 namespace User\View\Helper\Factory;
 
 use Interop\Container\ContainerInterface;
-use Zend\ServiceManager\Factory\FactoryInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 use User\Service\RbacManager;
 use User\View\Helper\Access;
 

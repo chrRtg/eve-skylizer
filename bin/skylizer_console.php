@@ -13,8 +13,8 @@ use Application\Console\FetchCorporationStructures;
 use Application\Console\ExportMoongooCommand;
 
 use Symfony\Component\Console\Application;
-use Zend\Mvc\Application as ZendApplication;
-use Zend\Stdlib\ArrayUtils;
+use Laminas\Mvc\Application as ZendApplication;
+use Laminas\Stdlib\ArrayUtils;
 
 $appConfig = require __DIR__ . '/../config/application.config.php';
 //$appConfig = require __DIR__ . '/../config/autoload/console.global.php';

@@ -2,7 +2,7 @@
 namespace User\Controller\Plugin\Factory;
 
 use Interop\Container\ContainerInterface;
-use Zend\ServiceManager\Factory\FactoryInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 use User\Service\RbacManager;
 use User\Controller\Plugin\AccessPlugin;
 

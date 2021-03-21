@@ -2,7 +2,7 @@
 
 namespace VposMoon\View\Helper;
 
-use Zend\View\Helper\AbstractHelper;
+use Laminas\View\Helper\AbstractHelper;
 
 class VposMoonHelper extends AbstractHelper
 {

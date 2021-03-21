@@ -1,10 +1,10 @@
 <?php
 namespace User\Form;
 
-use Zend\Form\Form;
-use Zend\Form\Fieldset;
-use Zend\InputFilter\InputFilter;
-use Zend\InputFilter\ArrayInput;
+use Laminas\Form\Form;
+use Laminas\Form\Fieldset;
+use Laminas\InputFilter\InputFilter;
+use Laminas\InputFilter\ArrayInput;
 
 /**
  * This form is used to collect user's email, full name, password and status. The form 

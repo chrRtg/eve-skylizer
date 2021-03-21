@@ -19,7 +19,7 @@ class EveEsiManager
     /**
      * Session manager.
      *
-     * @var Zend\Session\Container;
+     * @var Laminas\Session\Container;
      */
     private $sessionContainer;
     private $logger;

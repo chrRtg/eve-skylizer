@@ -1,7 +1,7 @@
 <?php
 namespace User\View\Helper;
 
-use Zend\View\Helper\AbstractHelper;
+use Laminas\View\Helper\AbstractHelper;
 use User\Entity\User;
 
 /**
@@ -19,7 +19,7 @@ class CurrentUser extends AbstractHelper
     /**
      * Authentication service.
      *
-     * @var Zend\Authentication\AuthenticationService
+     * @var Laminas\Authentication\AuthenticationService
      */
     private $authService;
     

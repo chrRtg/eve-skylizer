@@ -38,7 +38,7 @@ class VposManager
 
     /**
      *
-     * @var \Zend\Session\Container
+     * @var \Laminas\Session\Container
      */
     private $sessionContainer;
 

@@ -2,8 +2,8 @@
 namespace VposMoon;
 
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
-use Zend\Router\Http\Segment;
-use Zend\ServiceManager\Factory\InvokableFactory;
+use Laminas\Router\Http\Segment;
+use Laminas\ServiceManager\Factory\InvokableFactory;
 
 return [
     'controllers' => [

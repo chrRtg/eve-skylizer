@@ -2,7 +2,7 @@
 namespace VposMoon\View\Helper\Factory;
 
 use Interop\Container\ContainerInterface;
-use Zend\ServiceManager\Factory\FactoryInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 use VposMoon\View\Helper\VposMoonHelper;
 use VposMoon\Service\MoonManager;
 

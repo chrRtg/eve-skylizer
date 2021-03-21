@@ -1,14 +1,14 @@
 <?php
 namespace Application\Controller\Plugin;
 
-use Zend\Mvc\Controller\Plugin\AbstractPlugin;
+use Laminas\Mvc\Controller\Plugin\AbstractPlugin;
 
 /**
  * Logger Plugin
  *
  * Logger to be available in any Controller
  * Typical usage inside a controller:
- *    $this->logger()->log(\Zend\Log\Logger::ERR, "{function} Testing logger", ["function" => __FUNCTION__]);
+ *    $this->logger()->log(\Laminas\Log\Logger::ERR, "{function} Testing logger", ["function" => __FUNCTION__]);
  *
  *    $this->logger()->emerg('EMERG');
  *    $this->logger()->alert('ALERT');
@@ -38,8 +38,8 @@ class LoggerPlugin extends AbstractPlugin
 
         $this->getConfig();
 
-        $this->logger = new \Zend\Log\Logger();
-        $this->logger->addProcessor(new \Zend\Log\Processor\PsrPlaceholder());
+        $this->logger = new \Laminas\Log\Logger();
+        $this->logger->addProcessor(new \Laminas\Log\Processor\PsrPlaceholder());
         $this->setWriter();
         $this->setFilter();
     }
@@ -48,7 +48,7 @@ class LoggerPlugin extends AbstractPlugin
      * Add a message as a log entry
      *
      * Usage, available in any controller:
-     *    $this->logger()->log(\Zend\Log\Logger::ERR, "{function} Testing logger", ["function" => __FUNCTION__]);
+     *    $this->logger()->log(\Laminas\Log\Logger::ERR, "{function} Testing logger", ["function" => __FUNCTION__]);
      *
      * @param  int               $priority
      * @param  mixed             $message
@@ -70,7 +70,7 @@ class LoggerPlugin extends AbstractPlugin
      */
     public function emerg($message, $extra = [])
     {
-        return ($this->logger->log(\Zend\Log\Logger::EMERG, $message, $extra));
+        return ($this->logger->log(\Laminas\Log\Logger::EMERG, $message, $extra));
     }
 
     /**
@@ -80,7 +80,7 @@ class LoggerPlugin extends AbstractPlugin
      */
     public function alert($message, $extra = [])
     {
-        return ($this->logger->log(\Zend\Log\Logger::ALERT, $message, $extra));
+        return ($this->logger->log(\Laminas\Log\Logger::ALERT, $message, $extra));
     }
 
     /**
@@ -90,7 +90,7 @@ class LoggerPlugin extends AbstractPlugin
      */
     public function crit($message, $extra = [])
     {
-        return ($this->logger->log(\Zend\Log\Logger::CRIT, $message, $extra));
+        return ($this->logger->log(\Laminas\Log\Logger::CRIT, $message, $extra));
     }
 
     /**
@@ -100,7 +100,7 @@ class LoggerPlugin extends AbstractPlugin
      */
     public function err($message, $extra = [])
     {
-        return ($this->logger->log(\Zend\Log\Logger::ERR, $message, $extra));
+        return ($this->logger->log(\Laminas\Log\Logger::ERR, $message, $extra));
     }
 
     /**
@@ -110,7 +110,7 @@ class LoggerPlugin extends AbstractPlugin
      */
     public function warn($message, $extra = [])
     {
-        return ($this->logger->log(\Zend\Log\Logger::WARN, $message, $extra));
+        return ($this->logger->log(\Laminas\Log\Logger::WARN, $message, $extra));
     }
 
     /**
@@ -120,7 +120,7 @@ class LoggerPlugin extends AbstractPlugin
      */
     public function notice($message, $extra = [])
     {
-        return ($this->logger->log(\Zend\Log\Logger::NOTICE, $message, $extra));
+        return ($this->logger->log(\Laminas\Log\Logger::NOTICE, $message, $extra));
     }
 
     /**
@@ -130,7 +130,7 @@ class LoggerPlugin extends AbstractPlugin
      */
     public function info($message, $extra = [])
     {
-        return ($this->logger->log(\Zend\Log\Logger::INFO, $message, $extra));
+        return ($this->logger->log(\Laminas\Log\Logger::INFO, $message, $extra));
     }
 
     /**
@@ -140,7 +140,7 @@ class LoggerPlugin extends AbstractPlugin
      */
     public function debug($message, $extra = [])
     {
-        return ($this->logger->log(\Zend\Log\Logger::DEBUG, $message, $extra));
+        return ($this->logger->log(\Laminas\Log\Logger::DEBUG, $message, $extra));
     }
 
     /**
@@ -161,7 +161,7 @@ class LoggerPlugin extends AbstractPlugin
             $logfile .= '_'-date('ymd');
         }
 
-        $this->writer = new \Zend\Log\Writer\Stream($logfile . '.log');
+        $this->writer = new \Laminas\Log\Writer\Stream($logfile . '.log');
         $this->logger->addWriter($this->writer);
     }
 
@@ -179,10 +179,10 @@ class LoggerPlugin extends AbstractPlugin
         if (isset($this->config['loglevel'])) {
             $loglevel = $this->config['loglevel'];
         } else {
-            $loglevel = \Zend\Log\Logger::ERR;
+            $loglevel = \Laminas\Log\Logger::ERR;
         }
 
-        $this->filter = new \Zend\Log\Filter\Priority($loglevel);
+        $this->filter = new \Laminas\Log\Filter\Priority($loglevel);
         $this->writer->addFilter($this->filter);
     }
 

@@ -7,7 +7,7 @@ namespace Application\Controller\Plugin\Factory;
 
 use Application\Controller\Plugin\LoggerPlugin;
 use Interop\Container\ContainerInterface;
-use Zend\ServiceManager\Factory\FactoryInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 
 class LoggerPluginFactory implements FactoryInterface
 {

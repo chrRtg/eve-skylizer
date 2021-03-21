@@ -2,9 +2,9 @@
 
 namespace VposMoon\Form;
 
-use Zend\Form\Form;
-use Zend\Form\Fieldset;
-use Zend\InputFilter\InputFilter;
+use Laminas\Form\Form;
+use Laminas\Form\Fieldset;
+use Laminas\InputFilter\InputFilter;
 
 /**
  * This form is used to collect user's login, password and 'Remember Me' flag.
@@ -75,7 +75,7 @@ class MoonForm extends Form
             'name' => 'NotEmpty',
             'options' => array(
             'messages' => array(
-            \Zend\Validator\NotEmpty::IS_EMPTY => 'No input - No fun!'
+            \Laminas\Validator\NotEmpty::IS_EMPTY => 'No input - No fun!'
             ),
                     ),
             ),

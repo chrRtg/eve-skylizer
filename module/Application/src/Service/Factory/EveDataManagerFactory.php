@@ -3,7 +3,7 @@ namespace Application\Service\Factory;
 
 use Interop\Container\ContainerInterface;
 use Application\Service\EveDataManager;
-use Zend\ServiceManager\Factory\FactoryInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 
 class EveDataManagerFactory implements FactoryInterface
 {

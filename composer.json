@@ -4,38 +4,39 @@
     "type": "project",
     "license": "BSD-3-Clause",
     "keywords": [
-        "framework",
-        "mvc",
-        "zf2"
+        "eve-online",
+        "api",
+        "laminas"
     ],
-    "homepage": "http://foo.bar",
+    "homepage": "https://skylizer.eve-tools.info",
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {
-        "php": "^7.1",
+        "php": "^7.3",
         "ext-gd": "*",
         "ext-intl": "*",
-        "zendframework/zend-component-installer": "^1.0 || ^0.5 || ^1.0.0-dev@dev",
-        "zendframework/zend-mvc": "^3.0.1",
-        "zfcampus/zf-development-mode": "^3.0",
-        "zendframework/zend-mvc-form": "^1.0",
-        "zendframework/zend-mvc-plugins": "^1.0.1",
-        "zendframework/zend-session": "^2.7.1",
-        "zendframework/zend-authentication": "^2.5",
-        "doctrine/migrations": "^1.5",
-        "zendframework/zend-math": "^3.0",
-        "zendframework/zend-crypt": "^3.1",
-        "zendframework/zend-captcha": "^2.6",
-        "doctrine/doctrine-orm-module": "^1.1",
-        "zendframework/zend-cache": "^2.7",
-        "zendframework/zend-serializer": "^2.8",
-        "zendframework/zend-permissions-rbac": "^2.5",
-        "zendframework/zend-log": "^2.9",
+        "laminas/laminas-component-installer": "^2",
+        "laminas/laminas-mvc": "^3.0.1",
+        "laminas/laminas-development-mode": "^3.0",
+        "laminas/laminas-mvc-form": "^1.0",
+        "laminas/laminas-mvc-plugins": "^1.0.1",
+        "laminas/laminas-session": "^2.7.1",
+        "laminas/laminas-authentication": "^2.5",
+        "doctrine/migrations": "^3",
+        "laminas/laminas-math": "^3.0",
+        "laminas/laminas-crypt": "^3.1",
+        "laminas/laminas-captcha": "^2.6",
+        "doctrine/doctrine-orm-module": "^4",
+        "laminas/laminas-cache": "^2.7",
+        "laminas/laminas-serializer": "^2.8",
+        "laminas/laminas-permissions-rbac": "^2.5",
+        "laminas/laminas-log": "^2.9",
+        "laminas/laminas-cli": "^1",
+        "laminas/laminas-dependency-plugin": "^2.0",
+        "tasmaniski/laminas-current-route": "dev-master",
         "beberlei/doctrineextensions": "^1.0",
         "evelabs/oauth2-eveonline": "^1.1",
-        "eveseat/eseye": "^1.0.0",
-        "illchuk/zf3-symfony-console": "^0.1.1",
-		"tasmaniski/zend-current-route": "^2.0"
+        "eveseat/eseye": "^2.0.0"
     },
     "autoload": {
         "psr-4": {
@@ -53,14 +54,14 @@
     },
     "extra": [],
     "scripts": {
-        "development-disable": "zf-development-mode disable",
-        "development-enable": "zf-development-mode enable",
-        "development-status": "zf-development-mode status",
+        "development-disable": "laminas-development-mode disable",
+        "development-enable": "laminas-development-mode enable",
+        "development-status": "laminas-development-mode status",
         "serve": "php -S 0.0.0.0:8080 -t public/ public/index.php"
     },
     "require-dev": {
-        "zendframework/zend-developer-tools": "^1.1",
-        "san/san-session-toolbar": "^1.0",
-        "phpunit/phpunit": "^7.5"
+        "laminas/laminas-developer-tools": "^2",
+        "san/san-session-toolbar": "^4",
+        "phpunit/phpunit": "^9"
     }
 }

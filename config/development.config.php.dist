@@ -6,7 +6,7 @@
 return [
     // Additional modules to include when in development mode
     'modules' => [
-        'ZendDeveloperTools',
+        'Laminas\DeveloperTools',
 		'SanSessionToolbar',
     ],
     // Configuration overrides during development mode

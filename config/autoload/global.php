@@ -11,10 +11,10 @@
  * file.
  */
 
-use Zend\Cache\Storage\Adapter\Filesystem;
-use Zend\Session\Storage\SessionArrayStorage;
-use Zend\Session\Validator\HttpUserAgent;
-use Zend\Session\Validator\RemoteAddr;
+use Laminas\Cache\Storage\Adapter\Filesystem;
+use Laminas\Session\Storage\SessionArrayStorage;
+use Laminas\Session\Validator\HttpUserAgent;
+use Laminas\Session\Validator\RemoteAddr;
 
 return [
     // Session configuration.

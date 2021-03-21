@@ -8,7 +8,7 @@
  */
 
 use Doctrine\DBAL\Driver\PDOMySql\Driver as PDOMySqlDriver;
-use Zend\Log\Logger;
+use Laminas\Log\Logger;
 
 return [
 	'settings' => array (

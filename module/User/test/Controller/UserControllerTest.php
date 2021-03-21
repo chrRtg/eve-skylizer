@@ -8,8 +8,8 @@
 namespace UserTest\Controller;
 
 use User\Controller\UserController;
-use Zend\Stdlib\ArrayUtils;
-use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
+use Laminas\Stdlib\ArrayUtils;
+use Laminas\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 
 class UserControllerTest extends AbstractHttpControllerTestCase
 {

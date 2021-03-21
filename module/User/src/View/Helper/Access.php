@@ -1,7 +1,7 @@
 <?php
 namespace User\View\Helper;
 
-use Zend\View\Helper\AbstractHelper;
+use Laminas\View\Helper\AbstractHelper;
 
 /**
  * This view helper is used to check user permissions.

@@ -2,11 +2,11 @@
 
 namespace VposMoon\Controller;
 
-use Zend\Mvc\Controller\AbstractActionController;
-use Zend\Uri\Uri;
+use Laminas\Mvc\Controller\AbstractActionController;
+use Laminas\Uri\Uri;
 use VposMoon\Form\MoonForm;
-use Zend\View\Model\ViewModel;
-use Zend\View\Model\JsonModel;
+use Laminas\View\Model\ViewModel;
+use Laminas\View\Model\JsonModel;
 use VposMoon\Entity\AtMoon;
 
 /**

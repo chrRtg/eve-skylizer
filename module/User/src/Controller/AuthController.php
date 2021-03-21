@@ -3,8 +3,8 @@
 namespace User\Controller;
 
 use User\Service\EveSSOManager;
-use Zend\Mvc\Controller\AbstractActionController;
-use Zend\View\Model\ViewModel;
+use Laminas\Mvc\Controller\AbstractActionController;
+use Laminas\View\Model\ViewModel;
 
 /**
  * This controller is responsible for letting the user to log in and log out.

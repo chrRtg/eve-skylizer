@@ -6,12 +6,12 @@
  */
 
 /**
- * This is configuration for the ZendDeveloperTools development toolbar.
+ * This is configuration for the Laminas\DeveloperTools development toolbar.
  *
  * It will be enabled when you enable development mode.
  */
 return [
-    'zenddevelopertools' => [
+    'laminas-developer-tools' => [
         /**
          * General Profiler settings
          */
@@ -66,7 +66,7 @@ return [
 
             /**
              * Contains a list with all collector the profiler should run. Zend Developer Tools ships with
-             * 'db' (Zend\Db), 'time', 'event', 'memory', 'exception', 'request' and 'mail' (Zend\Mail). If you wish to
+             * 'db' (Laminas\Db), 'time', 'event', 'memory', 'exception', 'request' and 'mail' (Laminas\Mail). If you wish to
              * disable a default collector, simply set the value to null or false.
              *
              * Example: 'collectors' => array('db' => null)
@@ -99,7 +99,7 @@ return [
              * events. If you wish to disable the default all-inclusive identifier, simply set the value to null or
              * false.
              *
-             * Example: 'identifiers' => array('all' => null, 'dispatchable' => 'Zend\Stdlib\DispatchableInterface')
+             * Example: 'identifiers' => array('all' => null, 'dispatchable' => 'Laminas\Stdlib\DispatchableInterface')
              * Expects: array
              */
             'identifiers' => [],

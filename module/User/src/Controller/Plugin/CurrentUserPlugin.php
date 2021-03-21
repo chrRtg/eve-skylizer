@@ -1,7 +1,7 @@
 <?php
 namespace User\Controller\Plugin;
 
-use Zend\Mvc\Controller\Plugin\AbstractPlugin;
+use Laminas\Mvc\Controller\Plugin\AbstractPlugin;
 use User\Entity\User;
 
 /**
@@ -20,7 +20,7 @@ class CurrentUserPlugin extends AbstractPlugin
     /**
      * Authentication service.
      *
-     * @var Zend\Authentication\AuthenticationService 
+     * @var Laminas\Authentication\AuthenticationService 
      */
     private $authService;
     

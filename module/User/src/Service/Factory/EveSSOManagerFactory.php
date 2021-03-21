@@ -2,9 +2,9 @@
 namespace User\Service\Factory;
 
 use Interop\Container\ContainerInterface;
-use Zend\ServiceManager\Factory\FactoryInterface;
-use Zend\Session\SessionManager;
-use Zend\Session\Container;
+use Laminas\ServiceManager\Factory\FactoryInterface;
+use Laminas\Session\SessionManager;
+use Laminas\Session\Container;
 use User\Service\UserManager;
 use User\Service\EveSSOManager;
 use User\Service\RbacManager;
@@ -18,7 +18,7 @@ class EveSSOManagerFactory implements FactoryInterface
         $sessionContainer = new Container('eve_sso', $sessionManager);
         
         return new EveSSOManager(
-            $container->get(\Zend\Authentication\AuthenticationService::class), 
+            $container->get(\Laminas\Authentication\AuthenticationService::class), 
             $container->get(RbacManager::class), 
             $sessionContainer, 
             $container->get('Config'), 

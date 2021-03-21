@@ -4,9 +4,9 @@ namespace VposMoon\Controller;
 
 use VposMoon\Entity\AtMoon;
 use VposMoon\Form\MoonForm;
-use Zend\Mvc\Controller\AbstractActionController;
-use Zend\View\Model\JsonModel;
-use Zend\View\Model\ViewModel;
+use Laminas\Mvc\Controller\AbstractActionController;
+use Laminas\View\Model\JsonModel;
+use Laminas\View\Model\ViewModel;
 
 /**
  * The MoonController is about Moons, Survey Scans and Moon Goo

@@ -3,7 +3,7 @@
 namespace User\Service;
 
 use Evelabs\OAuth2\Client\Provider\EveOnline;
-use Zend\Authentication\Result;
+use Laminas\Authentication\Result;
 
 /**
  * The EveSSOManager is to support an EVE-SSO login.
@@ -26,7 +26,7 @@ class EveSSOManager
     /**
      * Authentication service.
      *
-     * @var \Zend\Authentication\AuthenticationService
+     * @var \Laminas\Authentication\AuthenticationService
      */
 
     private $authService;
@@ -41,7 +41,7 @@ class EveSSOManager
     /**
      * Session manager.
      *
-     * @var \Zend\Session\Container;
+     * @var \Laminas\Session\Container;
      */
     private $sessionContainer;
 
@@ -137,7 +137,7 @@ class EveSSOManager
     /**
      * Oauth2 login with Eve-Online SSO service.
      *
-     * @param  \Zend\Mvc\Controller\Plugin\Params $url_param
+     * @param  \Laminas\Mvc\Controller\Plugin\Params $url_param
      * @return string
      */
     public function eveSsoLogin($url_param)

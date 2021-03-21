@@ -4,8 +4,8 @@ namespace User\Controller;
 use User\Entity\Role;
 use User\Entity\User;
 use User\Form\UserForm;
-use Zend\Mvc\Controller\AbstractActionController;
-use Zend\View\Model\ViewModel;
+use Laminas\Mvc\Controller\AbstractActionController;
+use Laminas\View\Model\ViewModel;
 
 /**
  * This controller is responsible for user management (adding, editing,

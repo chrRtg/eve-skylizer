@@ -4,7 +4,7 @@ namespace User\Service;
 use User\Entity\Permission;
 use User\Entity\Role;
 use User\Entity\User;
-use Zend\Permissions\Rbac\Rbac;
+use Laminas\Permissions\Rbac\Rbac;
 
 /**
  * This service is responsible for initialzing RBAC (Role-Based Access Control).
@@ -21,14 +21,14 @@ class RbacManager
     /**
      * RBAC service.
      *
-     * @var Zend\Permissions\Rbac\Rbac
+     * @var Laminas\Permissions\Rbac\Rbac
      */
     private $rbac;
 
     /**
      * Filesystem cache.
      *
-     * @var Zend\Cache\Storage\StorageInterface
+     * @var Laminas\Cache\Storage\StorageInterface
      */
     private $cache;
 

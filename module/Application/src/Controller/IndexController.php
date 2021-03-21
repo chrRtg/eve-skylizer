@@ -2,8 +2,8 @@
 namespace Application\Controller;
 
 use User\Entity\User;
-use Zend\Mvc\Controller\AbstractActionController;
-use Zend\View\Model\ViewModel;
+use Laminas\Mvc\Controller\AbstractActionController;
+use Laminas\View\Model\ViewModel;
 
 /**
  * This is the main controller class of the User Demo application. It contains

@@ -5,8 +5,8 @@ use User\Entity\Permission;
 use User\Entity\Role;
 use User\Form\RoleForm;
 use User\Form\RolePermissionsForm;
-use Zend\Mvc\Controller\AbstractActionController;
-use Zend\View\Model\ViewModel;
+use Laminas\Mvc\Controller\AbstractActionController;
+use Laminas\View\Model\ViewModel;
 
 /**
  * This controller is responsible for role management (adding, editing,
