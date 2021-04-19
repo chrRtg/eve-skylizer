@@ -19,7 +19,7 @@ $current_route = $this->currentRoute()->getRoute();
 //ini_set('xdebug.var_display_max_depth', 3); print_r($vpos_list);
 //ini_set('xdebug.var_display_max_depth', 3); var_dump($filters);
 //ini_set('xdebug.var_display_max_depth', 3); var_dump($message);
-//ini_set('xdebug.var_display_max_depth', 3); var_dump($message['scanres']);
+//ini_set('xdebug.var_display_max_depth', 3); var_dump($message['message']);
 //echo '</pre>';
 
 if (empty($filters['info_system']['constellation'])) {
@@ -29,7 +29,7 @@ if (empty($filters['info_system']['constellation'])) {
 }
 ?>
 <script>
-	var sl_messages = <?=json_encode($message['message']);?>;
+	var sl_messages = <?=isset($message['message']) ? json_encode($message['message']) : '{}'?>;
 	var filters_json = <?=json_encode($filters_json);?>;
 	var current_route = <?=json_encode($current_route);?>;
 </script>

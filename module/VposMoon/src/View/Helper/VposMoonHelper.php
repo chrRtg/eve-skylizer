@@ -183,7 +183,10 @@ class VposMoonHelper extends AbstractHelper
      */
     private function sortWorthForRenderMoonMateriallist($a, $b)
     {
-        return $a["qty"] <= $b["qty"];
+        if ($a['qty'] == $b['qty']) {
+            return 0;
+        }
+        return ($a['qty'] > $b['qty'] ? -1 : 1);
     }
 
     /**
@@ -191,19 +194,36 @@ class VposMoonHelper extends AbstractHelper
      * Refining is not taken into consideration.
      *
      * @param  type $input
-     * @return type
+     * @return float
      */
     public function renderMoonMaterialValue($input)
     {
-        $res = '';
+        $res = 0.0;
 
         $data = $this->calculateMoonMateriallist($input);
 
         if (!empty($data)) {
-            $res = floatval($data['val']) * 480;
+            $res = $this->calculateMoonMaterialWorth($data) * 480;
         }
 
         return ($res);
+    }
+
+    /**
+     * Calculate the total for all ore values for a moon
+     *
+     * @param [type] $data
+     * @return float
+     */
+    private function calculateMoonMaterialWorth($data)
+    {
+        $sum = 0.0;
+        if (!empty($data)) {
+            foreach ($data as $k => $row) {
+                $sum += $row['worth'];
+            }
+        }
+        return $sum;
     }
 
     /**
@@ -216,7 +236,6 @@ class VposMoonHelper extends AbstractHelper
     private function calculateMoonMateriallist($input)
     {
         $data = [];
-        $data['val'] = 0;
 
         $moons = explode('#', $input);
 
@@ -233,7 +252,6 @@ class VposMoonHelper extends AbstractHelper
                         } else {
                             $data[$goo['3']]['qty'] += (floatval($goo['1']) * floatval($goo['4']));
                         }
-                        $data['val'] += floatval($data[$goo['3']]['worth']) * (floatval($goo['1']) * floatval($goo['4']));
                     }
                 }
             }

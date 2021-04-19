@@ -3,7 +3,6 @@
 namespace VposMoon\Form;
 
 use Laminas\Form\Form;
-use Laminas\Form\Fieldset;
 use Laminas\InputFilter\InputFilter;
 
 /**
@@ -13,7 +12,7 @@ class MoonForm extends Form
 {
 
     /**
-     * Constructor.     
+     * Constructor.
      */
     public function __construct()
     {
@@ -35,23 +34,23 @@ class MoonForm extends Form
         // Add "email" field
         $this->add(
             [
-            'type' => 'textarea',
-            'name' => 'scan',
-            'options' => [
-            'label' => 'Your scan please',
-            ],
+                'type' => 'textarea',
+                'name' => 'scan',
+                'options' => [
+                    'label' => 'Your scan please',
+                ],
             ]
         );
 
         // Add the Submit button
         $this->add(
             [
-            'type' => 'submit',
-            'name' => 'submit',
-            'attributes' => [
-            'value' => 'Post data',
-            'id' => 'submit',
-            ],
+                'type' => 'submit',
+                'name' => 'submit',
+                'attributes' => [
+                    'value' => 'Post data',
+                    'id' => 'submit',
+                ],
             ]
         );
     }
@@ -68,18 +67,18 @@ class MoonForm extends Form
         // Add input for "email" field
         $inputFilter->add(
             [
-            'name' => 'scan',
-            'required' => true,
-            'validators' => array(
-            array(
-            'name' => 'NotEmpty',
-            'options' => array(
-            'messages' => array(
-            \Laminas\Validator\NotEmpty::IS_EMPTY => 'No input - No fun!'
-            ),
+                'name' => 'scan',
+                'required' => true,
+                'validators' => array(
+                    array(
+                        'name' => 'NotEmpty',
+                        'options' => array(
+                            'messages' => array(
+                                \Laminas\Validator\NotEmpty::IS_EMPTY => 'No input - No fun!',
+                            ),
+                        ),
                     ),
-            ),
-            ),
+                ),
             ]
         );
     }
