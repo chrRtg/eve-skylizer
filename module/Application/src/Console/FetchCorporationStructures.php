@@ -64,5 +64,6 @@ class FetchCorporationStructures extends Command
         }
                 
         $output->writeln($cnt . " structures found");
+        return Command::SUCCESS;
     }
 }

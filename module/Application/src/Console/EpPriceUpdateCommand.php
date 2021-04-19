@@ -53,5 +53,6 @@ class EpPriceUpdateCommand extends Command
 
         $cnt = $this->moonController->priceEpUpdateConsole();
         $output->writeln($cnt . " prices updated");
+        return Command::SUCCESS;
     }
 }

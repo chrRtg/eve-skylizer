@@ -49,5 +49,6 @@ class PriceUpdateCommand extends Command
 
         $cnt = $this->moonController->priceUpdateConsole();
         $output->writeln($cnt . " prices updated");
+        return Command::SUCCESS;
     }
 }
