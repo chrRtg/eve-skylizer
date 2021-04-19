@@ -657,10 +657,19 @@ class EveSSOManager
      */
     private function refreshSsoToken()
     {
+        if($this->sessionContainer->token) {
+            $this->logger->debug("check refreshSsoToken: ". print_r(date('Y-m-d H:i:s', $this->sessionContainer->token->getExpires()), true) );
+        }
+
         if (!empty($this->sessionContainer->token) && $this->sessionContainer->token->hasExpired()) {
+                $this->logger->debug("call getFreshAccessToken");
             $new_token = $this->getFreshAccessToken($this->sessionContainer->token->getRefreshToken());
             // Purge old access token and store new access token to your data store.
             $this->sessionContainer->token = $new_token;
+            // also store in the eve_user object we use for authed requests
+            $this->sessionContainer->eveauth['eve_user']['token'] = $this->sessionContainer->token->getToken();
+            $this->sessionContainer->eveauth['eve_user']['refresh_token'] = $this->sessionContainer->token->getRefreshToken();
+            $this->sessionContainer->eveauth['eve_user']['token_expires'] = $this->sessionContainer->token->getExpires();
     
             // If the user is a CliUser update him
             if ($this->checkCliUser()) {

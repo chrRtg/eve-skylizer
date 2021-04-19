@@ -155,6 +155,8 @@ class EveEsiManager
             );
         }
 
+        $this->logger->debug('authedRequest: ' . print_r($authentication, true));
+
         // Instantiate a new Eseye instance.
         $esi = new Eseye($authentication);
 
