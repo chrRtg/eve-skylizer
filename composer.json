@@ -12,9 +12,12 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {
-        "php": "^7.3",
+        "php": "^7.4",
         "ext-gd": "*",
         "ext-intl": "*",
+        "ext-zip": "*",
+        "ext-gmp": "*",
+        "ext-pdo": "*",
         "laminas/laminas-component-installer": "^2",
         "laminas/laminas-mvc": "^3.0.1",
         "laminas/laminas-development-mode": "^3.0",
@@ -34,9 +37,9 @@
         "laminas/laminas-cli": "^1",
         "laminas/laminas-dependency-plugin": "^2.0",
         "tasmaniski/laminas-current-route": "dev-master",
-        "beberlei/doctrineextensions": "^1.0",
-        "evelabs/oauth2-eveonline": "^1.1",
-        "eveseat/eseye": "^2.0.0"
+        "beberlei/doctrineextensions": "^1.3.0",
+        "evelabs/oauth2-eveonline": "^1.1.1",
+        "eveseat/eseye": "^2.3.2"
     },
     "autoload": {
         "psr-4": {
