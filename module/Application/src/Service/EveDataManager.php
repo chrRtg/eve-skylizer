@@ -373,7 +373,7 @@ class EveDataManager
      */
     public function updatePricesFromFuzzwork()
     {
-        // create list of items we require up to date prices from
+        // create list of items we require up to date prices from. These are all groups with ores, gases, refined ores etc. (all prices relevant for skylizer)
         $itemlist = $this->getTypeIDsByGroupIDs(explode(',', '18,427,450,451,452,453,454,455,456,457,458,459,460,461,462,467,469,1884,1920,1921,1922,1923'));
         if (!$itemlist || empty($itemlist['typeids'])) {
             exit(-1);
