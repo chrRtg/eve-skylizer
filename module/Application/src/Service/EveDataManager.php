@@ -14,6 +14,7 @@ use User\Entity\User;
 use Application\Entity\Mapdenormalize;
 use Application\Entity\Maplocationwormholeclasses;
 use Application\Entity\Mapsolarsystemjumps;
+use \GuzzleHttp;
 
 /**
  * Manager service class to fetch EVE data from your database or to fill your database with EVE related data
@@ -242,6 +243,27 @@ class EveDataManager
         return($queryBuilder->getQuery()->getOneOrNullResult());
     }
 
+
+    /**
+     * get all typeIDs who belong to one or many groupIDs
+     *
+     * @param array groupids
+     * @return array query result
+     */
+    public function getTypeIDsByGroupIDs($groupids)
+    {
+        $this->entityManager->getConnection()->exec('SET @@group_concat_max_len = 8000;');
+        
+        $queryBuilder = $this->entityManager->createQueryBuilder();
+
+        $queryBuilder->select("GROUP_CONCAT(DISTINCT t.typeid) AS typeids")
+            ->from(Invtypes::class, 't')
+            ->where('t.groupid IN (:list)')
+            ->setParameter('list', $groupids);
+
+        return($queryBuilder->getQuery()->getOneOrNullResult());
+    }
+
     /**
      * Fetch a list of corporations where corporation name or ticker begins with $partial
      *
@@ -351,10 +373,15 @@ class EveDataManager
      */
     public function updatePricesFromFuzzwork()
     {
-        // @todo create list of prices to be fetched regularly on a query like categoryID = 25 or categoryID = 4 and published = 1
+        // create list of items we require up to date prices from
+        $itemlist = $this->getTypeIDsByGroupIDs(explode(',', '18,427,450,451,452,453,454,455,456,457,458,459,460,461,462,467,469,1884,1920,1921,1922,1923'));
+        if (!$itemlist || empty($itemlist['typeids'])) {
+            exit(-1);
+        }
+
         // request string, contains all types we need for moon ore price calculation
         // $request_string = 'aggregates/?region=10000002&types=34,35,36,37,38,39,40,11399,27029,48927,16633,16634,16635,16636,16637,16638,16639,16640,16641,16642,16643,16644,16646,16647,16648,16649,16650,16651,16652,16653,45490,45491,45492,45493,46280,46281,46282,46283,46284,46285,46286,46287,45494,45495,45496,45497,46288,46289,46290,46291,46292,46293,46294,46295,45498,45499,45500,45501,46296,46297,46298,46299,46300,46301,46302,46303,45502,45503,45504,45506,46304,46305,46306,46307,46308,46309,46310,46311,45510,45511,45512,45513,46312,46313,46314,46315,46316,46317,46318,46319';
-        $request_string = 'aggregates/?station=60003760&types=34,35,36,37,38,39,40,11399,27029,48927,16633,16634,16635,16636,16637,16638,16639,16640,16641,16642,16643,16644,16646,16647,16648,16649,16650,16651,16652,16653,45490,45491,45492,45493,46280,46281,46282,46283,46284,46285,46286,46287,45494,45495,45496,45497,46288,46289,46290,46291,46292,46293,46294,46295,45498,45499,45500,45501,46296,46297,46298,46299,46300,46301,46302,46303,45502,45503,45504,45506,46304,46305,46306,46307,46308,46309,46310,46311,45510,45511,45512,45513,46312,46313,46314,46315,46316,46317,46318,46319,46678';
+        $request_string = 'aggregates/?station=60003760&types='.$itemlist['typeids'];
 
         // Create a client with a base URI
         $client = new \GuzzleHttp\Client(['base_uri' => 'https://market.fuzzwork.co.uk/', 'verify' => false]);
