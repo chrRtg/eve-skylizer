@@ -164,7 +164,7 @@ class VposMoonHelper extends AbstractHelper
             foreach ($data as $k => $row) {
                 if (!empty($row) && $k != 'val') {
                     $res .= '<span class="gooname">' . $row['name'] . '</span>&nbsp;';
-                    $res .= '<span class="gooval">' . number_format(round(((float) $row['qty'] * 480), 0)) . '</span><br />';
+                    $res .= '<span class="gooval">' . number_format((float) $row['qty'], 1) . '</span><br />';
                     //$res .= '<span class="gooprice">' . number_format(floatval($row['worth']), 0) . '</span><br />';
                 }
             }
@@ -203,7 +203,7 @@ class VposMoonHelper extends AbstractHelper
         $data = $this->calculateMoonMateriallist($input);
 
         if (!empty($data)) {
-            $res = $this->calculateMoonMaterialWorth($data) * 480;
+            $res = $this->calculateMoonMaterialWorth($data);
         }
 
         return ($res);
@@ -220,7 +220,7 @@ class VposMoonHelper extends AbstractHelper
         $sum = 0.0;
         if (!empty($data)) {
             foreach ($data as $k => $row) {
-                $sum += $row['worth'];
+                $sum += $row['worth'] * $row['qty'];
             }
         }
         return $sum;

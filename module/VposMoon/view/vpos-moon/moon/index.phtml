@@ -88,9 +88,9 @@ if (empty($filters['info_system']['constellation'])) {
 							<?php if (!empty($filters['detail_filter_composition']) && $filters['detail_filter_composition'] == "1"): ?>
 								<th data-priority="3" scope="col">Composition</div></th>
 							<?php endif; ?>
-							<th data-priority="2" scope="col">ISK (m)<div class="sub">refined / day</div></th>
+							<th data-priority="2" scope="col">ISK<div class="sub">refined piece</div></th>
 							<?php if (!empty($filters['detail_filter_ore']) && $filters['detail_filter_ore'] == "1"): ?>
-								<th data-priority="3" scope="col">Ore / day</div></th>
+								<th data-priority="3" scope="col">Ore</div><div class="sub">100% refined</div></th>
 							<?php endif; ?>
 							<th scope="col">Structure</th>
 							<th scope="col">Owner</th>
@@ -109,7 +109,7 @@ if (empty($filters['info_system']['constellation'])) {
 								<?php endif; ?>
 									<td>
 										<?php if($moon['atmoonid']): ?>
-										<?= number_format( ($this->vpViewTool()->renderMoonMaterialValue($moon['materiallist']) / 1000000), 2); ?>
+										<?= number_format( ($this->vpViewTool()->renderMoonMaterialValue($moon['materiallist'])), 0); ?>
 										<?php endif; ?>
 									</td>								
 							<?php if (!empty($filters['detail_filter_ore']) && $filters['detail_filter_ore'] == "1"): ?>
