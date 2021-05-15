@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * AtMiningLedger
  *
- * @ORM\Table(name="at_mining_ledger", uniqueConstraints={@ORM\UniqueConstraint(name="idx_uniq", columns={"structure_id", "eve_userid", "last_updated", "eve_invtypes_typeid"})}, indexes={@ORM\Index(name="idx_goo", columns={"eve_invtypes_typeid"}), @ORM\Index(name="idx_struct", columns={"structure_id"}), @ORM\Index(name="idx_date", columns={"last_updated"}), @ORM\Index(name="idx_user", columns={"eve_userid"})})
+ * @ORM\Table(name="at_mining_ledger", uniqueConstraints={@ORM\UniqueConstraint(name="idx_uniq", columns={"structure_id", "eve_userid", "last_updated", "eve_invtypes_typeid"})}, indexes={@ORM\Index(name="idx_struct", columns={"structure_id"}), @ORM\Index(name="idx_goo", columns={"eve_invtypes_typeid"}), @ORM\Index(name="idx_celestial_id", columns={"celestial_id"}), @ORM\Index(name="idx_user", columns={"eve_userid"}), @ORM\Index(name="idx_date", columns={"last_updated"})})
  * @ORM\Entity
  */
 class AtMiningLedger
@@ -55,6 +55,34 @@ class AtMiningLedger
      * @ORM\Column(name="eve_invtypes_typeid", type="integer", precision=0, scale=0, nullable=false, unique=false)
      */
     private $eveInvtypesTypeid;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="celestial_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     */
+    private $celestialId;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="structure_name", type="string", length=255, precision=0, scale=0, nullable=false, unique=false)
+     */
+    private $structureName;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="basePrice", type="decimal", precision=19, scale=4, nullable=false, unique=false)
+     */
+    private $baseprice;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="refinedPrice", type="decimal", precision=19, scale=4, nullable=false, unique=false)
+     */
+    private $refinedprice;
 
     /**
      * @var \DateTime
@@ -192,6 +220,102 @@ class AtMiningLedger
     public function getEveInvtypesTypeid()
     {
         return $this->eveInvtypesTypeid;
+    }
+
+    /**
+     * Set celestialId.
+     *
+     * @param int $celestialId
+     *
+     * @return AtMiningLedger
+     */
+    public function setCelestialId($celestialId)
+    {
+        $this->celestialId = $celestialId;
+
+        return $this;
+    }
+
+    /**
+     * Get celestialId.
+     *
+     * @return int
+     */
+    public function getCelestialId()
+    {
+        return $this->celestialId;
+    }
+
+    /**
+     * Set structureName.
+     *
+     * @param string $structureName
+     *
+     * @return AtMiningLedger
+     */
+    public function setStructureName($structureName)
+    {
+        $this->structureName = $structureName;
+
+        return $this;
+    }
+
+    /**
+     * Get structureName.
+     *
+     * @return string
+     */
+    public function getStructureName()
+    {
+        return $this->structureName;
+    }
+
+    /**
+     * Set baseprice.
+     *
+     * @param string $baseprice
+     *
+     * @return AtMiningLedger
+     */
+    public function setBaseprice($baseprice)
+    {
+        $this->baseprice = $baseprice;
+
+        return $this;
+    }
+
+    /**
+     * Get baseprice.
+     *
+     * @return string
+     */
+    public function getBaseprice()
+    {
+        return $this->baseprice;
+    }
+
+    /**
+     * Set refinedprice.
+     *
+     * @param string $refinedprice
+     *
+     * @return AtMiningLedger
+     */
+    public function setRefinedprice($refinedprice)
+    {
+        $this->refinedprice = $refinedprice;
+
+        return $this;
+    }
+
+    /**
+     * Get refinedprice.
+     *
+     * @return string
+     */
+    public function getRefinedprice()
+    {
+        return $this->refinedprice;
     }
 
     /**

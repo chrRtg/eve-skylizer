@@ -23,6 +23,12 @@ class MiningManager
 
     /**
      *
+     * @var \Application\Service\EveDataManager
+     */
+    private $eveDataManager;
+
+    /**
+     *
      * @var \Application\Service\EveEsiManager
      */
     private $eveESIManager;
@@ -36,10 +42,11 @@ class MiningManager
     /**
      * Constructs the service.
      */
-    public function __construct($entityManager, $eveESIManager, $logger)
+    public function __construct($entityManager, $eveESIManager, $eveDataManager, $logger)
     {
         $this->entityManager = $entityManager;
         $this->eveESIManager = $eveESIManager;
+        $this->eveDataManager = $eveDataManager;
         $this->logger = $logger;
     }
 
@@ -332,6 +339,24 @@ class MiningManager
         if ($ledgers['type_id']) {
             $ledger_entity->setEveInvtypesTypeid($ledgers['type_id']);
         }
+
+        // also persist structure name and celestialId to make the information also available in the future in case the
+        // structure has been disbanded
+        $structure_entity = $this->entityManager->getRepository(AtStructure::class)->findOneByStructureId($structure_id);
+
+        if (isset($structure_entity)) {
+            $ledger_entity->setCelestialId($structure_entity->getCelestialId());
+            $ledger_entity->setStructureName($structure_entity->getStructureName());
+        } else {
+            $ledger_entity->setCelestialId(0);
+            $ledger_entity->setStructureName('-');
+        }
+
+        //prices change but we need to know about the values at the given moment.
+        $ore_price_entity = $this->eveDataManager->getOrePrice($ledgers['type_id']);
+  
+        $ledger_entity->setBaseprice(($ore_price_entity['refined'] ? $ore_price_entity['baseprice'] : 0));
+        $ledger_entity->setRefinedprice(($ore_price_entity['refined'] ? $ore_price_entity['refined'] : 0));
 
         $this->entityManager->persist($ledger_entity);
         $this->entityManager->flush();

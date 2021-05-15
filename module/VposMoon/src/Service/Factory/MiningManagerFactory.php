@@ -22,6 +22,7 @@ class MiningManagerFactory
         return new MiningManager(
             $container->get('doctrine.entitymanager.orm_default'),
             $container->get(\Application\Service\EveEsiManager::class),
+            $container->get(\Application\Service\EveDataManager::class),
             $container->get('MyLogger')
         );
     }

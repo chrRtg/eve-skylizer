@@ -5,6 +5,7 @@ namespace Application\Service;
 use Application\Entity\Trntranslations;
 use Application\Entity\Invtypes;
 use Application\Entity\Invgroups;
+use Application\Entity\Invtypematerials;
 use Application\Entity\Invmarketgroups;
 use Application\Entity\Invcategories;
 use Application\Entity\EveAlly;
@@ -462,6 +463,25 @@ class EveDataManager
 
         return($j);
     }
+
+    public function getOrePrice($type_id)
+    {
+        $queryBuilder = $this->entityManager->createQueryBuilder();
+
+        $queryBuilder->select('sum(itm.quantity * it2.baseprice) as refined, GROUP_CONCAT(DISTINCT it.baseprice) AS baseprice')
+            ->from(Invtypes::class, 'it')
+            ->from(Invtypes::class, 'it2')
+            ->from(Invtypematerials::class, 'itm')
+            ->where('itm.typeid = :typeid')->setParameters(array('typeid' => $type_id))
+            ->andwhere('it.typeid = itm.typeid')
+            ->andwhere('it2.typeid = itm.materialtypeid')
+            ->groupBy('itm.typeid');
+
+            $res = $queryBuilder->getQuery()->getOneOrNullResult();
+
+        return ($res);
+    }
+
 
     /**
      * Fetch Alliance and Corporation Information from ESI.
