@@ -404,9 +404,9 @@ class EveDataManager
         $price_arr = [];
         foreach ($result as $k => $v) {
             if ($v['sell']['weightedAverage']) {
-                $price_arr[$k] = floatval($v['sell']['weightedAverage']);
+                $price_arr[$k] = floatval($v['sell']['median']);
             } elseif ($v['buy']['weightedAverage']) {
-                $price_arr[$k] = floatval($v['buy']['weightedAverage']);
+                $price_arr[$k] = floatval($v['buy']['median']);
             }
         }
 
