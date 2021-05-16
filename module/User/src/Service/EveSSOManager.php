@@ -657,10 +657,6 @@ class EveSSOManager
      */
     private function refreshSsoToken()
     {
-        if($this->sessionContainer->token) {
-            $this->logger->debug("check refreshSsoToken: ". print_r(date('Y-m-d H:i:s', $this->sessionContainer->token->getExpires()), true) );
-        }
-
         if (!empty($this->sessionContainer->token) && $this->sessionContainer->token->hasExpired()) {
                 $this->logger->debug("call getFreshAccessToken");
             $new_token = $this->getFreshAccessToken($this->sessionContainer->token->getRefreshToken());
