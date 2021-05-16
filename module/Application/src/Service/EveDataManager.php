@@ -464,6 +464,12 @@ class EveDataManager
         return($j);
     }
 
+    /**
+     * Get basePrice of an Ore as well the price of his composition (with refining yield of 100%)
+     *
+     * @param int $type_id
+     * @return array    array with [baseprice] and [refined]
+     */
     public function getOrePrice($type_id)
     {
         $queryBuilder = $this->entityManager->createQueryBuilder();

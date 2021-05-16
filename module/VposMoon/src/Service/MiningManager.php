@@ -352,7 +352,7 @@ class MiningManager
             $ledger_entity->setStructureName('-');
         }
 
-        //prices change but we need to know about the values at the given moment.
+        //prices change - therefore we store the current price.
         $ore_price_entity = $this->eveDataManager->getOrePrice($ledgers['type_id']);
   
         $ledger_entity->setBaseprice(($ore_price_entity['refined'] ? $ore_price_entity['baseprice'] : 0));
