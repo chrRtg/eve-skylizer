@@ -474,7 +474,7 @@ class EveDataManager
     {
         $queryBuilder = $this->entityManager->createQueryBuilder();
 
-        $queryBuilder->select('sum(itm.quantity * it2.baseprice) as refined, GROUP_CONCAT(DISTINCT it.baseprice) AS baseprice')
+        $queryBuilder->select('sum((itm.quantity * it2.baseprice) / it.portionsize) as refined, GROUP_CONCAT(DISTINCT it.baseprice) AS baseprice')
             ->from(Invtypes::class, 'it')
             ->from(Invtypes::class, 'it2')
             ->from(Invtypematerials::class, 'itm')
