@@ -23,10 +23,7 @@ return [
                     ],
                 ],
                 'may_terminate' => true,
-                'child_routes' => [
-                    // You can place additional routes that match under the
-                    // route defined above here.
-                ],
+                'child_routes' => [],
             ],
             'vpos' => [
                 'type' => Segment::class,
@@ -38,10 +35,7 @@ return [
                     ],
                 ],
                 'may_terminate' => true,
-                'child_routes' => [
-                    // You can place additional routes that match under the
-                    // route defined above here.
-                ],
+                'child_routes' => [],
             ],
             'struct' => [
                 'type' => Segment::class,
@@ -53,10 +47,19 @@ return [
                     ],
                 ],
                 'may_terminate' => true,
-                'child_routes' => [
-                    // You can place additional routes that match under the
-                    // route defined above here.
+                'child_routes' => [],
+            ],
+            'ledger' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/ledger[/:action[/:id]]',
+                    'defaults' => [
+                        'controller' => Controller\LedgerController::class,
+                        'action' => 'index',
+                    ],
                 ],
+                'may_terminate' => true,
+                'child_routes' => [],
             ],
         ],
     ],
@@ -65,6 +68,7 @@ return [
             Controller\MoonController::class => Controller\Factory\MoonControllerFactory::class,
             Controller\VposController::class => Controller\Factory\VposControllerFactory::class,
             Controller\StructbrowseController::class => Controller\Factory\StructbrowseControllerFactory::class,
+            Controller\LedgerController::class => Controller\Factory\LedgerControllerFactory::class,
         ],
     ],
     // The 'access_filter' key is used by the User module to restrict or permit
@@ -87,6 +91,10 @@ return [
                 // Allow autorized users to visit "index"
                 ['actions' => ['index'], 'allow' => '@'],
             ],
+            Controller\LedgerController::class => [
+                // Allow autorized users to visit "index"
+                ['actions' => ['index'], 'allow' => '+moon.manage'],
+            ],
         ],
     ],
     // This key stores configuration for RBAC manager.
@@ -100,6 +108,7 @@ return [
             Service\MiningManager::class => Service\Factory\MiningManagerFactory::class,
             Service\StructureManager::class => Service\Factory\StructureManagerFactory::class,
             Service\StructurebrowserManager::class => Service\Factory\StructurebrowserManagerFactory::class,
+            Service\LedgerManager::class => Service\Factory\LedgerManagerFactory::class,
         ],
     ],
     'view_manager' => [

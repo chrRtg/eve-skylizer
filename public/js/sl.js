@@ -100,6 +100,29 @@ $(document).ready(function () {
     });
     moon_table.fixedHeader.headerOffset($('#skylizer_navbar').height());
 
+    
+    //datatable for ledgerTable
+    var ledger_table = $('#ledgertable').DataTable({
+        fixedHeader: true,
+        responsive: true,
+        language: {
+            decimal: ",",
+            thousands: "."
+        },
+        "columns": [
+            { "type": "html" },
+            { "type": "html" },
+            { "type": "num-fmt" },
+            { "type": "num-fmt" },
+            { "type": "num-fmt" },
+            { "type": "num-fmt" },
+          ],
+        "lengthMenu": [
+            [50, 100, -1],
+            [50, 100, "All"]
+        ]
+    });
+    ledger_table.fixedHeader.headerOffset($('#skylizer_navbar').height());
 
     /***********************************************************
      *

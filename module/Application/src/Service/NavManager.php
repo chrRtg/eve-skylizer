@@ -74,6 +74,14 @@ class NavManager
             ];
         }
 
+        if ($this->rbacManager->isGranted(null, 'moon.manage')) {
+            $items[] = [
+            'id' => 'ledger',
+            'label' => 'Ledger',
+            'link'  => $url('ledger')
+            ];
+        }
+
         $items[] = [
             'id' => 'about',
             'label' => 'About',
