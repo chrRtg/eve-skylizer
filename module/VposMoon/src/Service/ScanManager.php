@@ -11,7 +11,7 @@ class ScanManager
 {
     // pattern to analyze and break various inputs
     private const COSMIC_SCAN_REGEXP = '/^([A-Z]{3}-[0-9]{3})\t(.*)\t(.*)\t(.*)\t([0-9\,\.]+.?\%)\t(.*)/';
-    private const COSMIC_DSCAN_REGEXP = '/^(\S*)\t([\S ]*)\t([\S ]*)\t(-|[0-9\.\,]+ [AEUkm]+)/';
+    private const COSMIC_DSCAN_REGEXP = '/^(\S*)\t([\S ]*)\t([\S ]*)\t(-|[0-9 \.\,]+ [AEUkm]+)/';
     
     /**
      * Moon manager.
@@ -221,6 +221,7 @@ class ScanManager
      */
     public function isDscan($line)
     {
+        $match = array();
         if (preg_match(self::COSMIC_DSCAN_REGEXP, $line, $match)) {
             $structure_data = \VposMoon\Service\StructureManager::getStructureArray();
 
@@ -229,6 +230,7 @@ class ScanManager
             $structure_data['eve_itemname'] = $match[2];
             $structure_data['eve_typename'] = $match[3];
             $structure_data['distance'] = \VposMoon\Service\ScanManager::getEveDistanceKM($match[4]);
+            // $this->logger->debug('### isDscan: '.print_r($match, true));
 
             $this->cosmicManager->addToDataToCollector($structure_data);
             return true;
