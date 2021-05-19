@@ -85,4 +85,29 @@ class LedgerController extends AbstractActionController
             ]
         );
     }
+
+    public function chartJsonAction()
+    {
+        $structid = $this->params()->fromQuery('s');
+
+        $data = $this->ledgerManager->getLedgerPerDay($structid ? $structid : 0);
+
+        $this->logger->debug('fetch struct:__'.$structid.'__  : ' . print_r($data,true));
+
+        if (!empty($data)) {
+            return new JsonModel(
+                [
+                    'status' => 'SUCCESS',
+                    'data' => $data,
+                ]
+            );
+        }
+
+        return new JsonModel(
+            [
+                'status' => 'EMPTY',
+            ]
+        );
+        return false;
+    }
 }

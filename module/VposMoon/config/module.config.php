@@ -93,7 +93,7 @@ return [
             ],
             Controller\LedgerController::class => [
                 // Allow autorized users to visit "index"
-                ['actions' => ['index'], 'allow' => '+moon.manage'],
+                ['actions' => ['index', 'chartJson'], 'allow' => '+moon.manage'],
             ],
         ],
     ],
