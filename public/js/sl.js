@@ -116,6 +116,7 @@ $(document).ready(function () {
             { "type": "num-fmt" },
             { "type": "num-fmt" },
             { "type": "num-fmt" },
+            { "type": "html" },
           ],
         "lengthMenu": [
             [50, 100, -1],

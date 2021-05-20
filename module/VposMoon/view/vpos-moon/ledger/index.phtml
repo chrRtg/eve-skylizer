@@ -19,23 +19,29 @@ if (empty($filters['info_system']['constellation'])) {
     $location_string = $filters['info_system']['itemname'] . ' (' . $filters['info_system']['region'] . ')';
 }
 ?>
-<script>
-	var sl_messages = <?=json_encode($message['message']);?>;
-	var filters_json = <?=json_encode($filters_json);?>;
-	var current_route = <?=json_encode($current_route);?>;
-</script>
 
 <?=$this->flashMessenger()->render('error', ['alert', 'alert-warning']);?>
 <?=$this->flashMessenger()->render('success', ['alert', 'alert-success']);?>
 <?=$this->flashMessenger()->render('info', ['alert', 'alert-info']);?>
 
+
+<script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/data.js"></script>
+    <link rel="stylesheet" href="https://code.highcharts.com/css/themes/dark-unica.css">
+    <style>
+        .highcharts-plot-band {
+            fill: rgb(0, 78, 138);
+            fill-opacity: 0.05;
+        }
+    </style>
+    <script src="/js/highchart_ledgerperday.js"></script>
+
+
 <div class="row">
 	<div class="col-md-12 col-sm-12">
 
 		<div class="row">
-
-
-			<a href="<?= $this->url('ledger', ['action' => 'chartJson'], array('query' => array('s' => '444'))); ?>">bla</a>
+			<div id="highchartdiv"></div>
 		</div>
 		<div class="row">
 <!-- table start -->
@@ -43,35 +49,45 @@ if (empty($filters['info_system']['constellation'])) {
 					<thead>
 						<tr>
 							<th rowspan="2" data-priority="1" scope="col">Structure Name</th>
-							<th rowspan="2" data-priority="1" scope="col">Location</th>
+							<th rowspan="2" data-priority="2" scope="col">Location</th>
 							<th colspan="2" scope="col">refined Value (Mio ISK)</th>
 							<th colspan="2" scope="col">Pieces (thousands)</th>
+							<th rowspan="2" scope="col">&nbsp;</th>
 						</tr>
 						<tr>
 							<th scope="col">5 Weeks</th>
-							<th  scope="col">total</th>
+							<th scope="col">total</th>
 							<th scope="col">5 Weeks</th>
-							<th  scope="col">total</th>
+							<th scope="col">total</th>
 						</tr>
 					</thead>
 					<tbody>
 						<?php foreach ($ledger as $key => $station): ?>
 						<?php // var_export($moon); ?>
-						<tr>
-							<td><?=$station['structure_name']; ?></td>
-							<td><?=$station['celestial']; ?></td>
-							<td data-order="<?=$station['cp5w'];?>"><?=number_format($station['cp5w'] / 1000000, 0, ',', '.'); ?></td>
-							<td data-order="<?=$station['cpf'];?>"><?=round($station['cpf'] / 1000000, 0); ?></td>
-							<td data-order="<?=$station['gq5w'];?>"><?=round($station['gq5w'] / 1000, 0); ?></td>
-							<td data-order="<?=$station['gqf'];?>"><?=round($station['gqf'] / 1000, 0); ?></td>
-							</tr>
-						<?php endforeach; ?>						
+						<tr id="tblrow<?=$station['structure_id'];?>">
+							<td><?=$station['structure_name'];?></td>
+							<td><?=$station['celestial'];?></td>
+							<td data-order="<?=$station['cp5w'];?>"><?=number_format($station['cp5w'] / 1000000, 0, ',', '.');?></td>
+							<td data-order="<?=$station['cpf'];?>"><?=round($station['cpf'] / 1000000, 0);?></td>
+							<td data-order="<?=$station['gq5w'];?>"><?=round($station['gq5w'] / 1000, 0);?></td>
+							<td data-order="<?=$station['gqf'];?>"><?=round($station['gqf'] / 1000, 0);?></td>
+							<td>
+								<?php if($station['celestial']): ?>
+								<button type="button" class="btn btn-default btn-xs" onclick="openChildRow(this, <?=$station['structure_id'];?>, 'http://annotare.ddns.net/ledger/chartJson?s='+<?=$station['structure_id'];?>, '<?=$station['structure_name'];?>');" id="tblrow<?=$station['structure_id'];?>">
+									<span class="glyphicon glyphicon-stats"></span> graph</button>
+								<?php else: ?>
+									&nbsp;
+								<?php endif; ?>
+							</td>
+						</tr>
+						<?php endforeach;?>
 					</tbody>
 				</table>
 <!-- table end -->
 		</div>
 	</div>
 </div>
+
 
 <!-- Help Modal -->
 <div class="modal fade" id="helpModal" role="dialog" aria-labelledby="myModalLabel">

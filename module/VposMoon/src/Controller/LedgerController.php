@@ -80,8 +80,7 @@ class LedgerController extends AbstractActionController
         return new ViewModel(
             [
             'filters' => $filters,
-            'ledger' => $ledger,
-            'message' => $message
+            'ledger' => $ledger
             ]
         );
     }
