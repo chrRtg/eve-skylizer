@@ -90,6 +90,7 @@ class LedgerController extends AbstractActionController
         $structid = $this->params()->fromQuery('s');
 
         $data = $this->ledgerManager->getLedgerPerDay($structid ? $structid : 0);
+        $range = $this->ledgerManager->getLedgerMinMaxDate();
 
         $this->logger->debug('fetch struct:__'.$structid.'__  : ' . print_r($data,true));
 
@@ -98,6 +99,7 @@ class LedgerController extends AbstractActionController
                 [
                     'status' => 'SUCCESS',
                     'data' => $data,
+                    'range' => $range
                 ]
             );
         }

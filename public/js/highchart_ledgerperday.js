@@ -119,14 +119,17 @@ const chartoptions = {
 
 
 function formatJsData(json, xkey, ykey, nameKey = false) {
-    // console.log(json);
     var data = [];
-    Object.values(json).forEach(val => {
+
+    if(json.range.min) {
+        data.push({x: new Date(json.range.min), y: 1,title:'-'});
+    }
+    
+    Object.values(json.data).forEach(val => {
         var xval = val[xkey];
         if (typeof val[xkey] === 'object' && val[xkey].date) {
             xval = val[xkey].date;
         }
-        //console.log(xval + '    parsed: ' + Date.parse(xval));
         var row = {
             x: Date.parse(xval),
             y: parseInt(val[ykey])
@@ -136,6 +139,11 @@ function formatJsData(json, xkey, ykey, nameKey = false) {
         }
         data.push(row);
     });
+
+    if(json.range.max) {
+        data.push({x: new Date(json.range.max), y: 1,title:'-'});
+    }
+
     return data;
 }
 
@@ -146,7 +154,7 @@ $(document).ready(function () {
 
 function loadNewChart(url, target, title) {
     $.get(url, function (json) {
-        res = formatJsData(json.data, 'last_updated', 'compositionPrice', 'structures');
+        res = formatJsData(json, 'last_updated', 'compositionPrice', 'structures');
         chartoptions.series[0] = {
             name: 'ISK - Refined on 100%',
             data: res,
@@ -154,7 +162,7 @@ function loadNewChart(url, target, title) {
             type: 'column'
         };
 
-        res = formatJsData(json.data, 'last_updated', 'pieces');
+        res = formatJsData(json, 'last_updated', 'pieces');
         chartoptions.series[1] = {
             name: 'Pieces',
             data: res,
@@ -184,7 +192,7 @@ function hmN(number) {
     return scaled.toFixed(1) + ' ' + suffix;
 }
 
-
+// add a new child row below the one the button has been clicked and load a chart into it
 function openChildRow(e, sid, url, structname) {
 
     var table = $(e).parents('table').DataTable();

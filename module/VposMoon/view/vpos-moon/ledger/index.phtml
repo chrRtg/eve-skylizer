@@ -30,8 +30,8 @@ if (empty($filters['info_system']['constellation'])) {
     <link rel="stylesheet" href="https://code.highcharts.com/css/themes/dark-unica.css">
     <style>
         .highcharts-plot-band {
-            fill: rgb(0, 78, 138);
-            fill-opacity: 0.05;
+            fill: rgb(50, 128, 188);
+            fill-opacity: 0.1;
         }
     </style>
     <script src="/js/highchart_ledgerperday.js"></script>
@@ -68,9 +68,9 @@ if (empty($filters['info_system']['constellation'])) {
 							<td><?=$station['structure_name'];?></td>
 							<td><?=$station['celestial'];?></td>
 							<td data-order="<?=$station['cp5w'];?>"><?=number_format($station['cp5w'] / 1000000, 0, ',', '.');?></td>
-							<td data-order="<?=$station['cpf'];?>"><?=round($station['cpf'] / 1000000, 0);?></td>
-							<td data-order="<?=$station['gq5w'];?>"><?=round($station['gq5w'] / 1000, 0);?></td>
-							<td data-order="<?=$station['gqf'];?>"><?=round($station['gqf'] / 1000, 0);?></td>
+							<td data-order="<?=$station['cpf'];?>"><?=number_format($station['cpf'] / 1000000, 0, ',', '.');?></td>
+							<td data-order="<?=$station['gq5w'];?>"><?=number_format($station['gq5w'] / 1000, 0, ',', '.');?></td>
+							<td data-order="<?=$station['gqf'];?>"><?=number_format($station['gqf'] / 1000, 0, ',', '.');?></td>
 							<td>
 								<?php if($station['celestial']): ?>
 								<button type="button" class="btn btn-default btn-xs" onclick="openChildRow(this, <?=$station['structure_id'];?>, 'http://annotare.ddns.net/ledger/chartJson?s='+<?=$station['structure_id'];?>, '<?=$station['structure_name'];?>');" id="tblrow<?=$station['structure_id'];?>">
@@ -84,69 +84,6 @@ if (empty($filters['info_system']['constellation'])) {
 					</tbody>
 				</table>
 <!-- table end -->
-		</div>
-	</div>
-</div>
-
-
-<!-- Help Modal -->
-<div class="modal fade" id="helpModal" role="dialog" aria-labelledby="myModalLabel">
-	<div class="modal-dialog modal-lg" role="document">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-				<ul class="nav nav-tabs" id="tabContent">
-					<li class="active"><a href="#help_scan" data-toggle="tab">Probe Scanner</a></li>
-					<li><a href="#help_dscan" data-toggle="tab">Directional Scanner</a></li>
-			</ul>
-			</div>
-			<div class="tab-content">
-				<div class="tab-pane active modal-body" id="help_scan">
-					<div class="row">
-						<div class="col-md-6">
-							<img src="img/eve_scan_window.jpg" alt=""/>
-						</div>
-						<div class="col-md-6">
-							<p>Open your &laquo;Probe Scanner&raquo; window. Please take care your view is <strong>not filtered</strong>.						</p>
-							<p>Click inside the Probe Scanne window, select all entries (CTRL-A) and copy them to the clipboard (CTRL-C).</p>
-							<p>Now navigate to <span class="skylizer">Syklizer - (D)Scan</span> and paste the result into the big area to the right.</p>
-							<p>Then press the button &laquo;submit your scan&raquo; below the area and hold a sec. The table to the left will get updated soon and show your
-								scan results.</p>
-							<p><strong>Please always copy all entries to ensure the best possible result!</strong></p>
-						</div>
-					</div>
-				</div>
-				<div class="tab-pane modal-body" id="help_dscan">
-					<div class="row">
-						<div class="col-md-6">
-							<img src="img/eve_dscan_window.png" alt=""/>
-						</div>
-						<div class="col-md-6">
-							<p>Open your &laquo;Directional Scanner&raquo; window. Please take care your view is <strong>not filtered</strong> and you had set the Range and Angle sliders to their max value.</p>
-							<p>Click inside the Probe Scanne window, select all entries (CTRL-A) and copy them to the clipboard (CTRL-C).</p>
-							<p>Now navigate to <span class="skylizer">Syklizer - (D)Scan</span> and paste the result into the big area to the right.</p>
-							<p>Then press the button &laquo;submit your scan&raquo; below the area and hold a sec. The table to the left will get updated soon and show your
-								scan results.</p>
-							<p class="skylizer">Please always copy all entries and disable all filters to ensure the best possible result!</p>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
-
-<!-- Nope Modal -->
-<div class="modal fade" id="nopeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-	<div class="modal-dialog" role="document">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-				<h4 class="modal-title" id="myModalLabel">Nope?!</h4>
-			</div>
-			<div class="modal-body">
-				Sorry folks, this function is not supported yet.
-			</div>
 		</div>
 	</div>
 </div>

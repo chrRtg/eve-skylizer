@@ -56,6 +56,21 @@ class LedgerManager
         return ($statement->fetchAll());
     }
 
+    /**
+     * get oldest and newest Legder date.
+     *
+     * @return array resultSet
+     */
+    public function getLedgerMinMaxDate() {
+        $queryBuilder = $this->entityManager->createQueryBuilder();
+
+        $queryBuilder->select('min(aml.lastUpdated) as min, max(aml.lastUpdated) as max')
+            ->from(\VposMoon\Entity\AtMiningLedger::class, 'aml')
+            ->setMaxResults(1);
+
+        return ($queryBuilder->getQuery()->getOneOrNullResult());
+    }
+
     public function getLedgerPerDay($structure_id = 0)
     {
         $queryBuilder = $this->entityManager->createQueryBuilder();
