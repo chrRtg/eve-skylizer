@@ -19,24 +19,28 @@ CREATE TABLE `at_mining_ledger` (
   KEY `idx_goo` (`eve_invtypes_typeid`),
   KEY `idx_date` (`last_updated`),
   KEY `idx_celestial_id` (`celestial_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10793 DEFAULT CHARSET=utf8;
-
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 
 CREATE TABLE `at_mining_observer` (
-  `emo_id` INT NOT NULL AUTO_INCREMENT,
-  `structure_id` BIGINT(20) NOT NULL,
-  `observer_type` VARCHAR(80) NOT NULL,
-  `last_updated` DATETIME NULL,
+  `emo_id` int(11) NOT NULL AUTO_INCREMENT,
+  `structure_id` bigint(20) NOT NULL,
+  `observer_type` varchar(80) NOT NULL,
+  `last_updated` datetime DEFAULT NULL,
   PRIMARY KEY (`emo_id`),
-  INDEX `idx_struct` (`structure_id` ASC));
+  KEY `idx_struct` (`structure_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
-CREATE TABLE `skylizer`.`at_mining_period` (
-  `amp_id` INT NOT NULL AUTO_INCREMENT,
-  `structure_id` BIGINT(20) NOT NULL,
-  `date_start` DATETIME NOT NULL,
-  `date_end` DATETIME NULL,
+
+CREATE TABLE `at_mining_period` (
+  `amp_id` int(11) NOT NULL AUTO_INCREMENT,
+  `structure_id` bigint(20) NOT NULL,
+  `date_start` datetime NOT NULL,
+  `date_end` datetime DEFAULT NULL,
   PRIMARY KEY (`amp_id`),
-  UNIQUE INDEX `idx_uniq` (`structure_id` ASC, `date_start` ASC, `date_end` ASC));
+  UNIQUE KEY `idx_combined` (`structure_id`,`date_start`,`date_end`)
+) ENGINE=InnoDB AUTO_INCREMENT=88 DEFAULT CHARSET=latin1;
+
+
 
 SET FOREIGN_KEY_CHECKS = 1;

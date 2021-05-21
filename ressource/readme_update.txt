@@ -1,3 +1,5 @@
+use bin/import-staticdata.sh for importing static data. 
+Only use the description below if the script does not work for you.
 
 ## to be imported
 
