@@ -218,7 +218,9 @@ class MiningManager
                 return false;
             }
             $payload = array_merge($payload, (array) $res);
-            $xpages = $res->headers['X-Pages'];
+            if (isset($res->headers['X-Pages'])) {
+                $xpages = $res->headers['X-Pages'];
+            }
         } while ($page++ < $xpages);
 
         foreach ($payload as $v) {
