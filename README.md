@@ -1,25 +1,26 @@
-# skŸlizer - The Eve-Online scan analyzer
+# skŸlizer - The Eve-Online scan analyzer and Structures Manager
 
-skŸlizer is a tool for Eve Online to handle any kind of scans and to gather as much as possible data from the scan.
+skŸlizer is a tool for Eve Online to handle any kind of scans and to gather as much as possible data from any Scan or Dscan.
 
-At the moment scanning moons, anomalies and citadels is supported.
+skŸlizer add information about your corporations structures and visualize the mining ledgers.
 
 For up to date information please have a look into the [Changelog](https://github.com/chrRtg/eve-skylizer/wiki/Changelog).
 
 ## Features
 
-1. **Scan something in EVE**
+1. **Scan something in EVE & share your findings with your mates**
 2. **copy'n paste your scan to skŸlizer**
 3. **view & filter by value and ore - find the ISK** (or your next targets)
 4. **view & filter by anomalies**
-5. **share your findings with your mates**
+5. **Import and view Mining Ledgers - show them with efficacy grapsh in the new Ledger-View**
+6. **Structures Dashboard - show timers, fuel due, chunk due and inactive drills**
 
 * Identify the valuable moons (ISK!) in a system or the whole constellation
 * How to use: copy moon scan data from Eve Online. Press below the scan results "copy to clipboard", then navigate to skŸlizer and paste the scan to the area to the right and then the button "submit your scan" below the area.
 * **search** by system-name or constellation, just start typing - autosuggest fill the gaps
 * easily **navigate** to neighbour systems, a constellation or show all scanned moons in the current constellation
 * add structures, owning corporation and the structure name or some notes to any moon
-* Help Function
+* Help Functions
 
 ### Moon Scans
 
@@ -73,7 +74,8 @@ Feel free to add your scans (or some from pastebin) to the tool.
 Please have a look into the wiki to understand how to install and maintain skŸlizer:
 
 * [Changelog](https://github.com/chrRtg/eve-skylizer/wiki/Changelog)
-* [Update the application](https://github.com/chrRtg/eve-skylizer/wiki/Updates)
+* [Update the data](https://github.com/chrRtg/eve-skylizer/wiki/Update-Data)
+* [Update the application](https://github.com/chrRtg/eve-skylizer/wiki/Update-Application)
 * [How to install](https://github.com/chrRtg/eve-skylizer/wiki/Install)
 
 ## Features of the framework (for developers)
@@ -106,13 +108,14 @@ This code is provided under the [Apache License 2.0](https://choosealicense.com/
 ## Requirements
 
 * Webserver, e.g. Apache
-* PHP 7.1 or later with `gd` and `intl` extensions
-* MySQL 5.6 or later.
+* PHP 7.4 or better with `gd` and `intl` extensions
+* MySQL 5.6 or better.
 
 ## Thank you (to be extended)
 
+* the people who made [Laminas - open-source continuation of Zend Framework](https://getlaminas.org) 
 * to Oleg Krivtsov [Using Zend Framework 3](https://github.com/olegkrivtsov/using-zend-framework-3-book). Thanks Oleg & respect to your great effort!
 * to OG for teaching me doctrine 2 and more
 * [EveLabs](https://github.com/EvELabs/oauth2-eveonline) for the  Oauth Library
 * [SeAT](https://github.com/eveseat/eseye) for the ESI interface
-* and of course to [xell network seven](http://evemaps.dotlan.net/corp/xell_network_seven) and [V.e.G.A.](http://evemaps.dotlan.net/alliance/V.e.G.A.), flying with them since some years
+* and of course to [xell network seven](http://evemaps.dotlan.net/corp/xell_network_seven) and [V.e.G.A.](http://evemaps.dotlan.net/alliance/V.e.G.A.), proud member and flying with them since some years
