@@ -544,7 +544,7 @@ class StructureManager
                 return false;
             }
             $extractions = array_merge($extractions, (array) $res);
-            $xpages = $res->headers['X-Pages'];
+            $xpages = (isset($res->headers['X-Pages']) ? $res->headers['X-Pages'] : 0);
         } while ($page++ < $xpages);
 
         // convert the result into a assoc array with the structure ID as a key
