@@ -251,7 +251,7 @@ function printSuccessMessage()
 function checkUpdate()
 {
     # read timestamp of some smaller file on fuzzworks into variable _lastimport
-    _executeCommand " read _currimport < <(wget --server-response --spider https://www.fuzzwork.co.uk/dump/latest/invCategories.sql.bz2 2>&1 | grep -i Last-Modified | cut -c 18- | date -f  - +%s)" "can not fetch date of last update"
+    _executeCommand "export _currimport=$(wget --server-response --spider https://www.fuzzwork.co.uk/dump/latest/invCategories.sql.bz2 2>&1 | grep -i Last-Modified | cut -c 18- | date -f  - +%s)" "can not fetch date of last update"
 
     if [ -s $TMP_DIR/fuzzwork_last.txt ]; then
         _lastimport=$(< $TMP_DIR/fuzzwork_last.txt)
