@@ -232,12 +232,12 @@ function checkMysql
 
 function checkMysqlConnection()
 {
-    _executeCommand "$BIN_MYSQL --defaults-extra-file=<(printf '[client]\nuser = %s\npassword = %s' '$DB_USER' '$DB_PASS') -h $DB_HOST -e ';'" "can not connect to mysql with the given credentials"
+    _executeCommand "$BIN_MYSQL --user=\"$DB_USER\" --password=\"$DB_PASS\" --host=\"$DB_HOST\" -e 'select version();'" "can not connect to mysql with the given credentials"
 }
 
 function checkMysqlDB()
 {
-    _executeCommand "$BIN_MYSQL --defaults-extra-file=<(printf '[client]\nuser = %s\npassword = %s' '$DB_USER' '$DB_PASS') -h $DB_HOST -e 'use $DB_NAME;'" "can not find MySQL database '$DB_NAME' "
+    _executeCommand "$BIN_MYSQL --user=\"$DB_USER\" --password=\"$DB_PASS\" --host=\"$DB_HOST\" $DB_NAME -e 'use $DB_NAME;'" "can not find MySQL database '$DB_NAME' "
 }
 
 function printSuccessMessage()
@@ -279,7 +279,7 @@ function importFuzzworks()
 {
     _warning "Import fuzzwork data to MySQL..."
     for filename in $TMP_DIR/fuzzwork_import/*.bz2; do
-        _executeCommand "bzcat $filename | $BIN_MYSQL --defaults-extra-file=<(printf '[client]\nuser = %s\npassword = %s' '$DB_USER' '$DB_PASS') $DB_NAME -h $DB_HOST" "failed to import files from fuzzworks to db '$DB_NAME' "
+        _executeCommand "bzcat $filename | $BIN_MYSQL --user=\"$DB_USER\" --password=\"$DB_PASS\" --host=\"$DB_HOST\" $DB_NAME" "failed to import files from fuzzworks to db '$DB_NAME' "
         _success "   '$filename' imported"
     done
 }
@@ -287,7 +287,7 @@ function importFuzzworks()
 function postFixDatabase()
 {
     _warning "postFixDatabase..."
-    _executeCommand "$BIN_MYSQL --defaults-extra-file=<(printf '[client]\nuser = %s\npassword = %s' '$DB_USER' '$DB_PASS') $DB_NAME -h $DB_HOST --execute='$POSTSQL'" "can not find MySQL database '$DB_NAME' "
+    _executeCommand "$BIN_MYSQL --user=\"$DB_USER\" --password=\"$DB_PASS\" --host=\"$DB_HOST\" $DB_NAME --execute='$POSTSQL'" "can not find MySQL database '$DB_NAME' "
 
 }
 
