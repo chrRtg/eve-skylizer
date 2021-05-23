@@ -126,7 +126,7 @@ class NavManager
                         ];
             }
             
-            if (count($adminDropdownItems)!=0) {
+            if (!empty($adminDropdownItems)) {
                 $items[] = [
                     'id' => 'admin',
                     'label' => 'Admin',

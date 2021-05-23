@@ -132,7 +132,7 @@ class CosmicManager
      */
     private function evaluateStructureScan()
     {
-        if (!$this->structure_collector || count($this->structure_collector) == 0) {
+        if (!$this->structure_collector || empty($this->structure_collector)) {
             return false; // nothing to do
         }
 
@@ -214,7 +214,7 @@ class CosmicManager
     {
         $del_cnt = 0;
 
-        if (!$this->structure_collector || count($this->structure_collector) == 0) {
+        if (!$this->structure_collector || empty($this->structure_collector)) {
             return false; // nothing to do
         }
 
@@ -493,7 +493,7 @@ class CosmicManager
         }
 
         // no match? go back home
-        if (count($celstial_dist_collector) == 0) {
+        if (empty($celstial_dist_collector)) {
             return ($res);
         }
 

@@ -19,7 +19,7 @@ class VposManagerFactory
     /**
      * This method creates the UserManager service and returns its instance. 
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName)
     {
         $sessionManager = $container->get(SessionManager::class);
         $sessionContainer = new Container('eve_user', $sessionManager);

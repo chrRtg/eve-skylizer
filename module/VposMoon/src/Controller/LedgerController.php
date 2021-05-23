@@ -69,7 +69,6 @@ class LedgerController extends AbstractActionController
      */
     public function indexAction()
     {
-        $message = null;
         $goto_currentsystem = false;
 
         // create filters for listview out of get parameters and the user session parameters
@@ -109,6 +108,5 @@ class LedgerController extends AbstractActionController
                 'status' => 'EMPTY',
             ]
         );
-        return false;
     }
 }

@@ -17,7 +17,7 @@ class MiningManagerFactory
     /**
      * This method creates the UserManager service and returns its instance. 
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName)
     {
         return new MiningManager(
             $container->get('doctrine.entitymanager.orm_default'),

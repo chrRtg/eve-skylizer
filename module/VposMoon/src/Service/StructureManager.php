@@ -60,7 +60,7 @@ class StructureManager
         $this->userManager = $userManager;
         $this->eveESIManager = $eveESIManager;
         $this->eveSSOManager = $eveSSOManager;
-        $this->MiningManager = $miningManager;
+        $this->miningManager = $miningManager;
         $this->logger = $logger;
     }
 
@@ -436,7 +436,7 @@ class StructureManager
 
         if ($getledger) {
             // get mining ledger
-            $this->MiningManager->esiFetchCorporationMiningData($cli_user->getEveCorpid(), unserialize($cli_user->getAuthContainer()), $climode);
+            $this->miningManager->esiFetchCorporationMiningData($cli_user->getEveCorpid(), unserialize($cli_user->getAuthContainer()), $climode);
         }
 
         // reset CliUser for next usage

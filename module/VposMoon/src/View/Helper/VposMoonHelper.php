@@ -219,7 +219,7 @@ class VposMoonHelper extends AbstractHelper
     {
         $sum = 0.0;
         if (!empty($data)) {
-            foreach ($data as $k => $row) {
+            foreach ($data as $row) {
                 $sum += $row['worth'] * $row['qty'];
             }
         }

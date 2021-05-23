@@ -100,6 +100,10 @@ const chartoptions = {
     },
     tooltip: {
         formatter: function () {
+            if (typeof(this.points[1]) ==='undefined') {
+                return ('&nbsp;');
+            }
+
             return (
                 '<tspan style="font-size: 10px">' + Highcharts.dateFormat('%a, %d %b %y', new Date(this.x + (3600 * 1000 * 24))) + '</tspan>' +
                 '<tspan class="highcharts-br" dy="15" x="8">​</tspan>' +
@@ -116,41 +120,6 @@ const chartoptions = {
         data: []
     }]
 }
-
-
-function formatJsData(json, xkey, ykey, nameKey = false) {
-    var data = [];
-
-    if(json.range.min) {
-        data.push({x: new Date(json.range.min), y: 1,title:'-'});
-    }
-    
-    Object.values(json.data).forEach(val => {
-        var xval = val[xkey];
-        if (typeof val[xkey] === 'object' && val[xkey].date) {
-            xval = val[xkey].date;
-        }
-        var row = {
-            x: Date.parse(xval),
-            y: parseInt(val[ykey])
-        };
-        if (nameKey) {
-            row.title = val[nameKey];
-        }
-        data.push(row);
-    });
-
-    if(json.range.max) {
-        data.push({x: new Date(json.range.max), y: 1,title:'-'});
-    }
-
-    return data;
-}
-
-
-$(document).ready(function () {
-    loadNewChart('http://annotare.ddns.net/ledger/chartJson', 'highchartdiv', '');
-});
 
 function loadNewChart(url, target, title) {
     $.get(url, function (json) {
@@ -179,6 +148,69 @@ function loadNewChart(url, target, title) {
     });
 }
 
+
+// add a new child row below the one the button has been clicked and load a chart into it
+function openChildRow(e, sid, url, structname) {
+
+    var table = $(e).parents('table').DataTable();
+    var row = table.row('#tblrow' + sid);
+
+    var targetdiv = 'highcharttbldiv' + sid;
+    if (row.child.isShown()) {
+        row.child(false).remove();
+    } else {
+        row.child('<div id="' + targetdiv + '"></div>').show();
+        loadNewChart(url, targetdiv, structname);
+    }
+}
+
+
+$(document).ready(function () {
+    /* 
+     * Here goes the real fun
+     */
+    loadNewChart('http://annotare.ddns.net/ledger/chartJson', 'highchartdiv', '');
+});
+
+
+function formatJsData(json, xkey, ykey, nameKey = false) {
+    var data = [];
+
+    if (json.range.min) {
+        data.push({
+            x: new Date(json.range.min),
+            y: 1,
+            title: '-'
+        });
+    }
+
+    Object.values(json.data).forEach(val => {
+        var xval = val[xkey];
+        if (typeof val[xkey] === 'object' && val[xkey].date) {
+            xval = val[xkey].date;
+        }
+        var row = {
+            x: Date.parse(xval),
+            y: parseInt(val[ykey])
+        };
+        if (nameKey) {
+            row.title = val[nameKey];
+        }
+        data.push(row);
+    });
+
+    if (json.range.max) {
+        data.push({
+            x: new Date(json.range.max),
+            y: 1,
+            title: '-'
+        });
+    }
+
+    return data;
+}
+
+
 // format number to human readable number
 // https://stackoverflow.com/questions/9461621/format-a-number-as-2-5k-if-a-thousand-or-more-otherwise-900
 var SI_SYMBOL = ["", "thousand", "million", "billion", "trillion", "quadrillion", "quintillion"];
@@ -190,21 +222,4 @@ function hmN(number) {
     var scale = Math.pow(10, tier * 3);
     var scaled = number / scale;
     return scaled.toFixed(1) + ' ' + suffix;
-}
-
-// add a new child row below the one the button has been clicked and load a chart into it
-function openChildRow(e, sid, url, structname) {
-
-    var table = $(e).parents('table').DataTable();
-    var row = table.row( '#tblrow'+sid );
-    console.log(row);
-
-    var targetdiv = 'highcharttbldiv'+sid;
-    if ( row.child.isShown() ) {
-        row.child(false).remove();
-    } else {
-        row.child( '<div id="'+targetdiv+'"></div>' ).show();
-        loadNewChart(url, targetdiv, structname);
-    }
-
 }

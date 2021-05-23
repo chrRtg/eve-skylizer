@@ -3,7 +3,14 @@ $this->headTitle('ledger');
 
 $this->mainMenu()->setActiveItemId('ledger');
 
-$current_route = $this->currentRoute()->getRoute();
+$this->headLink()
+	->prependStylesheet($this->basePath('external/highcharts/dark-unica_21-05-23.css'));
+$this->headScript()
+	->prependFile($this->basePath('external/highcharts/highcharts_9-1-0.js'));
+
+
+$this->inlineScript()
+	->prependFile($this->basePath('js/highchart_ledgerperday.js'));
 
 //echo '<pre>';
 //ini_set('xdebug.var_display_max_depth', 3); var_dump($this->currentRoute()->getRoute());
@@ -12,12 +19,6 @@ $current_route = $this->currentRoute()->getRoute();
 //ini_set('xdebug.var_display_max_depth', 3); var_dump($message);
 // ini_set('xdebug.var_display_max_depth', 3); var_dump($ledger);
 //echo '</pre>';
-
-if (empty($filters['info_system']['constellation'])) {
-    $location_string = $filters['info_system']['itemname'] . ' (Constellation in ' . $filters['info_system']['region'] . ')';
-} else {
-    $location_string = $filters['info_system']['itemname'] . ' (' . $filters['info_system']['region'] . ')';
-}
 ?>
 
 <?=$this->flashMessenger()->render('error', ['alert', 'alert-warning']);?>
@@ -25,17 +26,12 @@ if (empty($filters['info_system']['constellation'])) {
 <?=$this->flashMessenger()->render('info', ['alert', 'alert-info']);?>
 
 
-<script src="https://code.highcharts.com/highcharts.js"></script>
-    <script src="https://code.highcharts.com/modules/data.js"></script>
-    <link rel="stylesheet" href="https://code.highcharts.com/css/themes/dark-unica.css">
-    <style>
-        .highcharts-plot-band {
-            fill: rgb(50, 128, 188);
-            fill-opacity: 0.1;
-        }
-    </style>
-    <script src="/js/highchart_ledgerperday.js"></script>
-
+<style>
+	.highcharts-plot-band {
+		fill: rgb(50, 128, 188);
+		fill-opacity: 0.1;
+	}
+</style>
 
 <div class="row">
 	<div class="col-md-12 col-sm-12">
