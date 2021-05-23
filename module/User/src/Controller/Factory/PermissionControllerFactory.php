@@ -12,7 +12,7 @@ use User\Service\PermissionManager;
  */
 class PermissionControllerFactory implements FactoryInterface
 {
-    public function __invoke(ContainerInterface $container, $requestedName)
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $entityManager = $container->get('doctrine.entitymanager.orm_default');
         $permissionManager = $container->get(PermissionManager::class);

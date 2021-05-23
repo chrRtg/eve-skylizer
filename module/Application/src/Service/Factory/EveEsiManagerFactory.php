@@ -19,7 +19,7 @@ class EveEsiManagerFactory
     /**
      * This method creates the UserManager service and returns its instance. 
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName)
     {
         // use the same session container as User\Service\Factory\EveSSOManagerFactory to get access to 
         // the eve-sso related information

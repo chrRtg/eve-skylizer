@@ -64,7 +64,6 @@ $(document).ready(function () {
     });
 
     function formatStructureTip(ditems) {
-        // console.log(ditems);
 
         var markup = '<div>' + ditems.groupname + ' : <strong>' + ditems.structItemname + '</strong> <span class="skylizer">' + ditems.structureName + '</span></div>';
         if (ditems.corporationName) {
@@ -934,16 +933,11 @@ function buildFilterQuery(filter_param) {
                 url += (url ? '&' : '') + key + '=' + url_param[key];
             }
         }
-        //console.log(url);
         if (url && url != '') {
-            //console.debug('gogo: ' + url);
-            //console.debug('route: ' + current_route);
             location.href = '/' + current_route + '?' + url;
             return false;
         }
-        //console.log('oerks');
     }
-    // console.log('MEGA oerks - well stay - do nothing');
     return false;
 }
 

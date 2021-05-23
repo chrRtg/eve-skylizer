@@ -13,7 +13,7 @@ class RbacAssertionManagerFactory
     /**
      * This method creates the NavManager service and returns its instance. 
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName)
     {   
         $entityManager = $container->get('doctrine.entitymanager.orm_default');
         $authService = $container->get(\Laminas\Authentication\AuthenticationService::class);

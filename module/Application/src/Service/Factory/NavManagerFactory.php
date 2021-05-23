@@ -6,7 +6,6 @@ use Application\Service\NavManager;
 use User\Service\RbacManager;
 use User\Service\EveSSOManager;
 
-
 /**
  * This is the factory class for NavManager service. The purpose of the factory
  * is to instantiate the service and pass it dependencies (inject dependencies).
@@ -16,8 +15,8 @@ class NavManagerFactory
     /**
      * This method creates the NavManager service and returns its instance. 
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
-    {        
+    public function __invoke(ContainerInterface $container, $requestedName)
+    {
         $authService = $container->get(\Laminas\Authentication\AuthenticationService::class);
         
         $viewHelperManager = $container->get('ViewHelperManager');
