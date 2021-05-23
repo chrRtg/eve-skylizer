@@ -169,7 +169,7 @@ $(document).ready(function () {
     /* 
      * Here goes the real fun
      */
-    loadNewChart('http://annotare.ddns.net/ledger/chartJson', 'highchartdiv', '');
+    loadNewChart('/ledger/chartJson', 'highchartdiv', '');
 });
 
 
