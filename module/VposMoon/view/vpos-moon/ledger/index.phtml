@@ -69,7 +69,7 @@ $this->inlineScript()
 							<td data-order="<?=$station['gqf'];?>"><?=number_format($station['gqf'] / 1000, 0, ',', '.');?></td>
 							<td>
 								<?php if($station['celestial']): ?>
-								<button type="button" class="btn btn-default btn-xs" onclick="openChildRow(this, <?=$station['structure_id'];?>, '/ledger/chartJson?s='+<?=$station['structure_id'];?>, '<?=$this->escapeHtml($station['structure_name']);?>');" id="tblrow<?=$station['structure_id'];?>">
+								<button type="button" class="btn btn-default btn-xs" onclick="openChildRow(this, <?=$station['structure_id'];?>, '/ledger/chartJson?s='+<?=$station['structure_id'];?>, '<?=htmlentities($station['structure_name']);?>');" id="tblrow<?=$station['structure_id'];?>">
 									<span class="glyphicon glyphicon-stats"></span> graph</button>
 								<?php else: ?>
 									&nbsp;
