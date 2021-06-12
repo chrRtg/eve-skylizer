@@ -164,14 +164,19 @@ function loadNewChart(url, target, title) {
 
 // add a new child row below the one the button has been clicked and load a chart into it
 function openChildRow(e, sid, url, structname) {
+    var button = $(e).find(".openclose");
 
     var table = $(e).parents('table').DataTable();
     var row = table.row('#tblrow' + sid);
 
     var targetdiv = 'highcharttbldiv' + sid;
     if (row.child.isShown()) {
+        toggleCss(button, "glyphicon-remove", "glyphicon-stats");
+        toggleCss($(e), "btn-primary", "btn-default")
         row.child(false).remove();
     } else {
+        toggleCss(button, "glyphicon-stats", "glyphicon-remove");
+        toggleCss($(e), "btn-default", "btn-primary")
         row.child('<div id="' + targetdiv + '"></div>').show();
         loadNewChart(url, targetdiv, structname);
     }
@@ -261,4 +266,9 @@ function hmN(number) {
     var scale = Math.pow(10, tier * 3);
     var scaled = number / scale;
     return scaled.toFixed(1) + ' ' + suffix;
+}
+
+function toggleCss (elem, remclass, addclass) {
+    elem.removeClass(remclass);
+    elem.addClass(addclass);
 }

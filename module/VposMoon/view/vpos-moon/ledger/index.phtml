@@ -69,7 +69,7 @@ $this->inlineScript()
 							<td>
 								<?php if($station['celestial']): ?>
 								<button type="button" class="btn btn-default btn-xs" onclick="openChildRow(this, <?=$station['structure_id'];?>, '/ledger/chartJson?s='+<?=$station['structure_id'];?>, '<?=addslashes($station['structure_name']);?>');" id="tblrow<?=$station['structure_id'];?>">
-									<span class="glyphicon glyphicon-stats"></span> graph</button>
+									<span class="openclose glyphicon glyphicon-stats"></span> graph</button>
 								<?php else: ?>
 									&nbsp;
 								<?php endif; ?>
