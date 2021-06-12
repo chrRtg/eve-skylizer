@@ -91,7 +91,7 @@ class LedgerController extends AbstractActionController
         $data = $this->ledgerManager->getLedgerPerDay($structid ? $structid : 0);
         $range = $this->ledgerManager->getLedgerMinMaxDate();
 
-        $this->logger->debug('fetch struct:__'.$structid.'__  : ' . print_r($data,true));
+        //$this->logger->debug('fetch struct:__'.$structid.'__  : ' . print_r($data, true));
 
         if (!empty($data)) {
             return new JsonModel(
