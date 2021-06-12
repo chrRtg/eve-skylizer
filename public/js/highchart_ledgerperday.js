@@ -1,3 +1,6 @@
+var xmin = 0;
+var xmax = 0;
+
 const chartoptions = {
     chart: {
         zoomType: 'x',
@@ -12,8 +15,7 @@ const chartoptions = {
                     plotBand = {
                         color: '#aa0000',
                     };
-
-                day = chart.xAxis[0].dataMin;
+                var day = chart.xAxis[0].dataMin;
                 while (day <= chart.xAxis[0].dataMax) {
                     // start from the saturday
                     if (new Date(day).getDay() === 6) {
@@ -33,16 +35,28 @@ const chartoptions = {
                     // increment by one day
                     day += (3600 * 1000 * 24);
                 }
-
                 chart.xAxis[0].update({
                     plotBands: plotBandAr
                 })
+                // take zoom parameters from master
+                if(xmin && xmax) {
+                    chart.xAxis[0].setExtremes(
+                        xmin,
+                        xmax,
+                        undefined,
+                        false
+                    )
+                    chart.showResetZoom();
+                }
             }
         },
     },
     xAxis: {
         type: 'datetime',
         crosshair: true,
+        events: {
+            setExtremes: syncExtremes
+        },        
     },
     yAxis: [{ // Primary yAxis
         title: {
@@ -103,7 +117,6 @@ const chartoptions = {
             if (typeof(this.points[1]) ==='undefined') {
                 return ('&nbsp;');
             }
-
             return (
                 '<tspan style="font-size: 10px">' + Highcharts.dateFormat('%a, %d %b %y', new Date(this.x + (3600 * 1000 * 24))) + '</tspan>' +
                 '<tspan class="highcharts-br" dy="15" x="8">​</tspan>' +
@@ -164,6 +177,32 @@ function openChildRow(e, sid, url, structname) {
     }
 }
 
+/**
+ * Synchronize zooming for all charts through the setExtremes event handler.
+ * from https://jsfiddle.net/BlackLabel/wre6yo7n/
+ */
+function syncExtremes(e) {
+    var thisChart = this.chart;
+
+    if (e.trigger !== 'syncExtremes') { // Prevent feedback loop
+        xmin = e.min;
+        xmax = e.max;
+        Highcharts.each(Highcharts.charts, function (chart) {
+            if (chart !== thisChart) {
+                if (chart.xAxis[0].setExtremes) { // It is null while updating
+                    chart.xAxis[0].setExtremes(
+                        e.min,
+                        e.max,
+                        undefined,
+                        false,
+                        { trigger: 'syncExtremes' }
+                    );
+                    chart.showResetZoom();
+                }
+            }
+        });
+    }
+}
 
 $(document).ready(function () {
     /* 
