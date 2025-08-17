@@ -1,5 +1,12 @@
 # skŸlizer - The Eve-Online scan analyzer and Structures Manager
 
+---
+**NOTE**
+
+While I do not play Eve Online since 2023 I do not work any longer on this project. If you plan to take the project over and you have specific questions please feel free to reach out to me.
+
+---
+
 skŸlizer is a tool for Eve Online to handle any kind of scans and to gather as much as possible data from any Scan or Dscan.
 
 skŸlizer add information about your corporations structures and visualize the mining ledgers.
